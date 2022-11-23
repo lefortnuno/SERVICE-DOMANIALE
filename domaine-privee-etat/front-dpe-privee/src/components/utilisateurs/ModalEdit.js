@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 
-const URL = `/`;
+const URL_BASE = `/utilisateur/`;
 let i = 0;
 
 export default function ModalEdition(props) {
@@ -25,7 +25,7 @@ export default function ModalEdition(props) {
   }, []);
 
   function getOneUser(id) {
-    axios.get(URL + `${id}`).then(function (response) {
+    axios.get(URL_BASE + `${id}`).then(function (response) {
       setInputs(response.data[0]);
     });
   }
@@ -38,7 +38,7 @@ export default function ModalEdition(props) {
 
   const handleSubmitEdit = (event, id) => {
     event.preventDefault();
-    axios.put(URL + `${id}`, inputs).then(function (response) {
+    axios.put(URL_BASE + `${id}`, inputs).then(function (response) {
       props.onHide();
       toast.success("Modification Reussi !")
     });
@@ -58,13 +58,13 @@ export default function ModalEdition(props) {
         keyboard={false}
       >
         <Modal.Header >
-          <Modal.Title>Edition Utilisateur Numero : {id}</Modal.Title>
+          <Modal.Title>Edition Utilisateur Numéro : {id}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
-              <Form.Label>identification</Form.Label>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>identification : </Form.Label>
               <Form.Control
                 type="text"
                 name="identification"
@@ -75,9 +75,20 @@ export default function ModalEdition(props) {
                 autoFocus
               />
             </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+              <Form.Label>Numéro CIN : </Form.Label>
+              <Form.Control
+                type="text"
+                name="cin"
+                value={inputs.cin}
+                onChange={handleChange}
+                placeholder="Numéro CIN"
+                autoComplete="off"
+              />
+            </Form.Group>
 
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
-              <Form.Label>etatCompte</Form.Label>
+              <Form.Label>etat du Compte : </Form.Label>
               <Form.Control
                 type="text"
                 name="etatCompte"
@@ -89,13 +100,14 @@ export default function ModalEdition(props) {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput4">
-              <Form.Label>Mdp</Form.Label>
+              <Form.Label>Mot de pass : </Form.Label>
               <Form.Control
                 type="password"
                 name="mdp"
                 value={inputs.mdp}
                 onChange={handleChange}
                 placeholder="mot de pass"
+                autoComplete="off"
               />
             </Form.Group>
           </Form>
@@ -103,14 +115,14 @@ export default function ModalEdition(props) {
 
         <Modal.Footer>
           <Button variant="danger" onClick={onClose}>
-            Close
+            Annuler
           </Button>
 
           <Button
             variant="primary"
             onClick={(e) => handleSubmitEdit(e, inputs.numCompte)}
           >
-            Save Changes
+            Enregistré
           </Button>
         </Modal.Footer>
       </Modal>

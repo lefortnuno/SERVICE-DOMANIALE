@@ -6,7 +6,7 @@ const chefAdjoint = require('../middlewares/chef.adjoint.middleware')
 const agent = require('../middlewares/agent.middleware')
 
 router.post("/seConnecter", utilisateurController.loginUtilisateur);
-router.get("/", chefAdjoint.checkUtilisateur, utilisateurController.getAllUtilisateurs);
+router.get("/", agent.checkUtilisateur, utilisateurController.getAllUtilisateurs);
 router.get("/:id", utilisateurController.getIdUtilisateur);
 router.post("/", utilisateurController.addUtilisateur);
 router.put("/:id", utilisateurController.updateUtilisateur);

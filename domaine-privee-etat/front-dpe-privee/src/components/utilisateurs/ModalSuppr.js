@@ -19,7 +19,7 @@ export default function DeleteConfirmation({
       keyboard={false}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Supprimer Definitivement ? </Modal.Title>
+        <Modal.Title>Supprimer Définitivement ? </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="alert alert-danger">{message}</div>

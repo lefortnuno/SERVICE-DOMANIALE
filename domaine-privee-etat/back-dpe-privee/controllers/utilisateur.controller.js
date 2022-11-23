@@ -2,15 +2,13 @@
 const Utilisateur = require("../models/utilisateur.model");
 const jwt = require("jsonwebtoken");
 const tmp = 3 * 24 * 60 * 60 * 1000;
-const path = require("path");
-const multer = require("multer");
 
 const createToken = (numCompte) => {
   return jwt.sign({ numCompte }, process.env.TOKEN_SECRET, { expiresIn: tmp });
 };
 
 module.exports.addUtilisateur = (req, res) => {
-  let { identification, mdp } = req.body;
+  let { identification, photoPDP, mdp, cin } = req.body;
   const attribut = "client";
   const etatCompte = "actif";
 
@@ -20,10 +18,12 @@ module.exports.addUtilisateur = (req, res) => {
       identification = identification + "-" + lastId;
 
       const newUtilisateur = {
-        attribut,
         identification,
+        photoPDP,
+        attribut,
         mdp,
         etatCompte,
+        cin,
       };
 
       // Add User Model
@@ -90,8 +90,8 @@ module.exports.updateUtilisateur = (req, res) => {
 };
 
 module.exports.roleUtilisateur = (req, res) => {
-  const { attribut } = req.body;
-  const newUtilisateur = { attribut };
+  const { attribut, cin } = req.body;
+  const newUtilisateur = { attribut, cin };
 
   Utilisateur.roleUtilisateur(newUtilisateur, req.params.id, (err, resp) => {
     if (!err) {

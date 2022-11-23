@@ -11,39 +11,24 @@ import ModalAjout from "./ModalAjout";
 import ModalEdition from "./ModalEdit";
 import DeleteConfirmation from "./ModalSuppr";
 
-const URL = `/`;
+const URL_BASE = `/utilisateur/`;
 
+//#region
+
+//#endregion
 export default function Utilisateur() {
   const navigate = useNavigate();
   const u_info = {
     u_token: localStorage.token,
+    u_nom: localStorage.u_nom,
+    u_prenom: localStorage.u_prenom,
     u_attribut: localStorage.u_attribut,
     u_photoPDP: localStorage.u_photoPDP,
     u_numCompte: localStorage.u_numCompte,
     u_etatCompte: localStorage.u_etatCompte,
   };
 
-  // MODAL AJOUT UTILISATEUR
-  const [show, setShow] = useState(false);
-  const showAddModal = () => setShow(true);
-  const closeAddModal = () => {
-    getUsers();
-    setShow(false);
-  };
-
-  // MODAL EDIT UTILISATEUR
-  const [numCompteEdit, setNumCompteEdit] = useState("");
-  const [showEdit, setShowEdit] = useState(false);
-  const showEditModal = (numCompte) => {
-    setNumCompteEdit(numCompte);
-    setShowEdit(true);
-  };
-  const closeEditModal = () => {
-    getUsers();
-    setShowEdit(false);
-  };
-
-  // PAGINATION ET DONNEE UTILISATEUR
+  //#region //------------DONNEE UTILISATEUR------------
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -56,12 +41,39 @@ export default function Utilisateur() {
         Authorization: u_info.u_token,
       },
     };
-    axios.get(URL, opts).then(function (response) {
-      setUsers(response.data);
+    axios.get(URL_BASE, opts).then(function (response) {
+      if (response.status === 200) {
+        setUsers(response.data);
+      } else {
+        toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
+      }
     });
   }
+  //#endregion
 
-  // MODAL DELETE UTILISATEUR
+  //#region //------------ MODAL AJOUT UTILISATEUR------------
+  const [show, setShow] = useState(false);
+  const showAddModal = () => setShow(true);
+  const closeAddModal = () => {
+    getUsers();
+    setShow(false);
+  };
+  //#endregion
+
+  //#region //------------MODAL EDIT UTILISATEUR------------
+  const [numCompteEdit, setNumCompteEdit] = useState("");
+  const [showEdit, setShowEdit] = useState(false);
+  const showEditModal = (numCompte) => {
+    setNumCompteEdit(numCompte);
+    setShowEdit(true);
+  };
+  const closeEditModal = () => {
+    getUsers();
+    setShowEdit(false);
+  };
+  //#endregion
+
+  //#region //------------MODAL DELETE UTILISATEUR------------
   const [id, setId] = useState(null);
   const [displayConfirmationModal, setDisplayConfirmationModal] =
     useState(false);
@@ -69,9 +81,9 @@ export default function Utilisateur() {
   const showDeleteModal = (id) => {
     setId(id);
     setDeleteMessage(
-      `Etes vous sure de vouloir supprimer '${
+      `Etes vous sûre de vouloir supprimer l'utilisateur : _' ${
         users.find((x) => x.numCompte === id).identification
-      }'?`
+      } '_ ?`
     );
     setDisplayConfirmationModal(true);
   };
@@ -79,9 +91,9 @@ export default function Utilisateur() {
     setDisplayConfirmationModal(false);
   };
   const submitDelete = (id) => {
-    axios.delete(URL + `${id}`).then(function (response) {
+    axios.delete(URL_BASE + `${id}`).then(function (response) {
       getUsers();
-      toast.success(`Suppr Reussi`);
+      toast.success(`Suppression Réussi`);
       setDisplayConfirmationModal(false);
 
       if (id == u_info.u_numCompte) {
@@ -90,8 +102,9 @@ export default function Utilisateur() {
       }
     });
   };
+  //#endregion
 
-  // ----- MA RECHERCHE -----
+  //#region   //----- MA RECHERCHE -----
   const [contenuTab, setContenuTab] = useState(true);
   function rechercheUtilisateur(event) {
     const valeur = event.target.value;
@@ -99,7 +112,7 @@ export default function Utilisateur() {
       getUsers();
       setContenuTab(true);
     } else {
-      axios.get(URL + `recherche/${valeur}`).then((response) => {
+      axios.get(URL_BASE + `recherche/${valeur}`).then((response) => {
         if (response.data.success) {
           setUsers(response.data.res);
           setContenuTab(true);
@@ -110,8 +123,9 @@ export default function Utilisateur() {
       });
     }
   }
+  //#endregion
 
-  // MY PAGINATION
+  //#region  //----- MY PAGINATION -----
   const [currentPage, setcurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
 
@@ -173,19 +187,21 @@ export default function Utilisateur() {
       setminPageNumberLimit(minPageNumberLimit - pageNumberLimit);
     }
   };
+  //#endregion
 
   return (
     <>
       <div>
-        <Header>
-          {u_info.u_attribut} {u_info.u_numCompte} : {u_info.u_photoPDP}
-        </Header>
+        <Header />
+
         <ModalAjout show={show} onHide={closeAddModal}>
           Ajout Nouveau Utilisateur
         </ModalAjout>
+
         <ModalEdition showEdit={showEdit} onHide={closeEditModal}>
           {numCompteEdit}
         </ModalEdition>
+
         <DeleteConfirmation
           showModal={displayConfirmationModal}
           confirmModal={submitDelete}

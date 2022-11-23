@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
-const LOGIN_URL = `/seConnecter`;
+const LOGIN_URL = `/utilisateur/seConnecter`;
 
 export default function Login() {
   const navigate = useNavigate();
@@ -21,12 +21,14 @@ export default function Login() {
       .post(LOGIN_URL, data)
       .then(function (response) {
         if (response.data.success) {
-          navigate("/utilisateur/"); // a decommenter si hiditr page hafa !
+          navigate("/utilisateur/"); 
           toast.success(`Connection Reussi`);
           const u = response.data.user[0];
           localStorage.setItem("u_numCompte", u.numCompte);
+          localStorage.setItem("u_nom", u.nom);
+          localStorage.setItem("u_prenom", u.prenom);
           localStorage.setItem("u_attribut", u.attribut);
-          localStorage.setItem("u_etatCompte", u.etatCompte );
+          localStorage.setItem("u_etatCompte", u.etatCompte);
           localStorage.setItem("u_photoPDP", u.photoPDP);
           localStorage.setItem("token", response.data.token);
         } else {

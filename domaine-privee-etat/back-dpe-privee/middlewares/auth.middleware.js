@@ -1,4 +1,4 @@
-const utilisateurModel = require("../models/utilisateur.model");
+const UtilisateurModel = require("../models/utilisateur.model");
 const jwt = require("jsonwebtoken");
 
 module.exports.checkUtilisateur = (req, res, next, myUserRole) => {
@@ -8,7 +8,7 @@ module.exports.checkUtilisateur = (req, res, next, myUserRole) => {
     jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
       if (decodedToken) {
         const dtok = decodedToken.numCompte[0];
-        utilisateurModel.getIdUtilisateur(dtok.numCompte, (err, resultat) => {
+        UtilisateurModel.getIdUtilisateur(dtok.numCompte, (err, resultat) => {
           if (
             resultat[0].attribut == myUserRole.admin ||
             resultat[0].attribut == myUserRole.chef ||

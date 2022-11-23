@@ -1,40 +1,57 @@
 let dbConn = require("../config/db");
+const Individu = require("./individu.model");
+
+//#region IDENTATION DE CODE
+//#endregion
 
 let Utilisateur = function (utilisateur) {
   this.numCompte = utilisateur.numCompte;
-  this.photoPDP = utilisateur.photoPDP;
   this.identification = utilisateur.identification;
+  this.photoPDP = utilisateur.photoPDP;
   this.attribut = utilisateur.attribut;
   this.mdp = utilisateur.mdp;
   this.etatCompte = utilisateur.etatCompte;
+  this.cin = utilisateur.cin;
 };
 
+const BASED_REQUETE = `SELECT * FROM compte `;
+const ADVANCED_REQUETE = `SELECT numCompte, identification, photoPDP, attribut, mdp, etatCompte, compte.cin as cin, individu.nom, individu.prenom FROM compte, individu WHERE compte.cin = individu.cin `;
+const ORDER_BY = ` ORDER BY numCompte DESC `;
+
 Utilisateur.addUtilisateur = (newUtilisateur, result) => {
-  dbConn.query("INSERT INTO compte SET ?", newUtilisateur, (err, res) => {
-    if (err) {
-      result(err, null);
+  Individu.getCinIndividu(newUtilisateur.cin, (err, resp) => {
+    console.log(resp);
+    if (resp) {
+      dbConn.query("INSERT INTO compte SET ?", newUtilisateur, (err, res) => {
+        if (!err) {
+          result(null, { success: true, message: "Ajout reussi !" });
+        } else {
+          result(err, null);
+        }
+      });
     } else {
-      result(null, { success: true, message: "Ajout reussi !" });
+      result(null, { success: false, message: "Individu introuvable !" });
     }
   });
 };
 
 Utilisateur.loginUtilisateur = (values, result) => {
-  let requete;
-  if (values.identification && values.mdp) {
-    requete = "SELECT * FROM compte WHERE identification=? AND mdp=?";
-  }
-  dbConn.query(requete, [values.identification, values.mdp], (err, res) => {
-    if (err) {
-      result(err, null);
-    } else {
-      result(null, res);
+  const requete = `AND identification=? AND mdp=?`;
+  dbConn.query(
+    ADVANCED_REQUETE + requete,
+    [values.identification, values.mdp],
+    (err, res) => {
+      if (!err) {
+        result(null, res);
+      } else {
+        result(err, null);
+      }
     }
-  });
+  );
 };
 
 Utilisateur.getAllUtilisateurs = (result) => {
-  dbConn.query("SELECT * FROM compte order by numCompte desc", (err, res) => {
+  dbConn.query(BASED_REQUETE + ORDER_BY, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -45,7 +62,7 @@ Utilisateur.getAllUtilisateurs = (result) => {
 
 Utilisateur.getLastIdUtilisateurs = (result) => {
   dbConn.query(
-    "SELECT numCompte FROM compte ORDER BY numCompte DESC LIMIT 1",
+    `SELECT numCompte FROM compte ` + ORDER_BY + `LIMIT 1`,
     (err, res) => {
       if (err) {
         return result(err, null);
@@ -65,26 +82,22 @@ Utilisateur.getLastIdUtilisateurs = (result) => {
 };
 
 Utilisateur.getIdUtilisateur = (numCompte, result) => {
-  dbConn.query(
-    "SELECT * FROM compte WHERE numCompte = ?",
-    numCompte,
-    (err, res) => {
-      if (err) {
-        result(err, null);
+  dbConn.query(BASED_REQUETE + `WHERE numCompte = ?`, numCompte, (err, res) => {
+    if (err) {
+      result(err, null);
+    } else {
+      if (res.length !== 0) {
+        result(null, res);
       } else {
-        if (res.length !== 0) {
-          result(null, res);
-        } else {
-          result(null, res);
-        }
+        result(null, res);
       }
     }
-  );
+  });
 };
 
 Utilisateur.searchUtilisateurByParams = (valeur, result) => {
   dbConn.query(
-    ` select * from compte where identification LIKE '%${valeur}%' order by numCompte desc`,
+    BASED_REQUETE + `WHERW identification LIKE '%${valeur}%'` + ORDER_BY,
     valeur,
     (err, res) => {
       if (err) {
@@ -102,7 +115,7 @@ Utilisateur.searchUtilisateurByParams = (valeur, result) => {
 
 Utilisateur.updateUtilisateur = (newUtilisateur, numCompte, result) => {
   dbConn.query(
-    `update compte set ? where numCompte = ${numCompte}`,
+    `UPDATE compte SET ? WHERE numCompte = ${numCompte}`,
     newUtilisateur,
     function (err, res) {
       if (err) {
@@ -116,7 +129,7 @@ Utilisateur.updateUtilisateur = (newUtilisateur, numCompte, result) => {
 
 Utilisateur.deleteUtilisateur = (numCompte, result) => {
   dbConn.query(
-    `delete from compte where numCompte = ${numCompte}`,
+    `DELETE FROM compte WHERE numCompte = ${numCompte}`,
     function (err, res) {
       if (err) {
         result(err, null);
@@ -133,7 +146,7 @@ Utilisateur.vraideleteUtilisateur = (numCompte, result) => {
   Utilisateur.getIdUtilisateur(numCompte, (err, resAttribut) => {
     if (resAttribut && resAttribut[0].attribut === "client") {
       dbConn.query(
-        `delete from compte where numCompte = ${numCompte}`,
+        `DELETE FROM compte WHERE numCompte = ${numCompte}`,
         function (err, res) {
           if (err) {
             result(err, null);
@@ -156,7 +169,7 @@ Utilisateur.vraideleteUtilisateur = (numCompte, result) => {
 
 Utilisateur.roleUtilisateur = (newUtilisateur, numCompte, result) => {
   dbConn.query(
-    `update compte set ? where numCompte = ${numCompte}`,
+    `UPDATE compte SET ? WHERE numCompte = ${numCompte}`,
     newUtilisateur,
     function (err, res) {
       if (err) {
