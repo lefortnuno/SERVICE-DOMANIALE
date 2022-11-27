@@ -9,13 +9,14 @@ import Button from "react-bootstrap/Button";
 import Header from "../../contexts/Header";
 import ModalAjout from "./ModalAjout";
 import ModalEdition from "./ModalEdit";
-import DeleteConfirmation from "./ModalSuppr";
+import DeleteConfirmation from "../../contexts/ModalSuppr";
 
-const URL_BASE = `/utilisateur/`;
+const URL_BASE = `utilisateur/`;
 
 //#region
 
 //#endregion
+
 export default function Utilisateur() {
   const navigate = useNavigate();
   const u_info = {
@@ -91,7 +92,12 @@ export default function Utilisateur() {
     setDisplayConfirmationModal(false);
   };
   const submitDelete = (id) => {
-    axios.delete(URL_BASE + `${id}`).then(function (response) {
+    const opts = {
+      headers: {
+        Authorization: u_info.u_token,
+      },
+    };
+    axios.delete(URL_BASE + `${id}`, opts).then(function (response) {
       getUsers();
       toast.success(`Suppression Réussi`);
       setDisplayConfirmationModal(false);
@@ -112,7 +118,12 @@ export default function Utilisateur() {
       getUsers();
       setContenuTab(true);
     } else {
-      axios.get(URL_BASE + `recherche/${valeur}`).then((response) => {
+      const opts = {
+        headers: {
+          Authorization: u_info.u_token,
+        },
+      };
+      axios.get(URL_BASE + `recherche/${valeur}`, opts).then((response) => {
         if (response.data.success) {
           setUsers(response.data.res);
           setContenuTab(true);
@@ -139,7 +150,6 @@ export default function Utilisateur() {
 
   function retourALaPremierPage() {
     setcurrentPage(1);
-    console.log(currentPage);
     if (currentPage > 5) {
       setmaxPageNumberLimit(5);
       setminPageNumberLimit(0);
@@ -210,8 +220,8 @@ export default function Utilisateur() {
           message={deleteMessage}
         />
 
-        <h2>
-          List Utilisateurs
+        <div>
+          <h2> Liste des Utilisateurs </h2>
           <span> </span>
           <Button
             className="btn btn-sm btn-primary"
@@ -232,7 +242,7 @@ export default function Utilisateur() {
               autoComplete="off"
             />
           </label>
-        </h2>
+        </div>
 
         {/* // ----- TABLEAU LISTE UTILISATEURS -----  */}
         <div className="table-responsive text-nowrap">

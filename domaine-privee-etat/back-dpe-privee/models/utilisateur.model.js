@@ -20,7 +20,6 @@ const ORDER_BY = ` ORDER BY numCompte DESC `;
 
 Utilisateur.addUtilisateur = (newUtilisateur, result) => {
   Individu.getCinIndividu(newUtilisateur.cin, (err, resp) => {
-    console.log(resp);
     if (resp) {
       dbConn.query("INSERT INTO compte SET ?", newUtilisateur, (err, res) => {
         if (!err) {
@@ -97,8 +96,7 @@ Utilisateur.getIdUtilisateur = (numCompte, result) => {
 
 Utilisateur.searchUtilisateurByParams = (valeur, result) => {
   dbConn.query(
-    BASED_REQUETE + `WHERW identification LIKE '%${valeur}%'` + ORDER_BY,
-    valeur,
+    BASED_REQUETE + `WHERE identification LIKE '%${valeur}%'` + ORDER_BY,
     (err, res) => {
       if (err) {
         result({ err, message: "erreur !", success: false }, null);

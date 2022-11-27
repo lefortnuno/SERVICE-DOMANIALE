@@ -10,23 +10,42 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 
-const URL_BASE = `/utilisateur/`;
+const URL_BASE = `utilisateur/`;
 
 export default function ModalAjout(props) {
+  const u_info = {
+    u_token: localStorage.token,
+  };
   // IMAGE PHOTO DE PROFILE DES UTILISATEUR
 
   // INFO DU COMPTE UTILISATEUR
   const onSubmit = (data) => {
-    axios.post(URL_BASE, data).then(function (response) {
-      if (response.data.success) {
-        toast.success(response.data.message);
+    const opts = {
+      headers: {
+        Authorization: u_info.u_token,
+      },
+    };
+    axios
+      .post(URL_BASE, data, opts)
+      .then(function (response) {
+        if (response.status === 200) {
+          toast.success("Ajout Reussi.");
+          reset();
+          props.onHide();
+        } else {
+          toast.error(response.data.message);
+          // FONCTON DE REDIRECTION VERS LE FORMULAIRE AJOUT INDIVIDU
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === 403) {
+          toast.error("Vous n'etes pas autoriser a ajouter un utilisateur!");
+        }
+      })
+      .finally(() => {
         reset();
         props.onHide();
-      } else {
-        toast.error(response.data.message);
-        // FONCTON DE REDIRECTION VERS LE FORMULAIRE AJOUT INDIVIDU
-      }
-    });
+      });
   };
 
   // SCHEMA VALIDATION FORMULAIRE -----
@@ -34,10 +53,10 @@ export default function ModalAjout(props) {
     identification: Yup.string()
       .required("identification obligatoire")
       .min(2, "trop court! Entrez au moins 2 caracteres"),
-      cin: Yup.string()
-        .required("Numéro CIN obligatoire")
-        .min(12, "trop court! Entrez 12 chiffres")
-        .max(12, "trop long! Entrez 12 chiffres"),
+    cin: Yup.string()
+      .required("Numéro CIN obligatoire")
+      .min(12, "trop court! Entrez 12 chiffres")
+      .max(12, "trop long! Entrez 12 chiffres"),
     mdp: Yup.string()
       .required("Mot de passe obligatoire")
       .min(4, "trop court! entrez au moins 4 caracteres"),

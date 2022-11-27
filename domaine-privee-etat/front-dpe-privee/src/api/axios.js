@@ -5,5 +5,5 @@ export default axios.create({
     `http://` +
     process.env.REACT_APP_API_IP_ADRESS +
     process.env.REACT_APP_API_PORT +
-    `/api`,
+    `/api/`,
 });
