@@ -8,7 +8,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-const URL_BASE = `utilisateur/`;
+const URL_BASE = `dossier/`;
 
 //#region
 
@@ -68,28 +68,30 @@ export default function ModalAjout(props) {
         Authorization: u_info.u_token,
       },
     };
-    console.log("ENREGISTREMENT REUSSI :", inputs);
-    // axios
-    //   .post(URL_BASE, inputs, opts)
-    //   .then(function (response) {
-    //     if (response.status === 200) {
-    //       toast.success("Ajout Reussi.");
-    //       reset();
-    //       props.onHide();
-    //     } else {
-    //       toast.error(response.data.message);
-    //       // FONCTON DE REDIRECTION VERS LE FORMULAIRE AJOUT INDIVIDU
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     if (e.response.status === 403) {
-    //       toast.error("Vous n'etes pas autoriser a ajouter un utilisateur!");
-    //     }
-    //   })
-    //   .finally(() => {
-    //     reset();
-    //     props.onHide();
-    //   });
+    
+    axios
+      .post(URL_BASE, inputs, opts)
+      .then(function (response) {
+        if (response.status === 200) {
+          toast.success("Ajout Reussi.");
+          reset();
+          props.onHide();
+          console.log(response.data);
+        } else {
+          console.log(response.data);
+          toast.error(response.data.message);
+          // FONCTON DE REDIRECTION VERS LE FORMULAIRE AJOUT INDIVIDU
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === 403) {
+          toast.error("Vous n'etes pas autoriser a ajouter un utilisateur!");
+        }
+      })
+      .finally(() => {
+        reset();
+        props.onHide();
+      });
   };
 
   //#endregion
