@@ -41,6 +41,19 @@ Historique.addHistorique = (newHistorique, result) => {
   });
 };
 
+Historique.addHistoNewDemande = (newHistorique) => {
+  Dossier.getNumDossier(
+    newHistorique.numAffaire,
+    (err, resNumAffaireDossier) => {
+      if (resNumAffaireDossier) {
+        dbConn.query("INSERT INTO HISTORIQUE SET ?", newHistorique);
+      } else {
+        return { message: "Dossier Mere non trouver ! Inconnu !" };
+      }
+    }
+  );
+};
+
 Historique.getAllHistoriques = (result) => {
   dbConn.query(
     "SELECT * FROM Historique ORDER BY numHisto DESC",

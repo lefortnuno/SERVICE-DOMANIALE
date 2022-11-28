@@ -1,46 +1,41 @@
 "use strict";
-const { data } = require("jquery");
 const Dossier = require("../models/dossier.model");
 const SousDossier = require("../models/sousDossier.model");
 const AutoNumAffaire = require("../models/numeroAffaire.model");
+const Histo = require("../models/historique.model");
 
 module.exports.addDossier = (req, res) => {
   let {
     numAffaire,
     dependance,
+    natureAffectation,
     empietement,
     lettreDemande,
     planAnnexe,
     pvDelimitation,
     superficieTerrain,
     droitDemande,
-    cin,
-    numCompte,
     observationDossier,
     lettreDesistement,
     planMere,
     certificatSituationJuridique,
-    obseravation_S_D,
-    dateDepot_S_D,
-    mesureAttribuable,
-    prixAttribuable,
+    numeroRequerant,
+    numCompte,
   } = req.body;
 
   const dateAujourdHui = new Date();
-  const phase = 1      
+  const numPhase = 1;
   const dateDemande = dateAujourdHui;
-  superficieTerrain = superficieTerrain + ' h.a'
+  // superficieTerrain = superficieTerrain + ' h.a'
 
-  if (!droitDemande){
-    droitDemande = 5000
-  }
-  if (!numCompte){
-    numCompte = 1
+  if (!droitDemande) {
+    droitDemande = 5000;
   }
 
   let newDossier = {
     numAffaire,
     dependance,
+    natureAffectation,
     empietement,
     lettreDemande,
     planAnnexe,
@@ -48,10 +43,9 @@ module.exports.addDossier = (req, res) => {
     superficieTerrain,
     dateDemande,
     droitDemande,
-    cin,
-    numCompte,
-    phase,
     observationDossier,
+    numeroRequerant,
+    numPhase,
   };
 
   let newSousDossier = {
@@ -59,10 +53,22 @@ module.exports.addDossier = (req, res) => {
     obseravation_S_D,
     dateDepot_S_D,
     mesureAttribuable,
-    prixAttribuable,
+    prixAttribue,
     lettreDesistement,
     planMere,
     certificatSituationJuridique,
+  };
+
+  let newHisto = {
+    mouvement,
+    dateMouvement,
+    dateRDV,
+    dispoDossier,
+    approbation,
+    Observation,
+    numAffaire,
+    numCompte,
+    numProcedure,
   };
 
   if (dependance && empietement) {
@@ -93,19 +99,29 @@ module.exports.addDossier = (req, res) => {
       numAffaire =
         lastNumAffaire + "-" + numAffaire + "/" + dateAujourdHui.getFullYear();
       newDossier.numAffaire = numAffaire;
-      newSousDossier.numAffaire = numAffaire;
 
       Dossier.addDossier(newDossier, (err, resp) => {
         if (err) {
           res.send(err);
         } else {
           res.send(resp);
-          newSousDossier.obseravation_S_D = "nouvelle demande";
-          newSousDossier.mesureAttribuable = "NULL";
-          newSousDossier.prixAttribuable = "NULL";
-          newSousDossier.dateDepot_S_D = dateAujourdHui;
 
+          newSousDossier.numAffaire = numAffaire;
+          newSousDossier.obseravation_S_D = "Nouvelle Demande";
+          newSousDossier.mesureAttribuable = "NULL";
+          newSousDossier.prixAttribue = "NULL";
+          newSousDossier.dateDepot_S_D = dateAujourdHui;
           SousDossier.addSousDossierNewDemande(newSousDossier);
+
+          newHisto.numAffaire = numAffaire;
+          newHisto.mouvement = "Entrer";
+          newHisto.dateMouvement = dateAujourdHui;
+          newHisto.dateRDV = dateAujourdHui;
+          newHisto.dispoDossier = "oui";
+          newHisto.approbation = "non";
+          newHisto.Observation = newDossier.observationDossier;
+          newHisto.numProcedure = newDossier.numPhase;
+          Histo.addHistoNewDemande(newHisto);
         }
       });
     }
@@ -125,10 +141,10 @@ module.exports.getAllDossiers = (req, res) => {
 module.exports.getIdDossier = (req, res) => {
   Dossier.getIdDossier(req.params.id, (err, resp) => {
     if (!err) {
-      if (resp){
+      if (resp) {
         res.send(resp);
-      }  else {
-        res.send({message:"Introuvable"});
+      } else {
+        res.send({ message: "Introuvable" });
       }
     } else {
       res.send(err);
@@ -137,10 +153,11 @@ module.exports.getIdDossier = (req, res) => {
 };
 
 module.exports.updateDossier = (req, res) => {
-  const { phase, superficieTerrain, observationDossier } = req.body;
+  const { superficieTerrain, observationDossier } = req.body;
 
   const updateDossier = {
-    phase, observationDossier, superficieTerrain
+    observationDossier,
+    superficieTerrain,
   };
 
   Dossier.updateDossier(updateDossier, req.params.id, (err, resp) => {
@@ -168,12 +185,12 @@ module.exports.avortementDossier = (req, res) => {
   });
 };
 
-module.exports.searchDossierByParams = (req, res) => {
-  Dossier.searchDossierByParams(req.params.valeur, (err, resp) => {
+module.exports.searchDossier = (req, res) => {
+  Dossier.searchDossier(req.params.valeur, (err, resp) => {
     if (!err) {
-      if (resp){
+      if (resp) {
         res.send(resp);
-      }  else {
+      } else {
         res.send(err);
       }
     } else {

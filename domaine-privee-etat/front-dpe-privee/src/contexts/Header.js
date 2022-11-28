@@ -41,6 +41,11 @@ function Header(props) {
                   Gestion des Utilisateurs
                 </Link>
               </li>
+              <li>
+                <Link to="/dossier/" className="link-name">
+                  Gestion des Nouvelles Demande
+                </Link>
+              </li>
               <li onClick={seDeconnecter}>
                 <span className="link-name"> Deconnection </span>
               </li>

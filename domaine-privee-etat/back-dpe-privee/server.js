@@ -14,6 +14,7 @@ const sousDossierRoute = require("./routes/sousDossier.route")
 const terrainRoute = require("./routes/terrain.route")
 const historiqueRoute = require("./routes/historique.route")
 const procedureRoute = require("./routes/procedure.route")
+const requerantRoute = require("./routes/requerant.route")
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -46,6 +47,7 @@ app.use("/api/sousDossier", sousDossierRoute)
 app.use("/api/terrain", terrainRoute)
 app.use("/api/historique", historiqueRoute)
 app.use("/api/procedure", procedureRoute)
+app.use("/api/requerant", requerantRoute)
 
 app.listen((process.env.PORT || process.env.URL_HOST_IP), () => {
     console.log(`Ecoute au port ${process.env.PORT} .... `);

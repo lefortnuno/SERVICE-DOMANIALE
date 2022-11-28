@@ -1,12 +1,12 @@
 let dbConn = require("../config/db");
-const Individu = require("./individu.model");
-const Compte = require("./utilisateur.model");
+const Requerant = require("./requerant.model");
 const Phase = require("./phase.model");
 
 let Dossier = function (dossier) {
   this.idDossier = dossier.idDossier;
   this.numAffaire = dossier.numAffaire;
   this.dependance = dossier.dependance;
+  this.natureAffectation = dossier.natureAffectation;
   this.empietement = dossier.empietement;
   this.lettreDemande = dossier.lettreDemande;
   this.planAnnexe = dossier.planAnnexe;
@@ -15,32 +15,32 @@ let Dossier = function (dossier) {
   this.dateDemande = dossier.dateDemande;
   this.droitDemande = dossier.droitDemande;
   this.observationDossier = dossier.observationDossier;
+  this.numeroRequerant = dossier.numeroRequerant;
   this.cin = dossier.cin;
-  this.numCompte = dossier.numCompte;
-  this.phase = dossier.phase;
+  this.etatMorale = dossier.etatMorale;
+  this.complementInformation = dossier.complementInformation;
+  this.nom = dossier.nom;
+  this.prenom = dossier.prenom;
+  this.numPhase = dossier.numPhase;
   this.lettreDesistement = dossier.lettreDesistement;
   this.planMere = dossier.planMere;
   this.certificatSituationJuridique = dossier.certificatSituationJuridique;
 };
 
-const mysqlRequete =
+const REQUETE_BASE =
   ` SELECT` +
-  ` idDossier, DOSSIER.numAffaire as numAffaire, dependance, empietement, lettreDemande, planAnnexe, pvDelimitation, superficieTerrain, DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, cin, NumCompte, phase,` +
-  ` numSousDossier, obseravation_S_D, dateDepot_S_D, mesureAttribuable, prixAttribuable, lettreDesistement, planMere, certificatSituationJuridique, SOUS_DOSSIER.numAffaire as numAffaireEtranger` +
-  ` FROM DOSSIER, SOUS_DOSSIER` +
-  ` WHERE DOSSIER.numAffaire = SOUS_DOSSIER.numAffaire`;
-const orderBy = ` ORDER BY idDossier DESC`;
+  ` idDossier, DOSSIER.numAffaire as numAffaire, dependance, empietement, natureAffectation, lettreDemande, planAnnexe, pvDelimitation, superficieTerrain, DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, DOSSIER.numeroRequerant as numeroRequerantEtranger, numPhase,` +
+  ` numSousDossier, obseravation_S_D,DATE_FORMAT(dateDepot_S_D, '%d-%m-%Y') as dateDepot_S_D, mesureAttribuable, prixAttribue, lettreDesistement, planMere, certificatSituationJuridique, SOUS_DOSSIER.numAffaire as numAffaireEtranger, ` +
+  ` REQUERANT.numeroRequerant as numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cinEtranger, `+
+  `INDIVIDU.cin as cin, nom, prenom `+
+  ` FROM DOSSIER, SOUS_DOSSIER, INDIVIDU, REQUERANT ` +
+  ` WHERE DOSSIER.numAffaire = SOUS_DOSSIER.numAffaire AND INDIVIDU.cin = REQUERANT.cin AND REQUERANT.numeroRequerant = DOSSIER.numeroRequerant`;
+const ORDER_BY = ` ORDER BY idDossier DESC`;
 
 Dossier.addDossier = (newDossier, result) => {
-  /*
-   Verification Existance Numero CIN, Phase et EVENTUELLEMNT DU COMPTE
-   */
-  Individu.getCinIndividu(newDossier.cin, (err, resIndividu) => {
+  Requerant.getIdRequerant(newDossier.numeroRequerant, (err, resRequerant) => {
     Phase.getIdPhase(newDossier.phase, (err, resPhase) => {
-      if (resIndividu && resPhase) {
-        if (newDossier.numCompte) {
-          Compte.getIdUtilisateur(newDossier.numCompte, (err, resCompte) => {
-            if (resCompte) {
+      if (resRequerant && resPhase) {
               dbConn.query(
                 "INSERT INTO dossier SET ?",
                 newDossier,
@@ -52,35 +52,19 @@ Dossier.addDossier = (newDossier, result) => {
                   }
                 }
               );
-            } else {
-              result(null, {
-                message: "Compte Utilisateur non trouver ! Inconnu !",
-                success: false,
-              });
-            }
-          });
-        } else {
-          dbConn.query("INSERT INTO dossier SET ?", newDossier, (err, res) => {
-            if (err) {
-              result(err, null);
-            } else {
-              result(null, { success: true, message: "Ajout reussi !" });
-            }
-          });
-        }
-      } else if (resIndividu && !resPhase) {
+      } else if (resRequerant && !resPhase) {
         result(null, {
           message: " Phase non trouver ! Inconnu !",
           success: false,
         });
-      } else if (!resIndividu && resPhase) {
+      } else if (!resRequerant && resPhase) {
         result(null, {
-          message: " CIN Individu non trouver ! Inconnu !",
+          message: " CIN Individu et numero requerant non trouver ! Inconnu !",
           success: false,
         });
       } else {
         result(null, {
-          message: " CIN Individu et Phase  non trouver ! Inconnu !",
+          message: " CIN Individu , Phase et numero requerant non trouver ! Inconnu !",
           success: false,
         });
       }
@@ -89,7 +73,7 @@ Dossier.addDossier = (newDossier, result) => {
 };
 
 Dossier.getAllDossiers = (result) => {
-  dbConn.query(mysqlRequete + orderBy, (err, res) => {
+  dbConn.query(REQUETE_BASE + ORDER_BY, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -99,7 +83,7 @@ Dossier.getAllDossiers = (result) => {
 };
 
 Dossier.getIdDossier = (id, result) => {
-  dbConn.query(mysqlRequete + " AND idDossier = ?", id, (err, res) => {
+  dbConn.query(REQUETE_BASE + " AND idDossier = ?", id, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -160,11 +144,11 @@ Dossier.avortementDossier = (updateDossier, id, result) => {
   );
 };
 
-Dossier.searchDossierByParams = (valeur, result) => {
+Dossier.searchDossier = (valeur, result) => {
   dbConn.query(
-    mysqlRequete +
-      ` AND (Dossier.numAffaire LIKE '%${valeur}%' OR cin LIKE '%${valeur}%')` +
-      orderBy,
+    REQUETE_BASE +
+      ` AND (Dossier.numAffaire LIKE '%${valeur}%' OR INDIVIDU.cin LIKE '%${valeur}%')` +
+      ORDER_BY,
     valeur,
     (err, res) => {
       if (err) {

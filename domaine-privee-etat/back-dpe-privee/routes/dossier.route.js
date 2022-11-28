@@ -1,11 +1,20 @@
 const router = require("express").Router();
 const DossierController = require("../controllers/dossier.controller");
+const agent = require("../middlewares/agent.middleware");
 
-router.get("/", DossierController.getAllDossiers);
-router.get("/:id", DossierController.getIdDossier);
-router.post("/", DossierController.addDossier);
-router.put("/:id", DossierController.updateDossier);
-router.put("/avc/:id", DossierController.avortementDossier);
-router.get("/recherche/:valeur", DossierController.searchDossierByParams);
+router.get("/", agent.checkUtilisateur, DossierController.getAllDossiers);
+router.get("/:id", agent.checkUtilisateur, DossierController.getIdDossier);
+router.post("/", agent.checkUtilisateur, DossierController.addDossier);
+router.put("/:id", agent.checkUtilisateur, DossierController.updateDossier);
+router.put(
+  "/avc/:id",
+  agent.checkUtilisateur,
+  DossierController.avortementDossier
+);
+router.get(
+  "/recherche/:valeur",
+  agent.checkUtilisateur,
+  DossierController.searchDossier
+);
 
 module.exports = router;

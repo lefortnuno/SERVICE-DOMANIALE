@@ -1,11 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Login from "./components/utilisateurs/login";
-import Utilisateur from "./components/utilisateurs/utilisateur";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Protected from "./contexts/Protected"
 import Deconnection from "./contexts/Deconnection"
+import Login from "./components/utilisateurs/login";
+import Utilisateur from "./components/utilisateurs/utilisateur";
+import Dossier from "./components/dossiers/dossier";
+
 
 function App() {
   return (
@@ -15,6 +17,7 @@ function App() {
         <Routes>
           <Route index element={ <Deconnection Cmp={Login} />} />
           <Route path="utilisateur/" element={ <Protected Cmp={Utilisateur} /> } />  
+          <Route path="dossier/" element={ <Protected Cmp={Dossier} /> } />  
         </Routes>
       </BrowserRouter>
     </div>

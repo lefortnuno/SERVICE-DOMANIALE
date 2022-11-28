@@ -96,7 +96,7 @@ Utilisateur.getIdUtilisateur = (numCompte, result) => {
 
 Utilisateur.searchUtilisateurByParams = (valeur, result) => {
   dbConn.query(
-    BASED_REQUETE + `WHERE identification LIKE '%${valeur}%'` + ORDER_BY,
+    BASED_REQUETE + `AND identification LIKE '%${valeur}%'` + ORDER_BY,
     (err, res) => {
       if (err) {
         result({ err, message: "erreur !", success: false }, null);
@@ -126,21 +126,6 @@ Utilisateur.updateUtilisateur = (newUtilisateur, numCompte, result) => {
 };
 
 Utilisateur.deleteUtilisateur = (numCompte, result) => {
-  dbConn.query(
-    `DELETE FROM compte WHERE numCompte = ${numCompte}`,
-    function (err, res) {
-      if (err) {
-        result(err, null);
-      } else {
-        result(null, {
-          message: `suppresion success, numCompte : ${numCompte}`,
-        });
-      }
-    }
-  );
-};
-
-Utilisateur.vraideleteUtilisateur = (numCompte, result) => {
   Utilisateur.getIdUtilisateur(numCompte, (err, resAttribut) => {
     if (resAttribut && resAttribut[0].attribut === "client") {
       dbConn.query(
