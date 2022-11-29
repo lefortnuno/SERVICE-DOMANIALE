@@ -11,7 +11,7 @@ let Requerant = function (individu) {
 };
 
 const REQUETE_BASE =
-  `SELECT numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cin ` +
+  `SELECT numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cin, ` +
   `INDIVIDU.cin as cinEtranger, nom, prenom ` +
   `FROM REQUERANT, INDIVIDU WHERE REQUERANT.cin = INDIVIDU.cin `;
 const ORDER_BY = ` ORDER BY numeroRequerant DESC`;
@@ -46,7 +46,7 @@ Requerant.getAllRequerants = (result) => {
 };
 
 Requerant.getIdRequerant = (id, result) => {
-  dbConn.query(REQUETE_BASE + `AND id = ?`, id, (err, res) => {
+  dbConn.query(REQUETE_BASE + `AND numeroRequerant = ?`, id, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -62,7 +62,7 @@ Requerant.getIdRequerant = (id, result) => {
 Requerant.searchRequerant = (values, result) => {
   const req =
     REQUETE_BASE +
-    `AND (cin LIKE '%${values.value}%' OR nom LIKE '%${values.value}%' OR prenom LIKE '%${values.value}%')` +
+    `AND (INDIVIDU.cin LIKE '%${values.value}%' OR nom LIKE '%${values.value}%' OR prenom LIKE '%${values.value}%')` +
     ORDER_BY;
 
   dbConn.query(req, (err, res) => {

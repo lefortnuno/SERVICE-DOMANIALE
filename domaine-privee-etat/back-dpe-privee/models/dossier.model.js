@@ -31,40 +31,39 @@ const REQUETE_BASE =
   ` SELECT` +
   ` idDossier, DOSSIER.numAffaire as numAffaire, dependance, empietement, natureAffectation, lettreDemande, planAnnexe, pvDelimitation, superficieTerrain, DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, DOSSIER.numeroRequerant as numeroRequerantEtranger, numPhase,` +
   ` numSousDossier, obseravation_S_D,DATE_FORMAT(dateDepot_S_D, '%d-%m-%Y') as dateDepot_S_D, mesureAttribuable, prixAttribue, lettreDesistement, planMere, certificatSituationJuridique, SOUS_DOSSIER.numAffaire as numAffaireEtranger, ` +
-  ` REQUERANT.numeroRequerant as numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cinEtranger, `+
-  `INDIVIDU.cin as cin, nom, prenom `+
+  ` REQUERANT.numeroRequerant as numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cinEtranger, ` +
+  `INDIVIDU.cin as cin, nom, prenom ` +
   ` FROM DOSSIER, SOUS_DOSSIER, INDIVIDU, REQUERANT ` +
   ` WHERE DOSSIER.numAffaire = SOUS_DOSSIER.numAffaire AND INDIVIDU.cin = REQUERANT.cin AND REQUERANT.numeroRequerant = DOSSIER.numeroRequerant`;
 const ORDER_BY = ` ORDER BY idDossier DESC`;
 
 Dossier.addDossier = (newDossier, result) => {
   Requerant.getIdRequerant(newDossier.numeroRequerant, (err, resRequerant) => {
-    Phase.getIdPhase(newDossier.phase, (err, resPhase) => {
+    Phase.getIdPhase(newDossier.numPhase, (err, resPhase) => {
+      console.log("resRequerant && resPhase === ", resRequerant, resPhase);
       if (resRequerant && resPhase) {
-              dbConn.query(
-                "INSERT INTO dossier SET ?",
-                newDossier,
-                (err, res) => {
-                  if (err) {
-                    result(err, null);
-                  } else {
-                    result(null, { success: true, message: "Ajout reussi !" });
-                  }
-                }
-              );
+        dbConn.query("INSERT INTO dossier SET ?", newDossier, (err, res) => {
+          if (err) {
+            console.log("err", err);
+            result(err, null);
+          } else {
+            console.log("resRequerant && resPhase");
+            result(null, { success: true, message: "Ajout reussi !" });
+          }
+        });
       } else if (resRequerant && !resPhase) {
         result(null, {
-          message: " Phase non trouver ! Inconnu !",
+          message: " Phase non trouver !",
           success: false,
         });
       } else if (!resRequerant && resPhase) {
         result(null, {
-          message: " CIN Individu et numero requerant non trouver ! Inconnu !",
+          message: " Numero requerant non trouver !",
           success: false,
         });
       } else {
         result(null, {
-          message: " CIN Individu , Phase et numero requerant non trouver ! Inconnu !",
+          message: " CIN Individu et Phase non trouver !",
           success: false,
         });
       }

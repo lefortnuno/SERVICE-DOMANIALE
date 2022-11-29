@@ -17,6 +17,8 @@ const URL_BASE = `dossier/`;
 export default function ModalAjout(props) {
   const u_info = {
     u_token: localStorage.token,
+    u_attribut: localStorage.u_attribut,
+    u_numCompte: localStorage.u_numCompte,
   };
   const [inputs, setInputs] = useState([]);
   const [erreurs, setErreurs] = useState([]);
@@ -72,13 +74,11 @@ export default function ModalAjout(props) {
     axios
       .post(URL_BASE, inputs, opts)
       .then(function (response) {
-        if (response.status === 200) {
+        if (response.status === 200 && response.data.success) {
           toast.success("Ajout Reussi.");
           reset();
           props.onHide();
-          console.log(response.data);
         } else {
-          console.log(response.data);
           toast.error(response.data.message);
           // FONCTON DE REDIRECTION VERS LE FORMULAIRE AJOUT INDIVIDU
         }
@@ -142,6 +142,9 @@ export default function ModalAjout(props) {
     }
     if (!inputs.droitDemande) {
       inputs.droitDemande = "5000";
+    }
+    if(!inputs.numCompte){
+      inputs.numCompte = u_info.u_numCompte
     }
     if (!inputs.lettreDesistement) {
       inputs.lettreDesistement = false;

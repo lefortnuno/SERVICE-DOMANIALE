@@ -54,6 +54,7 @@ Historique.addHistoNewDemande = (newHistorique) => {
   );
 };
 
+
 Historique.getAllHistoriques = (result) => {
   dbConn.query(
     "SELECT * FROM Historique ORDER BY numHisto DESC",

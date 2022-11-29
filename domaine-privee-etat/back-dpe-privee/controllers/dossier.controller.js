@@ -23,9 +23,28 @@ module.exports.addDossier = (req, res) => {
     numCompte,
   } = req.body;
 
+  if (natureAffectation === "Non Affecté") {
+    natureAffectation = 0;
+  } else if (natureAffectation === "Affecté") {
+    natureAffectation = 1;
+  } 
+
   const dateAujourdHui = new Date();
   const numPhase = 1;
   const dateDemande = dateAujourdHui;
+
+  let obseravation_S_D = "Nouvelle Demande";
+  let mesureAttribuable = "NULL";
+  let prixAttribue = "NULL";
+  let dateDepot_S_D = dateAujourdHui;
+  let mouvement = "Interne";
+  let dateMouvement = dateAujourdHui;
+  let dateRDV = dateAujourdHui;
+  let dispoDossier = "oui";
+  let approbation = "non";
+  let Observation = observationDossier;
+  let numProcedure = numPhase;
+
   // superficieTerrain = superficieTerrain + ' h.a'
 
   if (!droitDemande) {
@@ -104,24 +123,12 @@ module.exports.addDossier = (req, res) => {
         if (err) {
           res.send(err);
         } else {
-          res.send(resp);
-
           newSousDossier.numAffaire = numAffaire;
-          newSousDossier.obseravation_S_D = "Nouvelle Demande";
-          newSousDossier.mesureAttribuable = "NULL";
-          newSousDossier.prixAttribue = "NULL";
-          newSousDossier.dateDepot_S_D = dateAujourdHui;
           SousDossier.addSousDossierNewDemande(newSousDossier);
-
+          
           newHisto.numAffaire = numAffaire;
-          newHisto.mouvement = "Entrer";
-          newHisto.dateMouvement = dateAujourdHui;
-          newHisto.dateRDV = dateAujourdHui;
-          newHisto.dispoDossier = "oui";
-          newHisto.approbation = "non";
-          newHisto.Observation = newDossier.observationDossier;
-          newHisto.numProcedure = newDossier.numPhase;
           Histo.addHistoNewDemande(newHisto);
+          res.send(resp);
         }
       });
     }
