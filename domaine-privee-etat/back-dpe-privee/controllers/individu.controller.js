@@ -1,5 +1,7 @@
 "use strict";
 const Individu = require("../models/individu.model");
+const EtatCivil = require("../models/etatCivil.model");
+const Requerant = require("../models/requerant.model");
 
 module.exports.addIndividu = (req, res) => {
   const {
@@ -12,10 +14,34 @@ module.exports.addIndividu = (req, res) => {
     domicile,
     dateLivrance,
     lieuLivrance,
-    codeEtatCivil,
+    nature,
+    cinConjoint,
+    nomConjoint,
+    prenomConjoint,
+    dateNature,
+    lieuNature,
+    etatMorale,
+    complementInformation,
   } = req.body;
 
-  const newIndividu = {
+  let codeEtatCivil = 0;
+
+  const newEtatCivil = {
+    nature,
+    cinConjoint,
+    nomConjoint,
+    prenomConjoint,
+    dateNature,
+    lieuNature,
+  };
+
+  const newRequerant = {
+    etatMorale,
+    cin,
+    complementInformation,
+  };
+
+  let newIndividu = {
     cin,
     nom,
     prenom,
@@ -28,11 +54,33 @@ module.exports.addIndividu = (req, res) => {
     codeEtatCivil,
   };
 
-  Individu.addIndividu(newIndividu, (erreur, resp) => {
-    if (erreur) {
-      res.send(erreur);
+  EtatCivil.addEtatCivil(newEtatCivil, (err, resEC) => {
+    if (err) {
+      res.send(err);
     } else {
-      res.send(resp);
+      EtatCivil.getLastEtatCivil((error, resLastID) => {
+        if (error) {
+          res.send(error);
+        } else {
+          const id = resLastID[0]
+          newIndividu.codeEtatCivil = id;
+
+          Individu.addIndividu(newIndividu, (erreur, resI) => {
+            if (erreur) {
+              res.send(erreur);
+            } else {
+              Requerant.addRequerant(newRequerant, (erreurs, resReq) => {
+                if (erreurs) {
+                  res.send(erreurs);
+                } else {
+                  res.send(resI);
+                  console.log(resI);
+                }
+              });
+            }
+          });
+        }
+      });
     }
   });
 };

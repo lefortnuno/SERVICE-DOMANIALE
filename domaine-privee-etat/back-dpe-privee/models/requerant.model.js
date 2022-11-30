@@ -17,7 +17,7 @@ const REQUETE_BASE =
 const ORDER_BY = ` ORDER BY numeroRequerant DESC`;
 
 Requerant.addRequerant = (newRequerant, result) => {
-  Individu.getCinIndividu(newDossier.cin, (err, resIndividu) => {
+  Individu.getCinIndividu(newRequerant.cin, (err, resIndividu) => {
     if (resIndividu) {
       dbConn.query("INSERT INTO Requerant SET ?", newRequerant, (err, res) => {
         if (err) {

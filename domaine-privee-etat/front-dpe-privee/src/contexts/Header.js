@@ -42,6 +42,11 @@ function Header(props) {
                 </Link>
               </li>
               <li>
+                <Link to="/individu/" className="link-name">
+                  Gestion des Individus
+                </Link>
+              </li>
+              <li>
                 <Link to="/dossier/" className="link-name">
                   Gestion des Nouvelles Demande
                 </Link>

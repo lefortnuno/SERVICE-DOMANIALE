@@ -29,6 +29,17 @@ EtatCivil.getAllEtatCivils = (result) => {
     }
   });
 };
+EtatCivil.getLastEtatCivil = (result) => {
+  dbConn.query("SELECT codeEtatCivil FROM etat_civil ORDER BY codeEtatCivil DESC LIMIT 1", (err, res) => {
+    if (err) {
+       result(err, null);
+    } else {
+      const tmpID = Object.values(res);
+      id = Object.values(tmpID[0]);
+       result(null, id);
+    }
+  });
+};
 
 EtatCivil.getIdEtatCivil = (id, result) => {
   dbConn.query("SELECT * FROM etat_civil WHERE codeEtatCivil = ?", id, (err, res) => {
