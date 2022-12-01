@@ -1,5 +1,6 @@
 let dbConn = require("../config/db");
 const Individu = require("../models/individu.model");
+const Dossier = require("../models/dossier.model");
 
 let Requerant = function (individu) {
   this.numeroRequerant = individu.numeroRequerant;
@@ -17,20 +18,38 @@ const REQUETE_BASE =
 const ORDER_BY = ` ORDER BY numeroRequerant DESC`;
 
 Requerant.addRequerant = (newRequerant, result) => {
-  Individu.getCinIndividu(newRequerant.cin, (err, resIndividu) => {
-    if (resIndividu) {
-      dbConn.query("INSERT INTO Requerant SET ?", newRequerant, (err, res) => {
-        if (err) {
-          result(err, null);
-        } else {
-          result(null, res);
-        }
-      });
+  Individu.getCinIndividu(newRequerant.cin, (erreur, resIndividu) => {
+    if (erreur) {
+      result(erreur, null);
     } else {
-      result(null, {
-        message: " CIN Individu non trouver ! Inconnu !",
-        success: false,
-      });
+      if (resIndividu) {
+        dbConn.query(
+          "INSERT INTO Requerant SET ?",
+          newRequerant,
+          (err, res) => {
+            if (err) {
+              result(err, null);
+            } else {
+              result(null, res);
+            }
+          }
+        );
+      } else {
+        result(null, {
+          message: " CIN Individu non trouver ! Inconnu !",
+          success: false,
+        });
+      }
+    }
+  });
+};
+
+Requerant.addRequerantNewIndividu = (newRequerant, result) => {
+  dbConn.query("INSERT INTO Requerant SET ?", newRequerant, (err, res) => {
+    if (err) {
+      result(err, null);
+    } else {
+      result(null, res);
     }
   });
 };
@@ -47,6 +66,20 @@ Requerant.getAllRequerants = (result) => {
 
 Requerant.getIdRequerant = (id, result) => {
   dbConn.query(REQUETE_BASE + `AND numeroRequerant = ?`, id, (err, res) => {
+    if (err) {
+      result(err, null);
+    } else {
+      if (res.length !== 0) {
+        result(null, res);
+      } else {
+        result(null, null);
+      }
+    }
+  });
+};
+
+Requerant.getCINRequerant = (id, result) => {
+  dbConn.query(REQUETE_BASE + `AND individu.cin = ?`, id, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -92,19 +125,34 @@ Requerant.updateRequerant = (updateRequerant, numeroRequerant, result) => {
   );
 };
 
-// Requerant.deleteRequerant = (numeroRequerant, result) => {
-//   dbConn.query(
-//     `DELETE FROM Requerant WHERE numeroRequerant = ${numeroRequerant}`,
-//     function (err, res) {
-//       if (err) {
-//         result(err, null);
-//       } else {
-//         result(null, {
-//           message: `suppresion success, numeroRequerant : ${numeroRequerant}`,
-//         });
-//       }
-//     }
-//   );
-// };
+Requerant.deleteRequerant = (id, result) => {
+  // VERIFIER SI LES COMPTE REQUERANT DE L'INDIVIDU ON DES DOSSIERS ?
+  Dossier.getDossierRequerant(element, (error, resDosReq) => {
+    if (!error) {
+      if (resDosReq) {
+        result(null, {
+          success: false,
+          message: "Le requerant possede un ou plusieurs dossier.",
+        });
+      } else {
+        dbConn.query(
+          `DELETE FROM requerant WHERE numeroRequerant = ${id}`,
+          function (err, res) {
+            if (err) {
+              result(err, null);
+            } else {
+              result(null, {
+                success: true,
+                message: `suppresion success.`,
+              });
+            }
+          }
+        );
+      }
+    } else {
+      result(err, null);
+    }
+  });
+};
 
 module.exports = Requerant;

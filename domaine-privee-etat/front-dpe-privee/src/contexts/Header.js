@@ -42,9 +42,18 @@ function Header(props) {
                 </Link>
               </li>
               <li>
-                <Link to="/individu/" className="link-name">
-                  Gestion des Individus
-                </Link>
+                <ul className="nav-links">
+                  <li>
+                    <Link to="/individu/" className="link-name">
+                      Gestion des Individus
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/requerant/" className="link-name">
+                      Gestion des Requerant
+                    </Link>
+                  </li>
+                </ul>
               </li>
               <li>
                 <Link to="/dossier/" className="link-name">

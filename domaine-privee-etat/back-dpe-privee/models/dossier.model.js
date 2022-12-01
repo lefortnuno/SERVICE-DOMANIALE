@@ -40,14 +40,11 @@ const ORDER_BY = ` ORDER BY idDossier DESC`;
 Dossier.addDossier = (newDossier, result) => {
   Requerant.getIdRequerant(newDossier.numeroRequerant, (err, resRequerant) => {
     Phase.getIdPhase(newDossier.numPhase, (err, resPhase) => {
-      console.log("resRequerant && resPhase === ", resRequerant, resPhase);
       if (resRequerant && resPhase) {
         dbConn.query("INSERT INTO dossier SET ?", newDossier, (err, res) => {
           if (err) {
-            console.log("err", err);
             result(err, null);
           } else {
-            console.log("resRequerant && resPhase");
             result(null, { success: true, message: "Ajout reussi !" });
           }
         });
@@ -83,6 +80,20 @@ Dossier.getAllDossiers = (result) => {
 
 Dossier.getIdDossier = (id, result) => {
   dbConn.query(REQUETE_BASE + " AND idDossier = ?", id, (err, res) => {
+    if (err) {
+      result(err, null);
+    } else {
+      if (res.length !== 0) {
+        result(null, res);
+      } else {
+        result(null, null);
+      }
+    }
+  });
+};
+
+Dossier.getDossierRequerant = (id, result) => {
+  dbConn.query(REQUETE_BASE + " AND REQUERANT.numeroRequerant = ?", id, (err, res) => {
     if (err) {
       result(err, null);
     } else {

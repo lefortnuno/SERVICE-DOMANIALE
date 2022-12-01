@@ -69,12 +69,11 @@ module.exports.addIndividu = (req, res) => {
             if (erreur) {
               res.send(erreur);
             } else {
-              Requerant.addRequerant(newRequerant, (erreurs, resReq) => {
+              Requerant.addRequerantNewIndividu(newRequerant, (erreurs, resReq) => {
                 if (erreurs) {
                   res.send(erreurs);
                 } else {
                   res.send(resI);
-                  console.log(resI);
                 }
               });
             }
@@ -106,14 +105,9 @@ module.exports.getCinIndividu = (req, res) => {
 };
 
 module.exports.searchIndividu = (req, res) => {
-  const { value } = req.body;
-  Individu.searchIndividu({ value }, (err, resp) => {
+  Individu.searchIndividu(req.params.valeur, (err, resp) => {
     if (!err) {
-      if (resp.length !== 0) {
-        res.send(resp);
-      } else {
-        res.send({ message: "individu non trouver" });
-      }
+      res.send(resp);
     } else {
       res.send(err);
     }
@@ -154,3 +148,4 @@ module.exports.updateIndividu = (req, res) => {
     }
   });
 };
+

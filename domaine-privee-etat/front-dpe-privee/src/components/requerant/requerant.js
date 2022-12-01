@@ -11,13 +11,13 @@ import ModalAjout from "./ModalAjout";
 import ModalEdition from "./ModalEdit";
 import DeleteConfirmation from "../../contexts/ModalSuppr";
 
-const URL_BASE = `individu/`;
+const URL_BASE = `requerant/`;
 
 //#region
 
 //#endregion
 
-export default function Individu() {
+export default function Requerant() {
   const navigate = useNavigate();
   const u_info = {
     u_token: localStorage.token,
@@ -29,7 +29,7 @@ export default function Individu() {
     u_etatCompte: localStorage.u_etatCompte,
   };
 
-  //#region //------------DONNEE Individu------------
+  //#region //------------DONNEE Requerant------------
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function Individu() {
   }
   //#endregion
 
-  //#region //------------ MODAL AJOUT Individu------------
+  //#region //------------ MODAL AJOUT Requerant------------
   const [show, setShow] = useState(false);
   const showAddModal = () => setShow(true);
   const closeAddModal = () => {
@@ -61,7 +61,7 @@ export default function Individu() {
   };
   //#endregion
 
-  //#region //------------MODAL EDIT Individu------------
+  //#region //------------MODAL EDIT Requerant------------
   const [numCompteEdit, setNumCompteEdit] = useState("");
   const [showEdit, setShowEdit] = useState(false);
   const showEditModal = (numCompte) => {
@@ -74,7 +74,7 @@ export default function Individu() {
   };
   //#endregion
 
-  //#region //------------MODAL DELETE Individu------------
+  //#region //------------MODAL DELETE Requerant------------
   const [id, setId] = useState(null);
   const [displayConfirmationModal, setDisplayConfirmationModal] =
     useState(false);
@@ -82,7 +82,7 @@ export default function Individu() {
   const showDeleteModal = (id) => {
     setId(id);
     setDeleteMessage(
-      `Etes vous sûre de vouloir supprimer l'Individu : 
+      `Etes vous sûre de vouloir supprimer l'Requerant : 
       '${users.find((x) => x.cin === id).nom}
        ${users.find((x) => x.cin === id).prenom}, Numéro CIN :
        ${users.find((x) => x.cin === id).cin}' ?`
@@ -201,7 +201,7 @@ export default function Individu() {
         <Header />
 
         <ModalAjout show={show} onHide={closeAddModal}>
-          Nouveau Individu
+          Nouveau Requerant
         </ModalAjout>
 
         <ModalEdition showEdit={showEdit} onHide={closeEditModal}>
@@ -217,14 +217,14 @@ export default function Individu() {
         />
 
         <div>
-          <h2> Liste des Individu </h2>
+          <h2> Liste des Requerant </h2>
           <span> </span>
           <Button
             className="btn btn-sm btn-primary"
             variant="primary"
             onClick={showAddModal}
           >
-            Nouveau Individu
+            Nouveau Requerant
           </Button>
           <span> </span>
           <label>
@@ -234,7 +234,7 @@ export default function Individu() {
               className="form-control form-control-sm"
               onClick={retourALaPremierPage}
               onChange={rechercheIndividu}
-              placeholder="rechercher un Individu ...."
+              placeholder="rechercher un Requerant ...."
               autoComplete="off"
             />
           </label>
@@ -246,13 +246,11 @@ export default function Individu() {
             <thead>
               <tr>
                 <th scope="col">Numéro</th>
+                <th scope="col">Nom et Prenom</th>
                 <th scope="col">Numéro CIN</th>
-                <th scope="col">Nom</th>
-                <th scope="col">Prenom </th>
-                <th scope="col">profession</th>
-                <th scope="col">Etat Civil</th>
-                <th scope="col">nom et Prenom du conjoint</th>
-                <th scope="col">Numéro CIN du conjoint</th>
+                <th scope="col"> Etat Morale</th>
+                <th scope="col">Numéro d'Affaire</th>
+                <th scope="col"> </th>
                 <th scope="col"> Actions </th>
               </tr>
             </thead>
@@ -261,32 +259,18 @@ export default function Individu() {
                 currentItems.map((user, key) => (
                   <tr key={key}>
                     <th scope="row">{user.numeroRequerant}</th>
+                    <td>{user.nom} {user.prenom}</td>
                     <td>{user.cin}</td>
-                    <td>{user.nom}</td>
-                    <td>{user.prenom}</td>
-                    <td>{user.profession}</td>
-                    {user.nature === "Marié" ? (
-                      <>
-                        <td>{user.nature}</td>
-                        <td>
-                          {user.nomConjoint} {user.prenomConjoint}
-                        </td>
-                        <td>{user.cinConjoint}</td>
-                      </>
-                    ) : (
-                      <>
-                        <td>{user.nature}</td>
-                        <td> / </td>
-                        <td> / </td>
-                      </>
-                    )}
+                    <td>{user.etatMorale}</td>
+                    <td>{user.numAffaire}</td>
+                    <td> </td>
                     <td>
                       <button
                         type="button"
                         className="btn btn-outline-success btn-sm m-1 waves-effect"
                         variant="default"
                         name="numCompteEdit"
-                        onClick={() => showEditModal(user.cin)}
+                        onClick={() => showEditModal(user.numeroRequerant)}
                       >
                         <BsEye />
                       </button>
@@ -296,7 +280,7 @@ export default function Individu() {
                         className="btn btn-outline-primary btn-sm m-1 waves-effect"
                         variant="default"
                         name="numCompteEdit"
-                        onClick={() => showEditModal(user.cin)}
+                        onClick={() => showEditModal(user.numeroRequerant)}
                       >
                         <BsPencilSquare />
                       </button>
@@ -305,7 +289,7 @@ export default function Individu() {
                         type="button"
                         className="btn btn-outline-danger btn-sm m-1 waves-effect"
                         variant="default"
-                        // onClick={() => showDeleteModal(user.cin)}
+                        onClick={() => showDeleteModal(user.numeroRequerant)}
                       >
                         <BsFillTrashFill />
                       </Button>

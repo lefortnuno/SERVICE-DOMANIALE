@@ -18,5 +18,6 @@ router.get(
   agent.checkUtilisateur,
   requerantController.searchRequerant
 );
+router.delete("/:id", requerantController.deleteRequerant);
 
 module.exports = router;

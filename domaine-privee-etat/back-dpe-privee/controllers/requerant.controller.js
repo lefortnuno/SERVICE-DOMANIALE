@@ -71,3 +71,13 @@ module.exports.updateRequerant = (req, res) => {
     }
   });
 };
+
+module.exports.deleteRequerant = (req, res) => {
+  Requerant.deleteRequerant(req.params.id, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
