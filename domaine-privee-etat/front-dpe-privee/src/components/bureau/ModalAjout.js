@@ -8,7 +8,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-const URL_BASE = `requerant/`;
+const URL_BASE = `bureau/`;
 
 //#region
 
@@ -23,7 +23,8 @@ export default function ModalAjout(props) {
   const [inputs, setInputs] = useState([]);
   const [erreurs, setErreurs] = useState([]);
   const [messages, setMessages] = useState({
-    cin: "numéro CIN obligatoire",
+    nomBureau: "Nom Bureau obligatoire",
+    adressBureau:"Adress du Bureau obligatoire"
   });
 
   //#region // IMAGE PHOTO DE PROFILE DES UTILISATEUR
@@ -77,52 +78,27 @@ export default function ModalAjout(props) {
   const handleSubmit = () => {
     let isValidate = true;
     //#region // --- VALEUR PAR DEFAUT
-    if (!inputs.etatMorale) {
-      inputs.etatMorale = "Individu Normale";
-    }
-
-    if (!inputs.cin) {
-      inputs.cin = false;
+    if (!inputs.nomBureau) {
+      inputs.nomBureau = false;
       isValidate = false;
-    } else {
-      if (inputs.cin.toString().length < 12) {
-        isValidate = false;
-      } else if (inputs.cin.toString().length > 12) {
-        isValidate = false;
-      }
-    }
-
-    if (!inputs.complementInformation) {
-      inputs.complementInformation = "Aucune";
-    }
+    } 
+    if (!inputs.adressBureau) {
+      inputs.adressBureau = false;
+      isValidate = false;
+    } 
     //#endregion
 
     //#region //-------- PRE-VALIDATION
-    if (!inputs.cin) {
+    if (!inputs.nomBureau) {
       setErreurs({
-        cin: true,
+        nomBureau: true,
       });
-    } else {
-      if (inputs.cin.toString().length < 12) {
-        setErreurs({
-          cin: true,
-        });
-        setMessages({
-          cin: "numero CIN trop court",
-        });
-      } else if (inputs.cin.toString().length > 12) {
-        setErreurs({
-          cin: true,
-        });
-        setMessages({
-          cin: "numero CIN trop long ",
-        });
-      } else {
-        setErreurs({
-          cin: false,
-        });
-      }
-    }
+    } 
+    if (!inputs.adressBureau) {
+      setErreurs({
+        adressBureau: true,
+      });
+    } 
     //#endregion
 
     if (isValidate) {
@@ -163,77 +139,34 @@ export default function ModalAjout(props) {
           <Container>
             <Form>
               <Row style={rowStyle}>
-                <Col col="md-2">
-                  <Form.Label>Etat Morale</Form.Label>
-                  <Form.Select
-                    name="etatMorale"
-                    value={inputs.etatMorale}
-                    onChange={handleChange}
-                    disabled={false}
-                  >
-                    <option value="Individu Normale">- Individu Normale</option>
-                    <option value="Personne Morale"> - Personne Morale </option>
-                  </Form.Select>
-                </Col>
                 <Col col="md-8" ml="auto">
-                  <Form.Label>Numéro CIN</Form.Label>
+                  <Form.Label>Nom du Bureau</Form.Label>
                   <Form.Control
-                    type="number"
-                    min="0"
-                    name="cin"
+                    type="text"
+                    name="nomBureau"
                     onChange={handleChange}
                     autoComplete="off"
-                    placeholder="Numéro CIN ...."
+                    placeholder="Nom du Bureau...."
                     inline="true"
+                    disabled={false}
                   />
                   <small className="text-danger d-block">
-                    {erreurs.cin ? messages.cin : null}
+                    {erreurs.nomBureau ? messages.nomBureau : null}
                   </small>
                 </Col>
-              </Row>
-
-              <Row style={rowStyle}>
                 <Col col="md-8" ml="auto">
-                  <Form.Label>Nom KETRIK AUTO</Form.Label>
+                  <Form.Label>Adress du Bureau</Form.Label>
                   <Form.Control
                     type="text"
-                    name="nom"
+                    name="adressBureau"
                     onChange={handleChange}
                     autoComplete="off"
-                    placeholder="Nom ...."
+                    placeholder="Adress du Bureau...."
                     inline="true"
-                    disabled={true}
-                  />
-                </Col>
-                <Col col="md-8" ml="auto">
-                  <Form.Label>Prenom KETRIK AUTO</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="prenom"
-                    onChange={handleChange}
-                    autoComplete="off"
-                    placeholder="Prenom ...."
-                    inline="true"
-                    disabled={true}
-                  />
-                </Col>
-              </Row>
-
-              <Row style={rowStyle}>
-                <Col>
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    name="complementInformation"
-                    onChange={handleChange}
-                    autoComplete="off"
-                    placeholder="Une observation à ajouter ? exemple : ''individu tres menacant et insistant, ....'' "
-                    inline="true"
+                    disabled={false}
                   />
                   <small className="text-danger d-block">
-                    {erreurs.complementInformation
-                      ? messages.complementInformation
-                      : null}
+                    {erreurs.adressBureau ? messages.adressBureau : null}
                   </small>
                 </Col>
               </Row>

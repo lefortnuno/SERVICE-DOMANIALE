@@ -41,6 +41,7 @@ function Header(props) {
                   Gestion des Utilisateurs
                 </Link>
               </li>
+
               <li>
                 <ul className="nav-links">
                   <li>
@@ -55,11 +56,28 @@ function Header(props) {
                   </li>
                 </ul>
               </li>
+
               <li>
                 <Link to="/dossier/" className="link-name">
                   Gestion des Nouvelles Demande
                 </Link>
               </li>
+              
+              <li>
+                <ul className="nav-links">
+                  <li>
+                    <Link to="/procedure/" className="link-name">
+                      Gestion des Procedures
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/bureau/" className="link-name">
+                      Gestion des Bureaux
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+
               <li onClick={seDeconnecter}>
                 <span className="link-name"> Deconnection </span>
               </li>

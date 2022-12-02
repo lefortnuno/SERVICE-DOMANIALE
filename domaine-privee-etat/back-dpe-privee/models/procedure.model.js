@@ -7,6 +7,10 @@ const Procedure = function (procedure) {
   this.nomProcedure = procedure.nomProcedure;
   this.idBureau = procedure.idBureau;
 };
+const REQUETE_BASE = `SELECT numProcedure, nomProcedure, PROCEDURES.idBureau, nomBureau, adressBureau `+
+`FROM PROCEDURES, BUREAU WHERE PROCEDURES.idBureau = BUREAU.idBureau `
+const ORDER_BY = ` ORDER BY numProcedure DESC`
+
 
 Procedure.addProcedure = (newProcedure, result) => {
     Bureau.getIdBureau(newProcedure.idBureau, (err, resBureau) => {
@@ -29,7 +33,7 @@ Procedure.addProcedure = (newProcedure, result) => {
 };
 
 Procedure.getAllProcedures = (result) => {
-  dbConn.query("SELECT * FROM Procedures", (err, res) => {
+  dbConn.query(REQUETE_BASE+ORDER_BY, (err, res) => {
     if (err) {
       result(err, null);
     } else {

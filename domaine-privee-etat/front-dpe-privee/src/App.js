@@ -9,6 +9,8 @@ import Utilisateur from "./components/utilisateurs/utilisateur";
 import Dossier from "./components/dossiers/dossier";
 import Individu from "./components/individu/individu";
 import Requerant from "./components/requerant/requerant";
+import Bureau from "./components/bureau/bureau";
+import Procedure from "./components/procedure/procedure";
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
           <Route path="dossier/" element={<Protected Cmp={Dossier} />} />
           <Route path="individu/" element={<Protected Cmp={Individu} />} />
           <Route path="requerant/" element={<Protected Cmp={Requerant} />} />
+          <Route path="bureau/" element={<Protected Cmp={Bureau} />} />
+          <Route path="procedure/" element={<Protected Cmp={Procedure} />} />
         </Routes>
       </BrowserRouter>
     </div>

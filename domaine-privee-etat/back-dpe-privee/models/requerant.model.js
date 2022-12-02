@@ -1,6 +1,6 @@
 let dbConn = require("../config/db");
-const Individu = require("../models/individu.model");
-const Dossier = require("../models/dossier.model");
+const Individu = require("./individu.model");
+const Dossier = require("./dossier.model");
 
 let Requerant = function (individu) {
   this.numeroRequerant = individu.numeroRequerant;
@@ -12,46 +12,29 @@ let Requerant = function (individu) {
 };
 
 const REQUETE_BASE =
-  `SELECT numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cin, ` +
-  `INDIVIDU.cin as cinEtranger, nom, prenom ` +
-  `FROM REQUERANT, INDIVIDU WHERE REQUERANT.cin = INDIVIDU.cin `;
+  `SELECT REQUERANT.numeroRequerant as numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cin, ` +
+  `INDIVIDU.cin as cinEtranger, nom, prenom, numAffaire ` +
+  `FROM REQUERANT, INDIVIDU, DOSSIER WHERE `+
+  `REQUERANT.cin = INDIVIDU.cin AND DOSSIER.numeroRequerant = REQUERANT.numeroRequerant `;
 const ORDER_BY = ` ORDER BY numeroRequerant DESC`;
 
 Requerant.addRequerant = (newRequerant, result) => {
-  Individu.getCinIndividu(newRequerant.cin, (erreur, resIndividu) => {
-    if (erreur) {
-      result(erreur, null);
+  Individu.getCinIndividu(newRequerant.cin, (errr, resI) => {
+    if(errr){
+      result(null, err);
     } else {
-      if (resIndividu) {
-        dbConn.query(
-          "INSERT INTO Requerant SET ?",
-          newRequerant,
-          (err, res) => {
-            if (err) {
-              result(err, null);
-            } else {
-              result(null, res);
-            }
+      if(resI){
+        console.log(resI);
+        dbConn.query("INSERT INTO Requerant SET ?", newRequerant, (err, res) => {
+          if (err) {
+            result(err, null);
+          } else {
+            result(null, res);
           }
-        );
-      } else {
-        result(null, {
-          message: " CIN Individu non trouver ! Inconnu !",
-          success: false,
         });
       }
     }
-  });
-};
-
-Requerant.addRequerantNewIndividu = (newRequerant, result) => {
-  dbConn.query("INSERT INTO Requerant SET ?", newRequerant, (err, res) => {
-    if (err) {
-      result(err, null);
-    } else {
-      result(null, res);
-    }
-  });
+  })
 };
 
 Requerant.getAllRequerants = (result) => {
@@ -65,7 +48,7 @@ Requerant.getAllRequerants = (result) => {
 };
 
 Requerant.getIdRequerant = (id, result) => {
-  dbConn.query(REQUETE_BASE + `AND numeroRequerant = ?`, id, (err, res) => {
+  dbConn.query(REQUETE_BASE + `AND REQUERANT.numeroRequerant = ?`, id, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -92,23 +75,23 @@ Requerant.getCINRequerant = (id, result) => {
   });
 };
 
-Requerant.searchRequerant = (values, result) => {
-  const req =
+Requerant.searchRequerant = (valeur, result) => {
+  dbConn.query(
     REQUETE_BASE +
-    `AND (INDIVIDU.cin LIKE '%${values.value}%' OR nom LIKE '%${values.value}%' OR prenom LIKE '%${values.value}%')` +
-    ORDER_BY;
-
-  dbConn.query(req, (err, res) => {
-    if (err) {
-      result({ err, message: "erreur !", success: false }, null);
-    } else {
-      if (res.length !== 0) {
-        result(null, { res, message: "trouvable !", success: true });
+      `AND ( REQUERANT.cin LIKE '%${valeur}%' OR nom LIKE '%${valeur}%' OR prenom LIKE '%${valeur}%' )` +
+      ORDER_BY,
+    (err, res) => {
+      if (err) {
+        result({ err, message: "erreur !", success: false }, null);
       } else {
-        result(null, { res, message: "Introuvable !", success: false });
+        if (res.length !== 0) {
+          result(null, { res, message: "trouvable !", success: true });
+        } else {
+          result(null, { res, message: "Introuvable !", success: false });
+        }
       }
     }
-  });
+  );
 };
 
 Requerant.updateRequerant = (updateRequerant, numeroRequerant, result) => {

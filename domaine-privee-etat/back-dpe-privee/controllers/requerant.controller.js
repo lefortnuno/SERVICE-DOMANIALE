@@ -55,10 +55,12 @@ module.exports.searchRequerant = (req, res) => {
 
 module.exports.updateRequerant = (req, res) => {
   const {
+    cin,
     etatMorale,
     complementInformation,
   } = req.body;
   const updateRequerant = {
+    cin,
     etatMorale,
     complementInformation,
   };

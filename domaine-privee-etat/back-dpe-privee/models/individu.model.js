@@ -1,6 +1,4 @@
 let dbConn = require("../config/db");
-const Requerant = require("./requerant.model");
-const Dossier = require("./dossier.model");
 
 let Individu = function (individu) {
   this.cin = individu.cin;
@@ -49,9 +47,7 @@ Individu.getCinIndividu = (id, result) => {
     } else {
       if (res.length !== 0) {
         result(null, res);
-        // result(null, {success: true, res});
       } else {
-        // result(null, {success : false, message: "Individu non trouver !"});
         result(null, null);
       }
     }
@@ -65,9 +61,7 @@ Individu.getCinIndividuVoirPlus = (id, result) => {
     } else {
       if (res.length !== 0) {
         result(null, res);
-        // result(null, {success: true, res});
       } else {
-        // result(null, {success : false, message: "Individu non trouver !"});
         result(null, null);
       }
     }

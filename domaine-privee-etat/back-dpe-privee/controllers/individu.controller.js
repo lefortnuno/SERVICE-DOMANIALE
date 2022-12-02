@@ -69,7 +69,7 @@ module.exports.addIndividu = (req, res) => {
             if (erreur) {
               res.send(erreur);
             } else {
-              Requerant.addRequerantNewIndividu(newRequerant, (erreurs, resReq) => {
+              Requerant.addRequerant(newRequerant, (erreurs, resReq) => {
                 if (erreurs) {
                   res.send(erreurs);
                 } else {
