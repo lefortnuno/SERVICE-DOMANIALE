@@ -11,6 +11,7 @@ import Individu from "./components/individu/individu";
 import Requerant from "./components/requerant/requerant";
 import Bureau from "./components/bureau/bureau";
 import Procedure from "./components/procedure/procedure";
+import C_I from "./components/historique/C_I/cahierInterne";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="requerant/" element={<Protected Cmp={Requerant} />} />
           <Route path="bureau/" element={<Protected Cmp={Bureau} />} />
           <Route path="procedure/" element={<Protected Cmp={Procedure} />} />
+          <Route path="C_I/" element={<Protected Cmp={C_I} />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -5,7 +5,7 @@ let Bureau = function (bureau) {
   this.nomBureau = bureau.nomBureau;
   this.adressBureau = bureau.adressBureau;
 };
-REQUETE_BASE = `SELECT * FROM Bureau WHERE `
+REQUETE_BASE = `SELECT * FROM Bureau `
 ORDER_BY= ` ORDER BY idBureau DESC`
 
 Bureau.addBureau = (newBureau, result) => {
@@ -19,7 +19,7 @@ Bureau.addBureau = (newBureau, result) => {
 };
 
 Bureau.getAllBureau = (result) => {
-  dbConn.query("SELECT * FROM Bureau", (err, res) => {
+  dbConn.query(REQUETE_BASE+ORDER_BY, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -29,7 +29,7 @@ Bureau.getAllBureau = (result) => {
 };
 
 Bureau.getIdBureau = (id, result) => {
-  dbConn.query("SELECT * FROM Bureau WHERE idBureau = ?", id, (err, res) => {
+  dbConn.query(REQUETE_BASE+` WHERE idBureau = ?`, id, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -55,7 +55,7 @@ Bureau.updateBureau = (updateBureau, id, result) => {
 Bureau.searchBureau = (valeur, result) => {
   dbConn.query(
     REQUETE_BASE +
-      ` ( nomBureau LIKE '%${valeur}%' OR adressBureau LIKE '%${valeur}%' )` +
+      ` WHERE ( nomBureau LIKE '%${valeur}%' OR adressBureau LIKE '%${valeur}%' )` +
       ORDER_BY,
     (err, res) => {
       if (err) {

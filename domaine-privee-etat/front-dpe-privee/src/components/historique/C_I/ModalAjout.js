@@ -1,4 +1,4 @@
-import axios from "../../api/axios";
+import axios from "../../../api/axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";

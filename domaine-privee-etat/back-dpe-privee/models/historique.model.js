@@ -15,6 +15,10 @@ const Historique = function (historique) {
   this.numProcedure = historique.numProcedure;
 };
 
+const REQUETE_BASE = `SELECT numHisto,mouvement,dateMouvement,dateRDV,dispoDossier,approbation,observation,DOSSIER.numAffaire,dependance, natureAffectation, empietement, lettreDemande,planAnnexe,pvDelimitation,superficieTerrain,DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier,REQUERANT.numeroRequerant,etatMorale,PHASE.numPhase,nomPhase, DATE_FORMAT(dateRDV, '%d-%m-%Y') as dateRDV, COMPTE.numCompte, identification,INDIVIDU.cin, nom, prenom,PROCEDURES.numProcedure, nomProcedure,BUREAU.idBureau,nomBureau,adressBureau,SOUS_DOSSIER.numSousDossier,obseravation_S_D, DATE_FORMAT(dateDepot_S_D, '%d-%m-%Y') as dateDepot_S_D,mesureAttribuable,prixAttribue,lettreDesistement,planMere,certificatSituationJuridique FROM HISTORIQUE, INDIVIDU, REQUERANT, COMPTE, BUREAU, PROCEDURES, SOUS_DOSSIER, DOSSIER, PHASE WHERE HISTORIQUE.numAffaire = DOSSIER.numAffaire AND HISTORIQUE.numProcedure = PROCEDURES.numProcedure AND HISTORIQUE.numCompte = COMPTE.numCompte AND DOSSIER.numeroRequerant = REQUERANT.numeroRequerant AND DOSSIER.numAffaire = SOUS_DOSSIER.numAffaire AND DOSSIER.numPhase = PHASE.numPhase AND INDIVIDU.cin = REQUERANT.cin AND BUREAU.idBureau = PROCEDURES.idBureau `;
+
+const ORDER_BY = ` ORDER BY numHisto DESC `;
+
 Historique.addHistorique = (newHistorique, result) => {
   Dossier.getNumDossier(newHistorique.numAffaire, (err, resDossier) => {
     Compte.getIdUtilisateur(newHistorique.numCompte, (err, resCompte) => {
@@ -54,10 +58,45 @@ Historique.addHistoNewDemande = (newHistorique) => {
   );
 };
 
-
 Historique.getAllHistoriques = (result) => {
+  dbConn.query(REQUETE_BASE + ORDER_BY, (err, res) => {
+    if (err) {
+      result(err, null);
+    } else {
+      result(null, res);
+    }
+  });
+};
+
+Historique.getCahierInterne = (result) => {
   dbConn.query(
-    "SELECT * FROM Historique ORDER BY numHisto DESC",
+    REQUETE_BASE + `AND mouvement = 'Interne'` + ORDER_BY,
+    (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
+Historique.getCahierArriver = (result) => {
+  dbConn.query(
+    REQUETE_BASE + `AND mouvement = 'arriver'` + ORDER_BY,
+    (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
+Historique.getCahierDepart = (result) => {
+  dbConn.query(
+    REQUETE_BASE + `AND mouvement = 'depart'` + ORDER_BY,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -83,28 +122,23 @@ Historique.getIdHistorique = (id, result) => {
 };
 
 Historique.searchHistorique = (valeur, result) => {
-
-  let req = `select * from Historique, dossier where dossier.numAffaire=historique.numAffaire AND dossier.numAffaire LIKE '%${valeur.numAffaire}%' ORDER BY numHisto DESC`;
-
-  if (valeur.checkBoxDepart) {
-    req = `select * from Historique where mouvement = 'depart' ORDER BY numHisto DESC`;
-  }
-  if (valeur.checkBoxArriver) {
-    req = `select * from Historique where mouvement = 'arriver' ORDER BY numHisto DESC`;
-  }
-  if (valeur.checkBoxDepart && valeur.numAffaire) {
-    req = `select * from Historique, dossier where dossier.numAffaire=historique.numAffaire AND dossier.numAffaire LIKE '%${valeur.numAffaire}%' AND mouvement = 'depart' ORDER BY numHisto DESC`;
-  } else if (valeur.numAffaire && valeur.checkBoxArriver) {
-    req = `select * from Historique, dossier where dossier.numAffaire=historique.numAffaire AND dossier.numAffaire LIKE '%${valeur.numAffaire}%' AND mouvement = 'arriver' ORDER BY numHisto DESC`;
-  }
-
-  dbConn.query(req, function (err, res) {
-    if (err) {
-      result(err, null);
-    } else {
-      result(null, res);
+  dbConn.query(
+    REQUETE_BASE +
+      ` AND (Dossier.numAffaire LIKE '%${valeur}%' OR INDIVIDU.cin LIKE '%${valeur}%'  OR INDIVIDU.nom LIKE '%${valeur}%'  OR INDIVIDU.prenom LIKE '%${valeur}%' )` +
+      ORDER_BY,
+    valeur,
+    (err, res) => {
+      if (err) {
+        result({ err, message: "erreur !", success: false }, null);
+      } else {
+        if (res.length !== 0) {
+          result(null, { res, message: "trouvable !", success: true });
+        } else {
+          result(null, { res, message: "Introuvable !", success: false });
+        }
+      }
     }
-  });
+  );
 };
 
 Historique.updateHistorique = (updateHistorique, id, result) => {

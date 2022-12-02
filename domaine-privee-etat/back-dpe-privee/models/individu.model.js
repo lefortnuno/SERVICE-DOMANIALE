@@ -13,12 +13,8 @@ let Individu = function (individu) {
   this.codeEtatCivil = individu.codeEtatCivil;
 };
 
-REQUETE_BASE =
-  `SELECT INDIVIDU.cin, nom, prenom, lieunais, DATE_FORMAT(datenais, '%d-%m-%Y'), profession, domicile, DATE_FORMAT(dateLivrance, '%d-%m-%Y'), lieuLivrance, INDIVIDU.codeEtatCivil, ` +
-  `REQUERANT.numeroRequerant, REQUERANT.etatMorale, REQUERANT.complementInformation, ` +
-  `ETAT_CIVIL.codeEtatCivil , ETAT_CIVIL.nature, ETAT_CIVIL.cinConjoint, ETAT_CIVIL.nomConjoint, ETAT_CIVIL.prenomConjoint, DATE_FORMAT(ETAT_CIVIL.dateNature, '%d-%m-%Y'), ETAT_CIVIL.lieuNature ` +
-  `FROM INDIVIDU, REQUERANT, ETAT_CIVIL WHERE ETAT_CIVIL.codeEtatCivil = INDIVIDU.codeEtatCivil AND INDIVIDU.cin = REQUERANT.cin `;
-ORDER_BY = ` ORDER BY numeroRequerant DESC`;
+const REQUETE_BASE = `SELECT INDIVIDU.cin, nom, prenom, lieunais, DATE_FORMAT(datenais, '%d-%m-%Y'), profession, domicile, DATE_FORMAT(dateLivrance, '%d-%m-%Y') as dateLivrance, lieuLivrance, INDIVIDU.codeEtatCivil as codeEtatCivilEtranger, REQUERANT.numeroRequerant as numeroRequerant, etatMorale, complementInformation, ETAT_CIVIL.codeEtatCivil as codeEtatCivil,  nature, cinConjoint, nomConjoint, prenomConjoint, DATE_FORMAT(dateNature, '%d-%m-%Y') as dateNature, lieuNature FROM INDIVIDU, REQUERANT, ETAT_CIVIL WHERE ETAT_CIVIL.codeEtatCivil = INDIVIDU.codeEtatCivil AND INDIVIDU.cin = REQUERANT.cin `;
+const ORDER_BY = ` ORDER BY numeroRequerant DESC`;
 
 Individu.addIndividu = (newIndividu, result) => {
   dbConn.query("INSERT INTO individu SET ?", newIndividu, (err, res) => {
@@ -31,7 +27,7 @@ Individu.addIndividu = (newIndividu, result) => {
 };
 
 Individu.getAllIndividus = (result) => {
-  dbConn.query(REQUETE_BASE + ORDER_BY, (err, res) => {
+  dbConn.query(REQUETE_BASE+ORDER_BY, (err, res) => {
     if (err) {
       result(err, null);
     } else {

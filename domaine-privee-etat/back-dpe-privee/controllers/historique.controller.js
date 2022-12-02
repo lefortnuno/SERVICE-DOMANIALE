@@ -58,6 +58,36 @@ module.exports.getAllHistoriques = (req, res) => {
   });
 };
 
+module.exports.getCahierArriver = (req, res) => {
+  Historique.getCahierArriver((err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
+module.exports.getCahierDepart = (req, res) => {
+  Historique.getCahierDepart((err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
+module.exports.getCahierInterne = (req, res) => {
+  Historique.getCahierInterne((err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
 module.exports.getIdHistorique = (req, res) => {
   Historique.getIdHistorique(req.params.id, (err, resp) => {
     if (!err) {
@@ -69,21 +99,17 @@ module.exports.getIdHistorique = (req, res) => {
 };
 
 module.exports.searchHistorique = (req, res) => {
-  const { numAffaire, checkBoxArriver, checkBoxDepart } = req.body;
-  Historique.searchHistorique(
-    { numAffaire, checkBoxArriver, checkBoxDepart },
-    (err, resp) => {
-      if (!err) {
-        if (resp.length !== 0) {
-          res.send(resp);
-        } else {
-          res.send({ message: "Historique non trouver" });
-        }
+  Historique.searchHistorique(req.params.valeur, (err, resp) => {
+    if (!err) {
+      if (resp) {
+        res.send(resp);
       } else {
         res.send(err);
       }
+    } else {
+      res.send(err);
     }
-  );
+  });
 };
 
 module.exports.updateHistorique = (req, res) => {

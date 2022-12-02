@@ -78,6 +78,26 @@ function Header(props) {
                 </ul>
               </li>
 
+              <li>
+                <ul className="nav-links">
+                  <li>
+                    <Link to="/C_I/" className="link-name">
+                      Cahier Interne
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/bureau/" className="link-name">
+                      Cahier de Depart
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/bureau/" className="link-name">
+                      Cahier d'Arriver
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+
               <li onClick={seDeconnecter}>
                 <span className="link-name"> Deconnection </span>
               </li>
