@@ -60,3 +60,13 @@ module.exports.updateProcedure = (req, res) => {
     }
   });
 };
+
+module.exports.searchProcedure = (req, res) => {
+  Procedure.searchProcedure(req.params.valeur, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};

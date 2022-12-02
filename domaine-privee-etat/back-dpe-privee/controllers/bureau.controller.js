@@ -60,3 +60,13 @@ module.exports.updateBureau = (req, res) => {
     }
   });
 };
+
+module.exports.searchBureau = (req, res) => {
+  Bureau.searchBureau(req.params.valeur, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};

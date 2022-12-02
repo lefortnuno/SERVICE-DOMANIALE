@@ -66,4 +66,23 @@ Procedure.updateProcedure = (updateProcedure, id, result) => {
   );
 };
 
+Procedure.searchProcedure = (valeur, result) => {
+  dbConn.query(
+    REQUETE_BASE +
+      `AND ( nomBureau LIKE '%${valeur}%' OR nomProcedure LIKE '%${valeur}%' )` +
+      ORDER_BY,
+    (err, res) => {
+      if (err) {
+        result({ err, message: "erreur !", success: false }, null);
+      } else {
+        if (res.length !== 0) {
+          result(null, { res, message: "trouvable !", success: true });
+        } else {
+          result(null, { res, message: "Introuvable !", success: false });
+        }
+      }
+    }
+  );
+};
+
 module.exports = Procedure;

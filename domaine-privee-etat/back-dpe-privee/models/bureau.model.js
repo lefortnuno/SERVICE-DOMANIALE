@@ -5,6 +5,8 @@ let Bureau = function (bureau) {
   this.nomBureau = bureau.nomBureau;
   this.adressBureau = bureau.adressBureau;
 };
+REQUETE_BASE = `SELECT * FROM Bureau WHERE `
+ORDER_BY= ` ORDER BY idBureau DESC`
 
 Bureau.addBureau = (newBureau, result) => {
   dbConn.query("INSERT INTO Bureau SET ?", newBureau, (err, res) => {
@@ -45,6 +47,25 @@ Bureau.updateBureau = (updateBureau, id, result) => {
         result(err, null);
       } else {
         result(null, res);
+      }
+    }
+  );
+};
+
+Bureau.searchBureau = (valeur, result) => {
+  dbConn.query(
+    REQUETE_BASE +
+      ` ( nomBureau LIKE '%${valeur}%' OR adressBureau LIKE '%${valeur}%' )` +
+      ORDER_BY,
+    (err, res) => {
+      if (err) {
+        result({ err, message: "erreur !", success: false }, null);
+      } else {
+        if (res.length !== 0) {
+          result(null, { res, message: "trouvable !", success: true });
+        } else {
+          result(null, { res, message: "Introuvable !", success: false });
+        }
       }
     }
   );

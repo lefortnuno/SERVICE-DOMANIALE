@@ -15,7 +15,6 @@ router.get("/:id", agent.checkUtilisateur, requerantController.getIdRequerant);
 router.put("/:id", agent.checkUtilisateur, requerantController.updateRequerant);
 router.get(
   "/recherche/:valeur",
-  agent.checkUtilisateur,
   requerantController.searchRequerant
 );
 router.delete("/:id", requerantController.deleteRequerant);
