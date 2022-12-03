@@ -27,14 +27,7 @@ let Dossier = function (dossier) {
   this.certificatSituationJuridique = dossier.certificatSituationJuridique;
 };
 
-const REQUETE_BASE =
-  ` SELECT` +
-  ` idDossier, DOSSIER.numAffaire as numAffaire, dependance, empietement, natureAffectation, lettreDemande, planAnnexe, pvDelimitation, superficieTerrain, DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, DOSSIER.numeroRequerant as numeroRequerantEtranger, numPhase,` +
-  ` numSousDossier, obseravation_S_D,DATE_FORMAT(dateDepot_S_D, '%d-%m-%Y') as dateDepot_S_D, mesureAttribuable, prixAttribue, lettreDesistement, planMere, certificatSituationJuridique, SOUS_DOSSIER.numAffaire as numAffaireEtranger, ` +
-  ` REQUERANT.numeroRequerant as numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cinEtranger, ` +
-  `INDIVIDU.cin as cin, nom, prenom ` +
-  ` FROM DOSSIER, SOUS_DOSSIER, INDIVIDU, REQUERANT ` +
-  ` WHERE DOSSIER.numAffaire = SOUS_DOSSIER.numAffaire AND INDIVIDU.cin = REQUERANT.cin AND REQUERANT.numeroRequerant = DOSSIER.numeroRequerant`;
+const REQUETE_BASE = ` SELECT idDossier, DOSSIER.numAffaire as numAffaire, dependance, empietement, natureAffectation, lettreDemande, planAnnexe, pvDelimitation, superficieTerrain, DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, DOSSIER.numeroRequerant as numeroRequerantEtranger, numPhase, numSousDossier, obseravation_S_D,DATE_FORMAT(dateDepot_S_D, '%d-%m-%Y') as dateDepot_S_D, mesureAttribuable, prixAttribue, lettreDesistement, planMere, certificatSituationJuridique, SOUS_DOSSIER.numAffaire as numAffaireEtranger, REQUERANT.numeroRequerant as numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cinEtranger,  INDIVIDU.cin as cin, nom, prenom FROM DOSSIER, SOUS_DOSSIER, INDIVIDU, REQUERANT WHERE DOSSIER.numAffaire = SOUS_DOSSIER.numAffaire AND INDIVIDU.cin = REQUERANT.cin AND REQUERANT.numeroRequerant = DOSSIER.numeroRequerant AND DOSSIER.numPhase=1 `;
 const ORDER_BY = ` ORDER BY idDossier DESC`;
 
 Dossier.addDossier = (newDossier, result) => {

@@ -86,12 +86,12 @@ function Header(props) {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/bureau/" className="link-name">
+                    <Link to="/C_D/" className="link-name">
                       Cahier de Depart
                     </Link>
                   </li>
                   <li>
-                    <Link to="/bureau/" className="link-name">
+                    <Link to="/C_A/" className="link-name">
                       Cahier d'Arriver
                     </Link>
                   </li>

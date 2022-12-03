@@ -12,6 +12,8 @@ import Requerant from "./components/requerant/requerant";
 import Bureau from "./components/bureau/bureau";
 import Procedure from "./components/procedure/procedure";
 import C_I from "./components/historique/C_I/cahierInterne";
+import C_D from "./components/historique/C_D/cahierDepart";
+import C_A from "./components/historique/C_A/cahierArriver";
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
           <Route path="bureau/" element={<Protected Cmp={Bureau} />} />
           <Route path="procedure/" element={<Protected Cmp={Procedure} />} />
           <Route path="C_I/" element={<Protected Cmp={C_I} />} />
+          <Route path="C_D/" element={<Protected Cmp={C_D} />} />
+          <Route path="C_A/" element={<Protected Cmp={C_A} />} />
         </Routes>
       </BrowserRouter>
     </div>

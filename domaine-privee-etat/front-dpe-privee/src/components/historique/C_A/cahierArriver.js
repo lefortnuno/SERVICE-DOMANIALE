@@ -1,23 +1,28 @@
-import axios from "../../api/axios";
+import axios from "../../../api/axios";
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { BsFillTrashFill, BsPencilSquare, BsEye } from "react-icons/bs";
+import {
+  BsFillTrashFill,
+  BsPencilSquare,
+  BsEye,
+  BsShift,
+} from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
-import Header from "../../contexts/Header";
+import Header from "../../../contexts/Header";
 import ModalAjout from "./ModalAjout";
 import ModalEdition from "./ModalEdit";
 import DeleteConfirmation from "../../../contexts/ModalSuppr";
 
-const URL_BASE = `historique/`;
+const URL_BASE = `historique/C_A/`;
 
 //#region
 
 //#endregion
 
-export default function Dossier() {
+export default function C_I() {
   const navigate = useNavigate();
   const u_info = {
     u_token: localStorage.token,
@@ -29,7 +34,7 @@ export default function Dossier() {
     u_etatCompte: localStorage.u_etatCompte,
   };
 
-  //#region //------------DONNEE Dossier------------
+  //#region //------------DONNEE C_I------------
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -52,16 +57,20 @@ export default function Dossier() {
   }
   //#endregion
 
-  //#region //------------ MODAL AJOUT Dossier------------
+  //#region //------------ MODAL AJOUT C_I------------
+  const [numCompteAjout, setNumCompteAjout] = useState("");
   const [show, setShow] = useState(false);
-  const showAddModal = () => setShow(true);
+  const showAddModal = (numCompte) => {
+    setNumCompteAjout(numCompte);
+    setShow(true);
+  };
   const closeAddModal = () => {
     getUsers();
     setShow(false);
   };
   //#endregion
 
-  //#region //------------MODAL EDIT Dossier------------
+  //#region //------------MODAL EDIT C_I------------
   const [numCompteEdit, setNumCompteEdit] = useState("");
   const [showEdit, setShowEdit] = useState(false);
   const showEditModal = (numCompte) => {
@@ -74,7 +83,7 @@ export default function Dossier() {
   };
   //#endregion
 
-  //#region //------------MODAL DELETE Dossier------------
+  //#region //------------MODAL DELETE C_I------------
   const [id, setId] = useState(null);
   const [displayConfirmationModal, setDisplayConfirmationModal] =
     useState(false);
@@ -82,7 +91,7 @@ export default function Dossier() {
   const showDeleteModal = (id) => {
     setId(id);
     setDeleteMessage(
-      `Etes vous sûre de vouloir supprimer l'Dossier : _' ${
+      `Etes vous sûre de vouloir supprimer l'C_I : _' ${
         users.find((x) => x.idDossier === id).numAffaire
       } '_ ?`
     );
@@ -200,7 +209,7 @@ export default function Dossier() {
         <Header />
 
         <ModalAjout show={show} onHide={closeAddModal}>
-          Nouvelle Demande
+          {numCompteAjout}
         </ModalAjout>
 
         <ModalEdition showEdit={showEdit} onHide={closeEditModal}>
@@ -216,15 +225,7 @@ export default function Dossier() {
         />
 
         <div>
-          <h2> Liste des Nouvelles Demande </h2>
-          <span> </span>
-          <Button
-            className="btn btn-sm btn-primary"
-            variant="primary"
-            onClick={showAddModal}
-          >
-            Nouvelle Demande
-          </Button>
+          <h2> Cahier d'arriver </h2>
           <span> </span>
           <label>
             <input
@@ -233,7 +234,7 @@ export default function Dossier() {
               className="form-control form-control-sm"
               onClick={retourALaPremierPage}
               onChange={rechercheDossier}
-              placeholder="rechercher un Dossier ...."
+              placeholder="rechercher dans un cahier d'arriver ...."
               autoComplete="off"
             />
           </label>
@@ -244,13 +245,15 @@ export default function Dossier() {
           <table className="table table-striped w-auto">
             <thead>
               <tr>
-                <th scope="col">Ref</th>
-                <th scope="col">Affectation</th>
+                <th scope="col">#</th>
+                <th scope="col">Réf</th>
                 <th scope="col">Numéro Affaire</th>
-                <th scope="col">Numéro CIN</th>
-                <th scope="col">Date de Demande</th>
-                <th scope="col">Superficie du Terrain</th>
+                <th scope="col">Requerant</th>
+                <th scope="col">Date du Mouvement</th>
+                <th scope="col">Date Rendez-vous</th>
+                <th scope="col">Phase du dossier</th>
                 <th scope="col">Observation</th>
+                <th scope="col">Agent</th>
                 <th scope="col"> Actions </th>
               </tr>
             </thead>
@@ -258,20 +261,34 @@ export default function Dossier() {
               {contenuTab ? (
                 currentItems.map((user, key) => (
                   <tr key={key}>
-                  <th scope="row">{user.idDossier} </th>
-                  <td>{user.natureAffectation ? 'Affecté' : 'Non affecté'}</td>
-                  <td>{user.numAffaire}</td>
-                  <td>{user.cin}</td>
-                  <td>{user.dateDemande}</td>
-                  <td>{user.superficieTerrain}</td>
-                  <td>{user.observationDossier}</td>
+                    <th>
+                      <Button
+                        type="button"
+                        className="btn btn-outline-primary btn-sm m-1 waves-effect"
+                        variant="default"
+                        name="numCompteEdit"
+                        onClick={() => showAddModal(user.numHisto)}
+                      >
+                        <BsShift />
+                      </Button>
+                    </th>
+                    <th scope="row">{user.numHisto} </th>
+                    <td>{user.numAffaire}</td>
+                    <td>
+                      {user.nom} {user.prenom}
+                    </td>
+                    <td>{user.dateDepot_S_D}</td>
+                    <td>{user.dateRDV}</td>
+                    <td>{user.nomPhase}</td>
+                    <td>{user.obseravation_S_D}</td>
+                    <td>{user.identification}</td>
                     <td>
                       <button
                         type="button"
                         className="btn btn-outline-success btn-sm m-1 waves-effect"
                         variant="default"
                         name="numCompteEdit"
-                        onClick={() => showEditModal(user.numCompte)}
+                        onClick={() => showEditModal(user.numHisto)}
                       >
                         <BsEye />
                       </button>
@@ -281,7 +298,7 @@ export default function Dossier() {
                         className="btn btn-outline-primary btn-sm m-1 waves-effect"
                         variant="default"
                         name="numCompteEdit"
-                        onClick={() => showEditModal(user.numCompte)}
+                        onClick={() => showEditModal(user.numHisto)}
                       >
                         <BsPencilSquare />
                       </button>
@@ -290,7 +307,7 @@ export default function Dossier() {
                         type="button"
                         className="btn btn-outline-danger btn-sm m-1 waves-effect"
                         variant="default"
-                        onClick={() => showDeleteModal(user.numCompte)}
+                        onClick={() => showDeleteModal(user.numHisto)}
                       >
                         <BsFillTrashFill />
                       </Button>

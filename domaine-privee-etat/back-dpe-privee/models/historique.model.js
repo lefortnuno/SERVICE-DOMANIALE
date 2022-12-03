@@ -9,13 +9,14 @@ const Historique = function (historique) {
   this.dateRDV = historique.dateRDV;
   this.dispoDossier = historique.dispoDossier;
   this.approbation = historique.approbation;
+  this.accomplissement = historique.accomplissement;
   this.Observation = historique.Observation;
   this.numAffaire = historique.numAffaire;
   this.numCompte = historique.numCompte;
   this.numProcedure = historique.numProcedure;
 };
 
-const REQUETE_BASE = `SELECT numHisto,mouvement,dateMouvement,dateRDV,dispoDossier,approbation,observation,DOSSIER.numAffaire,dependance, natureAffectation, empietement, lettreDemande,planAnnexe,pvDelimitation,superficieTerrain,DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier,REQUERANT.numeroRequerant,etatMorale,PHASE.numPhase,nomPhase, DATE_FORMAT(dateRDV, '%d-%m-%Y') as dateRDV, COMPTE.numCompte, identification,INDIVIDU.cin, nom, prenom,PROCEDURES.numProcedure, nomProcedure,BUREAU.idBureau,nomBureau,adressBureau,SOUS_DOSSIER.numSousDossier,obseravation_S_D, DATE_FORMAT(dateDepot_S_D, '%d-%m-%Y') as dateDepot_S_D,mesureAttribuable,prixAttribue,lettreDesistement,planMere,certificatSituationJuridique FROM HISTORIQUE, INDIVIDU, REQUERANT, COMPTE, BUREAU, PROCEDURES, SOUS_DOSSIER, DOSSIER, PHASE WHERE HISTORIQUE.numAffaire = DOSSIER.numAffaire AND HISTORIQUE.numProcedure = PROCEDURES.numProcedure AND HISTORIQUE.numCompte = COMPTE.numCompte AND DOSSIER.numeroRequerant = REQUERANT.numeroRequerant AND DOSSIER.numAffaire = SOUS_DOSSIER.numAffaire AND DOSSIER.numPhase = PHASE.numPhase AND INDIVIDU.cin = REQUERANT.cin AND BUREAU.idBureau = PROCEDURES.idBureau `;
+const REQUETE_BASE = `SELECT numHisto,mouvement,dateMouvement,dateRDV,dispoDossier, approbation, observation, accomplissement, DOSSIER.numAffaire,dependance, natureAffectation, empietement, lettreDemande,planAnnexe,pvDelimitation,superficieTerrain,DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, REQUERANT.numeroRequerant, etatMorale, PHASE.numPhase, nomPhase, naturePhase, DATE_FORMAT(dateRDV, '%d-%m-%Y') as dateRDV, COMPTE.numCompte, identification,INDIVIDU.cin, nom, prenom,PROCEDURES.numProcedure, nomProcedure,BUREAU.idBureau,nomBureau,adressBureau,SOUS_DOSSIER.numSousDossier,obseravation_S_D, DATE_FORMAT(dateDepot_S_D, '%d-%m-%Y') as dateDepot_S_D,mesureAttribuable,prixAttribue,lettreDesistement,planMere,certificatSituationJuridique FROM HISTORIQUE, INDIVIDU, REQUERANT, COMPTE, BUREAU, PROCEDURES, SOUS_DOSSIER, DOSSIER, PHASE WHERE HISTORIQUE.numAffaire = DOSSIER.numAffaire AND HISTORIQUE.numProcedure = PROCEDURES.numProcedure AND HISTORIQUE.numCompte = COMPTE.numCompte AND DOSSIER.numeroRequerant = REQUERANT.numeroRequerant AND DOSSIER.numAffaire = SOUS_DOSSIER.numAffaire AND DOSSIER.numPhase = PHASE.numPhase AND INDIVIDU.cin = REQUERANT.cin AND BUREAU.idBureau = PROCEDURES.idBureau `;
 
 const ORDER_BY = ` ORDER BY numHisto DESC `;
 
@@ -70,7 +71,9 @@ Historique.getAllHistoriques = (result) => {
 
 Historique.getCahierInterne = (result) => {
   dbConn.query(
-    REQUETE_BASE + `AND mouvement = 'Interne'` + ORDER_BY,
+    REQUETE_BASE +
+      `AND ( mouvement = 'Interne' AND dispoDossier = 1 ) ` +
+      ORDER_BY,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -83,7 +86,9 @@ Historique.getCahierInterne = (result) => {
 
 Historique.getCahierArriver = (result) => {
   dbConn.query(
-    REQUETE_BASE + `AND mouvement = 'arriver'` + ORDER_BY,
+    REQUETE_BASE +
+      `AND ( mouvement = 'arriver' AND dispoDossier = 1 ) ` +
+      ORDER_BY,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -96,7 +101,9 @@ Historique.getCahierArriver = (result) => {
 
 Historique.getCahierDepart = (result) => {
   dbConn.query(
-    REQUETE_BASE + `AND mouvement = 'depart'` + ORDER_BY,
+    REQUETE_BASE +
+      `AND ( mouvement = 'depart' AND dispoDossier = 0 ) ` +
+      ORDER_BY,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -109,7 +116,7 @@ Historique.getCahierDepart = (result) => {
 
 Historique.getIdHistorique = (id, result) => {
   dbConn.query(
-    "SELECT * FROM historique WHERE numHisto = ?",
+    REQUETE_BASE+ ` AND HISTORIQUE.numHisto = ?`,
     id,
     (err, res) => {
       if (err) {

@@ -1,13 +1,13 @@
 const AuthMidleware = require("./auth.middleware");
 
-const monRole = "client";
-
+const monRole = process.env.xUTILISATEUR;
+                            
 module.exports.checkUtilisateur = (req, res, next) => {
   AuthMidleware.checkUtilisateur(req, res, next, {
-    admin: "admin",
-    chef: "chef",
-    chefAdjoint: "chef adjoint",
-    agent: "agent",
+    admin: process.env.xADMIN,
+    chef: process.env.xCHEF,
+    chefAdjoint: process.env.xCHEFADJOINT,
+    agent: process.env.xAGENT,
     client: monRole,
   });
 };

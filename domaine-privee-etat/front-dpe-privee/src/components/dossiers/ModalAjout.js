@@ -85,7 +85,7 @@ export default function ModalAjout(props) {
       })
       .catch((e) => {
         if (e.response.status === 403) {
-          toast.error("Vous n'etes pas autoriser a ajouter un utilisateur!");
+          toast.error("Vous n'etes pas autoriser a ajouter un dossier!");
         }
       })
       .finally(() => {
@@ -164,7 +164,12 @@ export default function ModalAjout(props) {
     if (!inputs.superficieTerrain) {
       inputs.superficieTerrain = false;
       isValidate = false;
+    } else {
+      if (inputs.superficieTerrain < 0.5 || inputs.superficieTerrain > 992.80){
+        isValidate =false;
+      }
     }
+
     if (!inputs.observationDossier) {
       inputs.observationDossier = false;
       isValidate = false;
@@ -173,7 +178,6 @@ export default function ModalAjout(props) {
       inputs.numeroRequerant = false;
       isValidate = false;
     }
-
     //#endregion
 
     //#region //-------- PRE-VALIDATION
@@ -228,11 +232,22 @@ export default function ModalAjout(props) {
         pvDelimitation: true,
       });
     }
+
     if (!inputs.superficieTerrain) {
       setErreurs({
         superficieTerrain: true,
       });
+    } else {
+      if (inputs.superficieTerrain < 0.5 || inputs.superficieTerrain > 992.80){
+        setErreurs({
+          superficieTerrain: true,
+        });
+        setMessages({
+          superficieTerrain: "Superficie de Terrain non acceptable !",
+        });
+      }
     }
+
     if (!inputs.observationDossier) {
       setErreurs({
         observationDossier: true,
@@ -279,48 +294,60 @@ export default function ModalAjout(props) {
   return (
     <>
       <Modal
-        size="sm"
+        size="lg"
         show={props.show}
         onHide={props.closeAddModal}
         backdrop="static"
         keyboard={false}
       >
-        <Modal.Header>
-          <Modal.Title>{props.children}</Modal.Title>
-        </Modal.Header>
+        <Form>
+          <Modal.Header>
+            <Row>
+              <Col>
+                <h3>{props.children}</h3>
+                <span> :-- {u_info.u_numCompte} --: </span>
+                <Form.Control
+                  type="number"
+                  name="numCompte"
+                  onChange={handleChange}
+                  autoComplete="off"
+                  placeholder="Numéro compte utilisateur ...."
+                  min="1"
+                  disabled={true}
+                  hidden={true}
+                />
+              </Col>
+              <Col col="md-8" ml="auto">
+                <Form.Label>Numéro Affaire</Form.Label>
+                <Form.Select
+                  name="numAffaire"
+                  value={inputs.numAffaire}
+                  onChange={handleChange}
+                  disabled={false}
+                >
+                  <option value="V"> - V </option>
+                  <option value="AX"> - AX </option>
+                  <option value="X"> - X </option>
+                </Form.Select>
+              </Col>
+              <Col col="md-8" ml="auto">
+                <Form.Label>Nature Affectation</Form.Label>
+                <Form.Select
+                  name="natureAffectation"
+                  value={inputs.natureAffectation}
+                  onChange={handleChange}
+                  disabled={false}
+                >
+                  <option value="Non Affecté"> - Non Affecté </option>
+                  <option value="Affecté"> - Affecté </option>
+                </Form.Select>
+              </Col>
+            </Row>
+          </Modal.Header>
 
-        <Modal.Body>
-          <Container>
-            <Form>
-              <Row style={rowStyle}>
-                <Col col="md-2">
-                  <Form.Label>Numéro Affaire</Form.Label>
-                  <Form.Select
-                    name="numAffaire"
-                    value={inputs.numAffaire}
-                    onChange={handleChange}
-                    disabled={false}
-                  >
-                    <option value="V"> - V </option>
-                    <option value="AX"> - AX </option>
-                    <option value="X"> - X </option>
-                  </Form.Select>
-                </Col>
-                <Col col="md-2">
-                  <Form.Label>Nature Affectation</Form.Label>
-                  <Form.Select
-                    name="natureAffectation"
-                    value={inputs.natureAffectation}
-                    onChange={handleChange}
-                    disabled={false}
-                  >
-                    <option value="Non Affecté"> - Non Affecté </option>
-                    <option value="Affecté"> - Affecté </option>
-                  </Form.Select>
-                </Col>
-              </Row>
-
-              <Row style={rowStyle}>
+          <Modal.Body>
+            <Container>
+              <Row>
                 <Col col="md-8" ml="auto">
                   <Form.Label>Numéro CIN</Form.Label>
                   <Form.Control
@@ -380,7 +407,7 @@ export default function ModalAjout(props) {
                 </Col>
               </Row>
 
-              <Row>
+              <Row style={rowStyle}>
                 <Col>
                   <Form.Label>
                     <Form.Check
@@ -413,7 +440,7 @@ export default function ModalAjout(props) {
                 </Col>
               </Row>
 
-              <Row>
+              <Row style={rowStyle}>
                 <Col>
                   <Form.Label>
                     <Form.Check
@@ -458,18 +485,16 @@ export default function ModalAjout(props) {
                     onChange={handleChange}
                     autoComplete="off"
                     placeholder="5.000 Ar"
+                    disabled={true}
                   />
                 </Col>
                 <Col>
-                  <Form.Label>Numéro de compte</Form.Label>
+                  <Form.Label>Date de rendez-vous</Form.Label>
                   <Form.Control
-                    type="number"
-                    name="numCompte"
+                    type="date"
+                    name="dateRDV"
                     onChange={handleChange}
                     autoComplete="off"
-                    placeholder="Numéro compte utilisateur ...."
-                    min="1"
-                    disabled={true}
                   />
                 </Col>
               </Row>
@@ -512,7 +537,7 @@ export default function ModalAjout(props) {
               ) : null}
 
               {inputs.empietement ? (
-                <Row>
+                <Row style={rowStyle}>
                   <Col>
                     <Form.Label>
                       <Form.Check
@@ -533,7 +558,7 @@ export default function ModalAjout(props) {
                 </Row>
               ) : null}
 
-              <Row>
+              <Row style={rowStyle}>
                 <Col>
                   <Form.Control
                     as="textarea"
@@ -551,9 +576,9 @@ export default function ModalAjout(props) {
                   </small>
                 </Col>
               </Row>
-            </Form>
-          </Container>
-        </Modal.Body>
+            </Container>
+          </Modal.Body>
+        </Form>
 
         <Modal.Footer>
           <Button variant="danger" onClick={onClose}>

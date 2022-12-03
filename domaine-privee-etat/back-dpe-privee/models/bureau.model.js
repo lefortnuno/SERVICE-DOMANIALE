@@ -5,8 +5,9 @@ let Bureau = function (bureau) {
   this.nomBureau = bureau.nomBureau;
   this.adressBureau = bureau.adressBureau;
 };
-REQUETE_BASE = `SELECT * FROM Bureau `
-ORDER_BY= ` ORDER BY idBureau DESC`
+
+const REQUETE_BASE = `SELECT * FROM Bureau `
+const ORDER_BY= ` ORDER BY idBureau DESC`
 
 Bureau.addBureau = (newBureau, result) => {
   dbConn.query("INSERT INTO Bureau SET ?", newBureau, (err, res) => {

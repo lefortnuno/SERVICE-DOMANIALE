@@ -17,6 +17,5 @@ router.get(
   "/recherche/:valeur",
   requerantController.searchRequerant
 );
-router.delete("/:id", requerantController.deleteRequerant);
 
 module.exports = router;

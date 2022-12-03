@@ -1,6 +1,5 @@
 let dbConn = require("../config/db");
 const Individu = require("./individu.model");
-const Dossier = require("./dossier.model");
 
 let Requerant = function (individu) {
   this.numeroRequerant = individu.numeroRequerant;
@@ -11,11 +10,7 @@ let Requerant = function (individu) {
   this.prenom = individu.prenom;
 };
 
-const REQUETE_BASE =
-  `SELECT REQUERANT.numeroRequerant as numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cin, ` +
-  `INDIVIDU.cin as cinEtranger, nom, prenom, numAffaire ` +
-  `FROM REQUERANT, INDIVIDU, DOSSIER WHERE `+
-  `REQUERANT.cin = INDIVIDU.cin AND DOSSIER.numeroRequerant = REQUERANT.numeroRequerant `;
+const REQUETE_BASE = `SELECT REQUERANT.numeroRequerant as numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cin, INDIVIDU.cin as cinEtranger, nom, prenom FROM REQUERANT, INDIVIDU WHERE REQUERANT.cin = INDIVIDU.cin `;
 const ORDER_BY = ` ORDER BY numeroRequerant DESC`;
 
 Requerant.addRequerant = (newRequerant, result) => {
@@ -24,7 +19,6 @@ Requerant.addRequerant = (newRequerant, result) => {
       result(null, err);
     } else {
       if(resI){
-        console.log(resI);
         dbConn.query("INSERT INTO Requerant SET ?", newRequerant, (err, res) => {
           if (err) {
             result(err, null);
@@ -106,36 +100,6 @@ Requerant.updateRequerant = (updateRequerant, numeroRequerant, result) => {
       }
     }
   );
-};
-
-Requerant.deleteRequerant = (id, result) => {
-  // VERIFIER SI LES COMPTE REQUERANT DE L'INDIVIDU ON DES DOSSIERS ?
-  Dossier.getDossierRequerant(element, (error, resDosReq) => {
-    if (!error) {
-      if (resDosReq) {
-        result(null, {
-          success: false,
-          message: "Le requerant possede un ou plusieurs dossier.",
-        });
-      } else {
-        dbConn.query(
-          `DELETE FROM requerant WHERE numeroRequerant = ${id}`,
-          function (err, res) {
-            if (err) {
-              result(err, null);
-            } else {
-              result(null, {
-                success: true,
-                message: `suppresion success.`,
-              });
-            }
-          }
-        );
-      }
-    } else {
-      result(err, null);
-    }
-  });
 };
 
 module.exports = Requerant;

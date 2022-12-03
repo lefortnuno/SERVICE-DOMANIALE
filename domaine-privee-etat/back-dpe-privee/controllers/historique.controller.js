@@ -24,7 +24,7 @@ module.exports.addHistorique = (req, res) => {
     dateMouvement = new Date();
     dateRDV = dateMouvement.addDays(addRdvDays);
   } else if (dateMouvement && !dateRDV) {
-    dateRDV =new Date().addDays(addRdvDays)
+    dateRDV = new Date().addDays(addRdvDays);
   } else if (!dateMouvement && dateRDV) {
     dateMouvement = new Date();
   }

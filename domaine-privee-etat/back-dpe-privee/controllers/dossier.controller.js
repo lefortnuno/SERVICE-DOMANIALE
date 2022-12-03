@@ -5,6 +5,12 @@ const AutoNumAffaire = require("../models/numeroAffaire.model");
 const Histo = require("../models/historique.model");
 
 module.exports.addDossier = (req, res) => {
+  Date.prototype.addDays = function (days) {
+    let date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+  };
+
   let {
     numAffaire,
     dependance,
@@ -17,6 +23,7 @@ module.exports.addDossier = (req, res) => {
     droitDemande,
     observationDossier,
     lettreDesistement,
+    dateRDV,
     planMere,
     certificatSituationJuridique,
     numeroRequerant,
@@ -27,25 +34,30 @@ module.exports.addDossier = (req, res) => {
     natureAffectation = 0;
   } else if (natureAffectation === "Affecté") {
     natureAffectation = 1;
-  } 
+  }
 
   const dateAujourdHui = new Date();
   const numPhase = 1;
   const dateDemande = dateAujourdHui;
-
-  let obseravation_S_D = "Nouvelle Demande";
+  
+  let obseravation_S_D = observationDossier;
+  if (!obseravation_S_D) {
+    obseravation_S_D = "Nouvelle Demande.";
+  }
   let mesureAttribuable = "NULL";
   let prixAttribue = "NULL";
   let dateDepot_S_D = dateAujourdHui;
-  let mouvement = "Interne";
+  let mouvement = "Arriver";
   let dateMouvement = dateAujourdHui;
-  let dateRDV = dateAujourdHui;
-  let dispoDossier = "oui";
-  let approbation = "non";
+  if (!dateRDV) {
+    let addRdvDays = 15;
+    dateRDV = dateAujourdHui.addDays(addRdvDays);
+  }
+  let dispoDossier = 1;
+  let approbation = 0;
+  let accomplissement = 0;
   let Observation = observationDossier;
   let numProcedure = numPhase;
-
-  // superficieTerrain = superficieTerrain + ' h.a'
 
   if (!droitDemande) {
     droitDemande = 5000;
@@ -84,6 +96,7 @@ module.exports.addDossier = (req, res) => {
     dateRDV,
     dispoDossier,
     approbation,
+    accomplissement,
     Observation,
     numAffaire,
     numCompte,
@@ -125,7 +138,7 @@ module.exports.addDossier = (req, res) => {
         } else {
           newSousDossier.numAffaire = numAffaire;
           SousDossier.addSousDossierNewDemande(newSousDossier);
-          
+
           newHisto.numAffaire = numAffaire;
           Histo.addHistoNewDemande(newHisto);
           res.send(resp);
