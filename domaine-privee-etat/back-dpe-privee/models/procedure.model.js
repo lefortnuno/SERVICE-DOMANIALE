@@ -5,9 +5,11 @@ const Bureau = require("./bureau.model");
 const Procedure = function (procedure) {
   this.numProcedure = procedure.numProcedure;
   this.nomProcedure = procedure.nomProcedure;
+  this.natureProcedure = procedure.natureProcedure;
+  this.movProcedure = procedure.movProcedure;
   this.idBureau = procedure.idBureau;
 };
-const REQUETE_BASE = `SELECT numProcedure, nomProcedure, PROCEDURES.idBureau, nomBureau, adressBureau `+
+const REQUETE_BASE = `SELECT numProcedure, nomProcedure, natureProcedure, movProcedure, PROCEDURES.idBureau, nomBureau, adressBureau `+
 `FROM PROCEDURES, BUREAU WHERE PROCEDURES.idBureau = BUREAU.idBureau `
 const ORDER_BY = ` ORDER BY numProcedure DESC`
 

@@ -5,11 +5,15 @@ module.exports.addProcedure = (req, res) => {
   const {
     nomProcedure,
     idBureau,
+    natureProcedure,
+    movProcedure,
   } = req.body;
 
   const newProcedure = {
     nomProcedure,
     idBureau,
+    natureProcedure,
+    movProcedure,
   };
 
   Procedure.addProcedure(newProcedure, (erreur, resp) => {
@@ -46,10 +50,14 @@ module.exports.updateProcedure = (req, res) => {
   const {
     nomProcedure,
     idBureau,
+    natureProcedure,
+    movProcedure,
   } = req.body;
   const updateProcedure = {
     nomProcedure,
     idBureau,
+    natureProcedure,
+    movProcedure,
   };
 
   Procedure.updateProcedure(updateProcedure, req.params.id, (err, resp) => {

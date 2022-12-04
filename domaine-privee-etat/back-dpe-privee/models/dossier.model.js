@@ -1,6 +1,6 @@
 let dbConn = require("../config/db");
 const Requerant = require("./requerant.model");
-const Phase = require("./phase.model");
+const Procedure = require("./procedure.model");
 
 let Dossier = function (dossier) {
   this.idDossier = dossier.idDossier;
@@ -21,19 +21,24 @@ let Dossier = function (dossier) {
   this.complementInformation = dossier.complementInformation;
   this.nom = dossier.nom;
   this.prenom = dossier.prenom;
-  this.numPhase = dossier.numPhase;
+  this.numProcedure = dossier.numProcedure;
   this.lettreDesistement = dossier.lettreDesistement;
   this.planMere = dossier.planMere;
   this.certificatSituationJuridique = dossier.certificatSituationJuridique;
 };
 
-const REQUETE_BASE = ` SELECT idDossier, DOSSIER.numAffaire as numAffaire, dependance, empietement, natureAffectation, lettreDemande, planAnnexe, pvDelimitation, superficieTerrain, DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, DOSSIER.numeroRequerant as numeroRequerantEtranger, numPhase, numSousDossier, obseravation_S_D,DATE_FORMAT(dateDepot_S_D, '%d-%m-%Y') as dateDepot_S_D, mesureAttribuable, prixAttribue, lettreDesistement, planMere, certificatSituationJuridique, SOUS_DOSSIER.numAffaire as numAffaireEtranger, REQUERANT.numeroRequerant as numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cinEtranger,  INDIVIDU.cin as cin, nom, prenom FROM DOSSIER, SOUS_DOSSIER, INDIVIDU, REQUERANT WHERE DOSSIER.numAffaire = SOUS_DOSSIER.numAffaire AND INDIVIDU.cin = REQUERANT.cin AND REQUERANT.numeroRequerant = DOSSIER.numeroRequerant AND DOSSIER.numPhase=1 `;
-const ORDER_BY = ` ORDER BY idDossier DESC`;
+const REQUETE_BASE = ` SELECT idDossier, DOSSIER.numAffaire as numAffaire, dependance, empietement, natureAffectation, lettreDemande, planAnnexe, pvDelimitation, superficieTerrain, DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, PROCEDURES.numProcedure, numSousDossier, obseravation_S_D,DATE_FORMAT(dateDepot_S_D, '%d-%m-%Y') as dateDepot_S_D, mesureAttribuable, prixAttribue, lettreDesistement, planMere, certificatSituationJuridique, REQUERANT.numeroRequerant as numeroRequerant, etatMorale, complementInformation, INDIVIDU.cin as cin, nom, prenom FROM DOSSIER, SOUS_DOSSIER, INDIVIDU, REQUERANT, PROCEDURES WHERE DOSSIER.numAffaire = SOUS_DOSSIER.numAffaire AND INDIVIDU.cin = REQUERANT.cin AND REQUERANT.numeroRequerant = DOSSIER.numeroRequerant `;
+
+const REQUETE_BASE2 = REQUETE_BASE + ` AND PROCEDURES.numProcedure=1 `;
+const REQUETE_NOUVELLE_DEMANDE =
+  REQUETE_BASE + ` AND PROCEDURES.numProcedure=1 `;
+
+const ORDER_BY = ` ORDER BY idDossier DESC `;
 
 Dossier.addDossier = (newDossier, result) => {
   Requerant.getIdRequerant(newDossier.numeroRequerant, (err, resRequerant) => {
-    Phase.getIdPhase(newDossier.numPhase, (err, resPhase) => {
-      if (resRequerant && resPhase) {
+    Procedure.getIdProcedure(newDossier.numProcedure, (err, resProcedure) => {
+      if (resRequerant && resProcedure) {
         dbConn.query("INSERT INTO dossier SET ?", newDossier, (err, res) => {
           if (err) {
             result(err, null);
@@ -41,19 +46,19 @@ Dossier.addDossier = (newDossier, result) => {
             result(null, { success: true, message: "Ajout reussi !" });
           }
         });
-      } else if (resRequerant && !resPhase) {
+      } else if (resRequerant && !resProcedure) {
         result(null, {
-          message: " Phase non trouver !",
+          message: " Procedure non trouver !",
           success: false,
         });
-      } else if (!resRequerant && resPhase) {
+      } else if (!resRequerant && resProcedure) {
         result(null, {
           message: " Numero requerant non trouver !",
           success: false,
         });
       } else {
         result(null, {
-          message: " CIN Individu et Phase non trouver !",
+          message: " CIN Individu et Procedure non trouver !",
           success: false,
         });
       }
@@ -62,7 +67,17 @@ Dossier.addDossier = (newDossier, result) => {
 };
 
 Dossier.getAllDossiers = (result) => {
-  dbConn.query(REQUETE_BASE + ORDER_BY, (err, res) => {
+  dbConn.query(REQUETE_NOUVELLE_DEMANDE + ORDER_BY, (err, res) => {
+    if (err) {
+      result(err, null);
+    } else {
+      result(null, res);
+    }
+  });
+};
+
+Dossier.getDerniereDossier = (result) => {
+  dbConn.query(`SELECT * FROM DOSSIER ` + ORDER_BY + ` LIMIT 1`, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -86,17 +101,21 @@ Dossier.getIdDossier = (id, result) => {
 };
 
 Dossier.getDossierRequerant = (id, result) => {
-  dbConn.query(REQUETE_BASE + " AND REQUERANT.numeroRequerant = ?", id, (err, res) => {
-    if (err) {
-      result(err, null);
-    } else {
-      if (res.length !== 0) {
-        result(null, res);
+  dbConn.query(
+    REQUETE_BASE + " AND REQUERANT.numeroRequerant = ?",
+    id,
+    (err, res) => {
+      if (err) {
+        result(err, null);
       } else {
-        result(null, null);
+        if (res.length !== 0) {
+          result(null, res);
+        } else {
+          result(null, null);
+        }
       }
     }
-  });
+  );
 };
 
 Dossier.getNumDossier = (numAffaire, result) => {
@@ -126,6 +145,20 @@ Dossier.updateDossier = (updateDossier, id, result) => {
         result(err, null);
       } else {
         result(null, res);
+      }
+    }
+  );
+};
+
+Dossier.updateDossierProcedureByNumAffaire = (updateDossier, id, result) => {
+  dbConn.query(
+    `update dossier set ? where numAffaire = '${id}'`,
+    updateDossier,
+    function (err, res) {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, {success: true});
       }
     }
   );

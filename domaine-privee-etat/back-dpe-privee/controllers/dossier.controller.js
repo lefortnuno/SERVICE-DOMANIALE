@@ -2,7 +2,6 @@
 const Dossier = require("../models/dossier.model");
 const SousDossier = require("../models/sousDossier.model");
 const AutoNumAffaire = require("../models/numeroAffaire.model");
-const Histo = require("../models/historique.model");
 
 module.exports.addDossier = (req, res) => {
   Date.prototype.addDays = function (days) {
@@ -27,7 +26,6 @@ module.exports.addDossier = (req, res) => {
     planMere,
     certificatSituationJuridique,
     numeroRequerant,
-    numCompte,
   } = req.body;
 
   if (natureAffectation === "Non Affecté") {
@@ -37,7 +35,7 @@ module.exports.addDossier = (req, res) => {
   }
 
   const dateAujourdHui = new Date();
-  const numPhase = 1;
+  const numProcedure = 1;
   const dateDemande = dateAujourdHui;
   
   let obseravation_S_D = observationDossier;
@@ -47,17 +45,10 @@ module.exports.addDossier = (req, res) => {
   let mesureAttribuable = "NULL";
   let prixAttribue = "NULL";
   let dateDepot_S_D = dateAujourdHui;
-  let mouvement = "Arriver";
-  let dateMouvement = dateAujourdHui;
   if (!dateRDV) {
     let addRdvDays = 15;
     dateRDV = dateAujourdHui.addDays(addRdvDays);
   }
-  let dispoDossier = 1;
-  let approbation = 0;
-  let accomplissement = 0;
-  let Observation = observationDossier;
-  let numProcedure = numPhase;
 
   if (!droitDemande) {
     droitDemande = 5000;
@@ -76,7 +67,7 @@ module.exports.addDossier = (req, res) => {
     droitDemande,
     observationDossier,
     numeroRequerant,
-    numPhase,
+    numProcedure,
   };
 
   let newSousDossier = {
@@ -90,42 +81,21 @@ module.exports.addDossier = (req, res) => {
     certificatSituationJuridique,
   };
 
-  let newHisto = {
-    mouvement,
-    dateMouvement,
-    dateRDV,
-    dispoDossier,
-    approbation,
-    accomplissement,
-    Observation,
-    numAffaire,
-    numCompte,
-    numProcedure,
-  };
-
   if (dependance && empietement) {
-    /**
-     * LE DOSSIER PRESENTE UNE EMPIETINEMENT ET UNE DEPENDANCE
-     */
+    //LE DOSSIER PRESENTE UNE EMPIETINEMENT ET UNE DEPENDANCE
     newSousDossier.lettreDesistement = lettreDesistement;
     newSousDossier.planMere = planMere;
     newSousDossier.certificatSituationJuridique = certificatSituationJuridique;
   } else if (dependance && !empietement) {
-    /**
-     * LE DOSSIER EST DEPENDANT
-     */
+    //LE DOSSIER EST DEPENDANT
     newSousDossier.planMere = planMere;
     newSousDossier.certificatSituationJuridique = certificatSituationJuridique;
   } else if (!dependance && empietement) {
-    /**
-     * LE DOSSIER PRESENTE UNE EMPIETINEMENT
-     */
+    //LE DOSSIER PRESENTE UNE EMPIETINEMENT
     newSousDossier.lettreDesistement = lettreDesistement;
   }
 
-  /*
-  Ajout Numero Affaire depuis NUMERO_AFFAIRE_INCREMENT_AUTOMATIQUE
-  */
+  //Ajout Numero Affaire depuis NUMERO_AFFAIRE_INCREMENT_AUTOMATIQUE 
   AutoNumAffaire.getLastIdNumeroAffaire((err, lastNumAffaire) => {
     if (!err) {
       numAffaire =
@@ -138,9 +108,6 @@ module.exports.addDossier = (req, res) => {
         } else {
           newSousDossier.numAffaire = numAffaire;
           SousDossier.addSousDossierNewDemande(newSousDossier);
-
-          newHisto.numAffaire = numAffaire;
-          Histo.addHistoNewDemande(newHisto);
           res.send(resp);
         }
       });
@@ -179,7 +146,6 @@ module.exports.updateDossier = (req, res) => {
     observationDossier,
     superficieTerrain,
   };
-
   Dossier.updateDossier(updateDossier, req.params.id, (err, resp) => {
     if (!err) {
       res.send(resp);
@@ -190,10 +156,10 @@ module.exports.updateDossier = (req, res) => {
 };
 
 module.exports.avortementDossier = (req, res) => {
-  const { phase } = req.body;
+  const { numProcedure } = req.body;
 
   const updateDossier = {
-    phase,
+    numProcedure,
   };
 
   Dossier.avortementDossier(updateDossier, req.params.id, (err, resp) => {

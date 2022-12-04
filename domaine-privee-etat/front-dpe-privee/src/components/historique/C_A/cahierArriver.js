@@ -262,15 +262,17 @@ export default function C_I() {
                 currentItems.map((user, key) => (
                   <tr key={key}>
                     <th>
-                      <Button
-                        type="button"
-                        className="btn btn-outline-primary btn-sm m-1 waves-effect"
-                        variant="default"
-                        name="numCompteEdit"
-                        onClick={() => showAddModal(user.numHisto)}
-                      >
-                        <BsShift />
-                      </Button>
+                      {user.accomplissement ? null : (
+                        <Button
+                          type="button"
+                          className="btn btn-outline-primary btn-sm m-1 waves-effect"
+                          variant="default"
+                          name="numCompteEdit"
+                          onClick={() => showAddModal(user.numHisto)}
+                        >
+                          <BsShift />
+                        </Button>
+                      )}
                     </th>
                     <th scope="row">{user.numHisto} </th>
                     <td>{user.numAffaire}</td>
@@ -279,7 +281,7 @@ export default function C_I() {
                     </td>
                     <td>{user.dateDepot_S_D}</td>
                     <td>{user.dateRDV}</td>
-                    <td>{user.nomPhase}</td>
+                    <td>{user.nomProcedure}</td>
                     <td>{user.obseravation_S_D}</td>
                     <td>{user.identification}</td>
                     <td>

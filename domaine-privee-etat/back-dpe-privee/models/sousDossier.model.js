@@ -40,10 +40,14 @@ SousDossier.addSousDossierNewDemande = (newSousDossier) => {
   Dossier.getNumDossier(
     newSousDossier.numAffaire,
     (err, resNumAffaireDossier) => {
-      if (resNumAffaireDossier) {
-        dbConn.query("INSERT INTO SOUS_DOSSIER SET ?", newSousDossier);
-      } else {
-        return { message: "Dossier Mere non trouver ! Inconnu !" };
+      if(err){
+        console.log("err SOUS DOSSIER : ", err);
+      } {
+        if (resNumAffaireDossier) {
+          dbConn.query("INSERT INTO SOUS_DOSSIER SET ?", newSousDossier);
+        } else {
+          return { message: "Dossier Mere non trouver ! Inconnu !" };
+        }
       }
     }
   );

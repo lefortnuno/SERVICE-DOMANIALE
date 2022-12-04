@@ -9,6 +9,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 const URL_BASE = `dossier/`;
+const URL_HISTO = `historique/histoND/`;
 
 //#region
 
@@ -76,8 +77,9 @@ export default function ModalAjout(props) {
       .then(function (response) {
         if (response.status === 200 && response.data.success) {
           toast.success("Ajout Reussi.");
-          reset();
-          props.onHide();
+          onSubmitHisto();
+          // reset();
+          // props.onHide();
         } else {
           toast.error(response.data.message);
           // FONCTON DE REDIRECTION VERS LE FORMULAIRE AJOUT INDIVIDU
@@ -89,11 +91,43 @@ export default function ModalAjout(props) {
         }
       })
       .finally(() => {
-        reset();
-        props.onHide();
+        // reset();
+        // props.onHide();
       });
   };
+  //#endregion
 
+  //#region // FUNCTION AJOUT NOUVEAU XXX
+  const onSubmitHisto = (event) => {
+    // event.preventDefault();
+    const opts = {
+      headers: {
+        Authorization: u_info.u_token,
+      },
+    };
+
+    axios
+      .post(URL_HISTO, inputs, opts)
+      .then(function (response) {
+        if (response.status === 200 && response.data.success) {
+          toast.success("Ajout Reussi.");
+          // reset();
+          // props.onHide();
+        } else {
+          toast.error(response.data.message);
+          // FONCTON DE REDIRECTION VERS LE FORMULAIRE AJOUT INDIVIDU
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === 403) {
+          toast.error("Vous n'etes pas autoriser a ajouter un dossier!");
+        }
+      })
+      .finally(() => {
+        // reset();
+        // props.onHide();
+      });
+  };
   //#endregion
 
   //#region // SCHEMA VALIDATION FORMULAIRE -----

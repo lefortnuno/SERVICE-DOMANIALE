@@ -10,53 +10,28 @@ const Historique = function (historique) {
   this.dispoDossier = historique.dispoDossier;
   this.approbation = historique.approbation;
   this.accomplissement = historique.accomplissement;
-  this.Observation = historique.Observation;
+  this.observation = historique.observation;
   this.numAffaire = historique.numAffaire;
   this.numCompte = historique.numCompte;
-  this.numProcedure = historique.numProcedure;
 };
 
-const REQUETE_BASE = `SELECT numHisto,mouvement,dateMouvement,dateRDV,dispoDossier, approbation, observation, accomplissement, DOSSIER.numAffaire,dependance, natureAffectation, empietement, lettreDemande,planAnnexe,pvDelimitation,superficieTerrain,DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, REQUERANT.numeroRequerant, etatMorale, PHASE.numPhase, nomPhase, naturePhase, DATE_FORMAT(dateRDV, '%d-%m-%Y') as dateRDV, COMPTE.numCompte, identification,INDIVIDU.cin, nom, prenom,PROCEDURES.numProcedure, nomProcedure,BUREAU.idBureau,nomBureau,adressBureau,SOUS_DOSSIER.numSousDossier,obseravation_S_D, DATE_FORMAT(dateDepot_S_D, '%d-%m-%Y') as dateDepot_S_D,mesureAttribuable,prixAttribue,lettreDesistement,planMere,certificatSituationJuridique FROM HISTORIQUE, INDIVIDU, REQUERANT, COMPTE, BUREAU, PROCEDURES, SOUS_DOSSIER, DOSSIER, PHASE WHERE HISTORIQUE.numAffaire = DOSSIER.numAffaire AND HISTORIQUE.numProcedure = PROCEDURES.numProcedure AND HISTORIQUE.numCompte = COMPTE.numCompte AND DOSSIER.numeroRequerant = REQUERANT.numeroRequerant AND DOSSIER.numAffaire = SOUS_DOSSIER.numAffaire AND DOSSIER.numPhase = PHASE.numPhase AND INDIVIDU.cin = REQUERANT.cin AND BUREAU.idBureau = PROCEDURES.idBureau `;
+const REQUETE_BASE = `SELECT numHisto, mouvement, dateMouvement, dateRDV, dispoDossier, approbation, observation, accomplissement, DOSSIER.numAffaire, dependance, natureAffectation, empietement, lettreDemande, planAnnexe, pvDelimitation, superficieTerrain,DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, REQUERANT.numeroRequerant, etatMorale, PROCEDURES.numProcedure, nomProcedure, natureProcedure, movProcedure, DATE_FORMAT(dateRDV, '%d-%m-%Y') as dateRDV, COMPTE.numCompte, identification, INDIVIDU.cin, nom, prenom, BUREAU.idBureau, nomBureau, adressBureau, SOUS_DOSSIER.numSousDossier, obseravation_S_D, DATE_FORMAT(dateDepot_S_D, '%d-%m-%Y') as dateDepot_S_D, mesureAttribuable, prixAttribue, lettreDesistement, planMere,certificatSituationJuridique FROM HISTORIQUE, INDIVIDU, REQUERANT, COMPTE, BUREAU, PROCEDURES, SOUS_DOSSIER, DOSSIER WHERE HISTORIQUE.numAffaire = DOSSIER.numAffaire AND  HISTORIQUE.numCompte = COMPTE.numCompte AND DOSSIER.numeroRequerant = REQUERANT.numeroRequerant AND DOSSIER.numAffaire = SOUS_DOSSIER.numAffaire AND DOSSIER.numProcedure = PROCEDURES.numProcedure AND INDIVIDU.cin = REQUERANT.cin AND BUREAU.idBureau = PROCEDURES.idBureau `;
 
 const ORDER_BY = ` ORDER BY numHisto DESC `;
 
 Historique.addHistorique = (newHistorique, result) => {
-  Dossier.getNumDossier(newHistorique.numAffaire, (err, resDossier) => {
-    Compte.getIdUtilisateur(newHistorique.numCompte, (err, resCompte) => {
-      if (resDossier && resCompte) {
-        dbConn.query(
-          "INSERT INTO Historique SET ?",
-          newHistorique,
-          (err, res) => {
-            if (err) {
-              result(err, null);
-            } else {
-              result(null, res);
-            }
-          }
-        );
-      } else if (resDossier && !resCompte) {
-        result(null, { message: "Compte introuvable ! inconnu" });
-      } else if (!resDossier && resCompte) {
-        result(null, { message: "Dossier introuvable ! inconnu" });
-      } else {
-        result(null, { message: "Dossier et Compte introuvable ! inconnu" });
-      }
-    });
+  dbConn.query("INSERT INTO Historique SET ?", newHistorique, (err, res) => {
+    if (err) {
+      result(err, null);
+    } else {
+      console.log(res);
+      result(null, {success: true});
+    }
   });
 };
 
 Historique.addHistoNewDemande = (newHistorique) => {
-  Dossier.getNumDossier(
-    newHistorique.numAffaire,
-    (err, resNumAffaireDossier) => {
-      if (resNumAffaireDossier) {
-        dbConn.query("INSERT INTO HISTORIQUE SET ?", newHistorique);
-      } else {
-        return { message: "Dossier Mere non trouver ! Inconnu !" };
-      }
-    }
-  );
+  dbConn.query("INSERT INTO HISTORIQUE SET ?", newHistorique);
 };
 
 Historique.getAllHistoriques = (result) => {
@@ -116,7 +91,7 @@ Historique.getCahierDepart = (result) => {
 
 Historique.getIdHistorique = (id, result) => {
   dbConn.query(
-    REQUETE_BASE+ ` AND HISTORIQUE.numHisto = ?`,
+    REQUETE_BASE + ` AND HISTORIQUE.numHisto = ?`,
     id,
     (err, res) => {
       if (err) {
@@ -156,7 +131,7 @@ Historique.updateHistorique = (updateHistorique, id, result) => {
       if (err) {
         result(err, null);
       } else {
-        result(null, res);
+        result(null, {success: true});
       }
     }
   );

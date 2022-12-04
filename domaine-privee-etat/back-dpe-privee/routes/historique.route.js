@@ -3,6 +3,7 @@ const HistoriqueController = require("../controllers/historique.controller");
 const agent = require("../middlewares/agent.middleware");
 
 router.post("/", agent.checkUtilisateur, HistoriqueController.addHistorique);
+router.post("/histoND/", agent.checkUtilisateur, HistoriqueController.addHistoNewDemande);
 router.get("/", agent.checkUtilisateur, HistoriqueController.getAllHistoriques);
 router.get(
   "/C_I/",
@@ -28,6 +29,11 @@ router.put(
   "/:id",
   agent.checkUtilisateur,
   HistoriqueController.updateHistorique
+);
+router.put(
+  "/next/:id",
+  agent.checkUtilisateur,
+  HistoriqueController.nextProcedureHistorique
 );
 router.get(
   "/C_I/recherche/:valeur",
