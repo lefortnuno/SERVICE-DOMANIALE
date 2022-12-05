@@ -2,7 +2,12 @@ import axios from "../../../api/axios";
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { BsFillTrashFill, BsPencilSquare, BsEye } from "react-icons/bs";
+import {
+  BsFillTrashFill,
+  BsPencilSquare,
+  BsEye,
+  BsShift,
+} from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
@@ -53,8 +58,12 @@ export default function C_I() {
   //#endregion
 
   //#region //------------ MODAL AJOUT C_I------------
+  const [numCompteAjout, setNumCompteAjout] = useState("");
   const [show, setShow] = useState(false);
-  const showAddModal = () => setShow(true);
+  const showAddModal = (numCompte) => {
+    setNumCompteAjout(numCompte);
+    setShow(true);
+  };
   const closeAddModal = () => {
     getUsers();
     setShow(false);
@@ -200,7 +209,7 @@ export default function C_I() {
         <Header />
 
         <ModalAjout show={show} onHide={closeAddModal}>
-          Demmarré un Mouvement Interne
+          {numCompteAjout}
         </ModalAjout>
 
         <ModalEdition showEdit={showEdit} onHide={closeEditModal}>
@@ -216,15 +225,7 @@ export default function C_I() {
         />
 
         <div>
-          <h2> Cahier de Mouvement Interne </h2>
-          <span> </span>
-          <Button
-            className="btn btn-sm btn-primary"
-            variant="primary"
-            onClick={showAddModal}
-          >
-            Nouveau Mouvement Interne
-          </Button>
+          <h2> Cahier de Depart </h2>
           <span> </span>
           <label>
             <input
@@ -233,7 +234,7 @@ export default function C_I() {
               className="form-control form-control-sm"
               onClick={retourALaPremierPage}
               onChange={rechercheDossier}
-              placeholder="rechercher un C_I ...."
+              placeholder="rechercher dans un cahier de depart ...."
               autoComplete="off"
             />
           </label>
@@ -244,7 +245,8 @@ export default function C_I() {
           <table className="table table-striped w-auto">
             <thead>
               <tr>
-                <th scope="col">Ref</th>
+                <th scope="col">#</th>
+                <th scope="col">Réf</th>
                 <th scope="col">Numéro Affaire</th>
                 <th scope="col">Requerant</th>
                 <th scope="col">Date du Mouvement</th>
@@ -259,14 +261,29 @@ export default function C_I() {
               {contenuTab ? (
                 currentItems.map((user, key) => (
                   <tr key={key}>
-                  <th scope="row">{user.numHisto} </th>
-                  <td>{user.numAffaire}</td>
-                  <td>{user.nom} {user.prenom}</td>
-                  <td>{user.dateDepot_S_D}</td>
-                  <td>{user.dateRDV}</td>
-                  <td>{user.nomPhase}</td>
-                  <td>{user.obseravation_S_D}</td>
-                  <td>{user.identification}</td>
+                    <th>
+                      {user.accomplissement ? null : (
+                        <Button
+                          type="button"
+                          className="btn btn-outline-primary btn-sm m-1 waves-effect"
+                          variant="default"
+                          name="numCompteEdit"
+                          onClick={() => showAddModal(user.numHisto)}
+                        >
+                          <BsShift />
+                        </Button>
+                      )}
+                    </th>
+                    <th scope="row">{user.numHisto} </th>
+                    <td>{user.numAffaire}</td>
+                    <td>
+                      {user.nom} {user.prenom}
+                    </td>
+                    <td>{user.dateDepot_S_D}</td>
+                    <td>{user.dateRDV}</td>
+                    <td>{user.nomProcedure}</td>
+                    <td>{user.obseravation_S_D}</td>
+                    <td>{user.identification}</td>
                     <td>
                       <button
                         type="button"

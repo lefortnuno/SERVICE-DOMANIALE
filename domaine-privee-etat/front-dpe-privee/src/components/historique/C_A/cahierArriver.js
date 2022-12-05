@@ -22,7 +22,7 @@ const URL_BASE = `historique/C_A/`;
 
 //#endregion
 
-export default function C_I() {
+export default function C_A() {
   const navigate = useNavigate();
   const u_info = {
     u_token: localStorage.token,
