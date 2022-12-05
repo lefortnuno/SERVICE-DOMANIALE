@@ -21,7 +21,7 @@ export default function Login() {
       .post(LOGIN_URL, data)
       .then(function (response) {
         if (response.data.success) {
-          navigate("/utilisateur/"); 
+          navigate("/utilisateur/");
           toast.success(`Connection Reussi`);
           const u = response.data.user[0];
           localStorage.setItem("u_numCompte", u.numCompte);
@@ -66,49 +66,62 @@ export default function Login() {
   const { errors } = formState;
   return (
     <>
-      <div className="container">
-        <Header />
-        <Form className="text-center border border-light p-5">
-          <p className="h4 mb-4">Se Connecter</p>
-          <div className={!errMsg ? null : "alert alert-danger"}>{errMsg}</div>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label> </Form.Label>
-            <Form.Control
-              type="text"
-              name="identification"
-              {...register("identification")}
-              placeholder="identification"
-              className="form-control mb-4"
-              autoFocus
-              autoComplete="off"
-              required
-            />
-            <small className="text-danger d-block">
-              {errors.identification?.message}
-            </small>
-          </Form.Group>
+      <Header />
+      <div className="body_of_login">
+        <div class="container_of_login">
+          <div class="title">Se Connecter</div>
+          <div class="content_of_login">
+            <Form className="text-center border border-light p-5">
+              <div className={!errMsg ? null : "alert alert-danger"}>
+                {errMsg}
+              </div>
 
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
-            <Form.Label> </Form.Label>
-            <Form.Control
-              type="password"
-              name="mdp"
-              {...register("mdp")}
-              placeholder="mot de pass"
-              className="form-control mb-4"
-              autoComplete="off"
-              required
-            />
-            <small className="text-danger d-block">{errors.mdp?.message}</small>
-          </Form.Group>
-          <Button variant="danger" onClick={onClose}>
-            Annuler
-          </Button>
-          <span> </span>
-          <Button variant="primary" onClick={handleSubmit(onSubmit)}>
-            Se Connecter
-          </Button>
-        </Form>
+              <div className="user-details">
+                <Form.Group className="input-box">
+                  <Form.Label className="details"> Identifiant : </Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="identification"
+                    {...register("identification")}
+                    placeholder="identification"
+                    className="form-control"
+                    autoFocus
+                    autoComplete="off"
+                    required
+                  />
+                  <small className="text-danger d-block">
+                    {errors.identification?.message}
+                  </small>
+                </Form.Group>
+                  <Form.Group className="input-box">
+                    <Form.Label className="details"> Mot de pass :</Form.Label>
+                    <Form.Control
+                      type="password"
+                      name="mdp"
+                      {...register("mdp")}
+                      placeholder="mot de pass"
+                      className="form-control"
+                      autoComplete="off"
+                      required
+                    />
+                    <small className="text-danger d-block">
+                      {errors.mdp?.message}
+                    </small>
+                  </Form.Group>
+              </div>
+
+              <div className="button">
+                <Button variant="danger" onClick={onClose}>
+                  Annuler
+                </Button>
+                <span> </span>
+                <Button variant="primary" onClick={handleSubmit(onSubmit)}>
+                  Se Connecter
+                </Button>
+              </div>
+            </Form>
+          </div>
+        </div>
       </div>
     </>
   );

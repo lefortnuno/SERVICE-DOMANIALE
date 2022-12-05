@@ -63,7 +63,7 @@ export default function ModalAjout(props) {
   };
   //#endregion
 
-  //#region // FUNCTION AJOUT NOUVEAU XXX
+  //#region // FUNCTION AJOUT NOUVEAU 
   const onSubmit = (event) => {
     // event.preventDefault();
     const opts = {
@@ -97,7 +97,7 @@ export default function ModalAjout(props) {
   };
   //#endregion
 
-  //#region // FUNCTION AJOUT NOUVEAU XXX
+  //#region // FUNCTION AJOUT HISTORIQUE N.D
   const onSubmitHisto = (event) => {
     // event.preventDefault();
     const opts = {

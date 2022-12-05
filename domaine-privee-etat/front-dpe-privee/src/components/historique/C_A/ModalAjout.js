@@ -44,6 +44,9 @@ export default function ModalAjout(props) {
     approbation: "Veuillez valider pour pouvoir continuer",
     observation: "Une observation du dossier est obligatoire",
     dateRDV: "Une date de rendez-vous est obligatoire",
+    observation_S_D: "Observation obligatoire",
+    prixAttribue: "Proposer un prix à soumettre au autorité !",
+    mesureAttribuable: "Mesure du terrain obligatoire",
   });
   const [phase, setPhase] = useState([]);
   const id = props.children;
@@ -77,7 +80,11 @@ export default function ModalAjout(props) {
               const d = new Date();
               const tmpdate =
                 d.getDate() + `/` + (d.getMonth() + 1) + `/` + d.getFullYear();
-              const date = { dateRDV: tmpdate, observation: "", numCompte: u_info.u_numCompte };
+              const date = {
+                dateRDV: tmpdate,
+                observation: "",
+                numCompte: u_info.u_numCompte,
+              };
               e = Object.assign(e, date);
               if (e.numProcedure === 4) {
                 const sousDosQuatre = { observation_S_D: "", prixAttribue: "" };
@@ -91,7 +98,6 @@ export default function ModalAjout(props) {
                 e = Object.assign(e, sousDosSept);
               }
               setNextInputs(e);
-              console.log(e);
             }
           }
         }
@@ -284,11 +290,8 @@ export default function ModalAjout(props) {
           isValidate = false;
         }
       }
-      if (!nextInputs.observation_S_D) {
-        nextInputs.observation_S_D = false;
-        isValidate = false;
-      }
     }
+
     if (nextInputs.numProcedure === 7) {
       if (!nextInputs.mesureAttribuable) {
         nextInputs.mesureAttribuable = false;
@@ -297,10 +300,6 @@ export default function ModalAjout(props) {
         if (nextInputs.mesureAttribuable < 25) {
           isValidate = false;
         }
-      }
-      if (!nextInputs.observation_S_D) {
-        nextInputs.observation_S_D = false;
-        isValidate = false;
       }
     }
     //#endregion
@@ -337,11 +336,6 @@ export default function ModalAjout(props) {
           });
         }
       }
-      if (!nextInputs.observation_S_D) {
-        setErreurs({
-          observation_S_D: true,
-        });
-      }
     }
 
     if (nextInputs.numProcedure === 7) {
@@ -359,20 +353,16 @@ export default function ModalAjout(props) {
           });
         }
       }
-      if (!nextInputs.observation_S_D) {
-        setErreurs({
-          observation_S_D: true,
-        });
-      }
     }
     //#endregion
 
     if (isValidate) {
-      onSubmit();
-      histoAccApp(id);
-      if (nextInputs.numProcedure === 4 || nextInputs.numProcedure === 7) {
-        ajoutSousDossier();
-      }
+      toast.success("All Good");
+      // onSubmit();
+      // histoAccApp(id);
+      // if (nextInputs.numProcedure === 4 || nextInputs.numProcedure === 7) {
+      //   ajoutSousDossier();
+      // }
     }
   };
   //#endregion
@@ -465,66 +455,67 @@ export default function ModalAjout(props) {
                 </Col>
               </Row>
 
-              {nextInputs.numProcedure === 4 ? (
-                <Row style={rowStyle}>
-                  <Col col="md-6" ml="auto">
-                    <Form.Label> Prix par m^2 </Form.Label>
-                    <Form.Control
-                      type="number"
-                      min="0"
-                      name="prixAttribue"
-                      value={nextInputs.prixAttribue}
-                      onChange={handleChange}
-                      disabled={false}
-                      autoComplete="off"
-                    />
-                    <small className="text-danger d-block">
-                      {erreurs.prixAttribue ? messages.prixAttribue : null}
-                    </small>
-                  </Col>
-                  <Col col="md-6" ml="auto">
-                    <Form.Label>Autres Avis </Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="observation_S_D"
-                      value={nextInputs.observation_S_D}
-                      onChange={handleChange}
-                      disabled={false}
-                      autoComplete="off"
-                    />
-                    <small className="text-danger d-block">
-                      {erreurs.observation_S_D
-                        ? messages.observation_S_D
-                        : null}
-                    </small>
-                  </Col>
-                </Row>
-              ) : null}
-
-              {nextInputs.numProcedure === 7 ? (
-                <Row style={rowStyle}>
-                  <Col col="md-6" ml="auto">
-                    <Form.Label> Mesure Attribuable </Form.Label>
-                    <Form.Control
-                      type="number"
-                      min="0"
-                      name="mesureAttribuable"
-                      value={nextInputs.mesureAttribuable}
-                      onChange={handleChange}
-                      disabled={false}
-                      autoComplete="off"
-                    />
-                    <small className="text-danger d-block">
-                      {erreurs.mesureAttribuable
-                        ? messages.mesureAttribuable
-                        : null}
-                    </small>
-                  </Col>
-                </Row>
-              ) : null}
-
               <Row style={rowStyle}>
+                {nextInputs.numProcedure === 7 ? (
+                  <>
+                    <Col col="md-6" ml="auto">
+                      <Form.Label> Mesure Attribuable </Form.Label>
+                      <Form.Control
+                        type="number"
+                        min="0"
+                        name="mesureAttribuable"
+                        value={nextInputs.mesureAttribuable}
+                        onChange={handleChange}
+                        disabled={false}
+                        autoComplete="off"
+                      />
+                      <small className="text-danger d-block">
+                        {erreurs.mesureAttribuable
+                          ? messages.mesureAttribuable
+                          : null}
+                      </small>
+                    </Col>
+                  </>
+                ) : null}
+
+                {nextInputs.numProcedure === 4 ? (
+                  <>
+                    <Col col="md-6" ml="auto">
+                      <Form.Label> prix du m² </Form.Label>
+                      <Form.Control
+                        type="number"
+                        min="0"
+                        name="prixAttribue"
+                        value={nextInputs.prixAttribue}
+                        onChange={handleChange}
+                        disabled={false}
+                        placeholder="prix par mètre carré"
+                        autoComplete="off"
+                      />
+                      <small className="text-danger d-block">
+                        {erreurs.prixAttribue ? messages.prixAttribue : null}
+                      </small>
+                    </Col>
+                    {/* <Col col="md-6" ml="auto">
+                      <Form.Label>Autres Avis </Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="observation_S_D"
+                        value={nextInputs.observation_S_D}
+                        onChange={handleChange}
+                        disabled={false}
+                        autoComplete="off"
+                      />
+                      <small className="text-danger d-block">
+                        {erreurs.observation_S_D
+                          ? messages.observation_S_D
+                          : null}
+                      </small>
+                    </Col> */}
+                  </>
+                ) : null}
                 <Col>
+                  <Form.Label> Observatin </Form.Label>
                   <Form.Control
                     as="textarea"
                     rows={2}

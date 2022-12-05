@@ -38,9 +38,9 @@ module.exports.addDossier = (req, res) => {
   const numProcedure = 1;
   const dateDemande = dateAujourdHui;
   
-  let obseravation_S_D = observationDossier;
-  if (!obseravation_S_D) {
-    obseravation_S_D = "Nouvelle Demande.";
+  let observation_S_D = observationDossier;
+  if (!observation_S_D) {
+    observation_S_D = "Nouvelle Demande.";
   }
   let mesureAttribuable = "NULL";
   let prixAttribue = "NULL";
@@ -72,7 +72,7 @@ module.exports.addDossier = (req, res) => {
 
   let newSousDossier = {
     numAffaire,
-    obseravation_S_D,
+    observation_S_D,
     dateDepot_S_D,
     mesureAttribuable,
     prixAttribue,
