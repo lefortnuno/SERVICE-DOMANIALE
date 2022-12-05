@@ -4,17 +4,17 @@ let Dossier = require("./dossier.model");
 let SousDossier = function (sousDossier) {
   this.numSousDossier = sousDossier.numSousDossier;
   this.numAffaire = sousDossier.numAffaire;
-  this.obseravation_S_D = sousDossier.obseravation_S_D;
+  this.observation_S_D = sousDossier.observation_S_D;
   this.dateDepot_S_D = sousDossier.dateDepot_S_D;
   this.mesureAttribuable = sousDossier.mesureAttribuable;
-  this.prixAttribuable = sousDossier.prixAttribuable;
+  this.prixAttribue = sousDossier.prixAttribue;
   this.lettreDesistement = sousDossier.lettreDesistement;
   this.planMere = sousDossier.planMere;
   this.certificatSituationJuridique = sousDossier.certificatSituationJuridique;
 };
 
 SousDossier.addSousDossier = (newSousDossier, result) => {
-  Dossier.getIdDossier(
+  Dossier.getNumDossier(
     newSousDossier.numAffaire,
     (err, resNumAffaireDossier) => {
       if (resNumAffaireDossier) {
@@ -25,7 +25,7 @@ SousDossier.addSousDossier = (newSousDossier, result) => {
             if (err) {
               result(err, null);
             } else {
-              result(null, res);
+              result(null, {success: true});
             }
           }
         );

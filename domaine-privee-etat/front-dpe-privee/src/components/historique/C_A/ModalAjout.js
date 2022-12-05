@@ -11,6 +11,8 @@ import Col from "react-bootstrap/Col";
 const URL_BASE = `historique/`;
 const URL_Procedure = `procedure/`;
 const URL_DOSSIER = `dossier/`;
+const URL_SOUS_DOSSIER = `sousDossier/`;
+
 let i = 0;
 
 export default function ModalAjout(props) {
@@ -24,7 +26,6 @@ export default function ModalAjout(props) {
   };
   const [inputs, setInputs] = useState({
     numAffaire: "1-V/2022",
-    numCompte: "1",
     approbation: false,
   });
   const [nextInputs, setNextInputs] = useState({
@@ -32,6 +33,11 @@ export default function ModalAjout(props) {
     nomProcedure: "x-N.D",
     observation: "",
     dateRDV: "",
+    observation_S_D: "",
+    mesureAttribuable: "",
+    prixAttribue: "",
+    movProcedure: "",
+    numCompte: "",
   });
   const [erreurs, setErreurs] = useState([]);
   const [messages, setMessages] = useState({
@@ -71,9 +77,21 @@ export default function ModalAjout(props) {
               const d = new Date();
               const tmpdate =
                 d.getDate() + `/` + (d.getMonth() + 1) + `/` + d.getFullYear();
-              const date = { dateRDV: tmpdate, observation: "" };
+              const date = { dateRDV: tmpdate, observation: "", numCompte: u_info.u_numCompte };
               e = Object.assign(e, date);
+              if (e.numProcedure === 4) {
+                const sousDosQuatre = { observation_S_D: "", prixAttribue: "" };
+                e = Object.assign(e, sousDosQuatre);
+              }
+              if (e.numProcedure === 7) {
+                const sousDosSept = {
+                  observation_S_D: "",
+                  mesureAttribuable: "",
+                };
+                e = Object.assign(e, sousDosSept);
+              }
               setNextInputs(e);
+              console.log(e);
             }
           }
         }
@@ -123,7 +141,7 @@ export default function ModalAjout(props) {
     let newData = {
       mouvement: nextInputs.movProcedure,
       observation: nextInputs.observation,
-      numCompte: inputs.numCompte,
+      numCompte: nextInputs.numCompte,
       numAffaire: inputs.numAffaire,
       numProcedure: nextInputs.numProcedure,
       dispoDossier: `1`,
@@ -169,7 +187,7 @@ export default function ModalAjout(props) {
     };
 
     const upData = {
-      numCompte: inputs.numCompte,
+      numCompte: nextInputs.numCompte,
       numAffaire: inputs.numAffaire,
       numProcedure: nextInputs.numProcedure,
       approbationUP: inputs.approbation,
@@ -197,12 +215,53 @@ export default function ModalAjout(props) {
   };
   //#endregion
 
+  //#region // FUNCTION  AJOUT SOUS DOSSIER selon la phase
+  const ajoutSousDossier = () => {
+    const opts = {
+      headers: {
+        Authorization: u_info.u_token,
+      },
+    };
+
+    const newData = {
+      numCompte: nextInputs.numCompte,
+      numAffaire: inputs.numAffaire,
+      observation_S_D: nextInputs.observation_S_D,
+      mesureAttribuable: nextInputs.mesureAttribuable,
+      prixAttribue: nextInputs.prixAttribue,
+      lettreDesistement: inputs.lettreDesistement,
+      planMere: inputs.planMere,
+      certificatSituationJuridique: inputs.certificatSituationJuridique,
+    };
+    axios
+      .post(URL_SOUS_DOSSIER, newData, opts)
+      .then(function (response) {
+        if (response.status === 200 && response.data.success) {
+          toast.success("Historique: Ajout Reussi.");
+          i = 0;
+          props.onHide();
+        } else {
+          toast.error(response.data.message);
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === 403) {
+          toast.error("Vous n'etes pas autoriser !");
+        }
+      })
+      .finally(() => {
+        i = 0;
+        props.onHide();
+      });
+  };
+  //#endregion
+
   //#region // SCHEMA VALIDATION FORMULAIRE -----
   const handleSubmit = () => {
     let isValidate = true;
     //#region // --- VALEUR PAR DEFAUT
-    if (!inputs.numCompte) {
-      inputs.numCompte = u_info.u_numCompte;
+    if (!nextInputs.numCompte) {
+      nextInputs.numCompte = u_info.u_numCompte;
     }
     if (!inputs.approbation) {
       inputs.approbation = false;
@@ -215,6 +274,34 @@ export default function ModalAjout(props) {
     if (!nextInputs.dateRDV) {
       nextInputs.dateRDV = false;
       isValidate = false;
+    }
+    if (nextInputs.numProcedure === 4) {
+      if (!nextInputs.prixAttribue) {
+        nextInputs.prixAttribue = false;
+        isValidate = false;
+      } else {
+        if (nextInputs.prixAttribue < 25) {
+          isValidate = false;
+        }
+      }
+      if (!nextInputs.observation_S_D) {
+        nextInputs.observation_S_D = false;
+        isValidate = false;
+      }
+    }
+    if (nextInputs.numProcedure === 7) {
+      if (!nextInputs.mesureAttribuable) {
+        nextInputs.mesureAttribuable = false;
+        isValidate = false;
+      } else {
+        if (nextInputs.mesureAttribuable < 25) {
+          isValidate = false;
+        }
+      }
+      if (!nextInputs.observation_S_D) {
+        nextInputs.observation_S_D = false;
+        isValidate = false;
+      }
     }
     //#endregion
 
@@ -234,11 +321,58 @@ export default function ModalAjout(props) {
         dateRDV: true,
       });
     }
+
+    if (nextInputs.numProcedure === 4) {
+      if (!nextInputs.prixAttribue) {
+        setErreurs({
+          prixAttribue: true,
+        });
+      } else {
+        if (nextInputs.prixAttribue < 25) {
+          setErreurs({
+            prixAttribue: true,
+          });
+          setMessages({
+            prixAttribue: "Prix anormale!",
+          });
+        }
+      }
+      if (!nextInputs.observation_S_D) {
+        setErreurs({
+          observation_S_D: true,
+        });
+      }
+    }
+
+    if (nextInputs.numProcedure === 7) {
+      if (!nextInputs.mesureAttribuable) {
+        setErreurs({
+          mesureAttribuable: true,
+        });
+      } else {
+        if (nextInputs.mesureAttribuable < 25) {
+          setErreurs({
+            mesureAttribuable: true,
+          });
+          setMessages({
+            mesureAttribuable: "Mesure anormale !",
+          });
+        }
+      }
+      if (!nextInputs.observation_S_D) {
+        setErreurs({
+          observation_S_D: true,
+        });
+      }
+    }
     //#endregion
 
     if (isValidate) {
       onSubmit();
       histoAccApp(id);
+      if (nextInputs.numProcedure === 4 || nextInputs.numProcedure === 7) {
+        ajoutSousDossier();
+      }
     }
   };
   //#endregion
@@ -261,7 +395,7 @@ export default function ModalAjout(props) {
   return (
     <>
       <Modal
-        size="sm"
+        size="lg"
         show={props.show}
         onHide={props.closeAddModal}
         backdrop="static"
@@ -277,7 +411,7 @@ export default function ModalAjout(props) {
                     type="number"
                     name="numCompte"
                     onChange={handleChange}
-                    value={inputs.numCompte}
+                    value={nextInputs.numCompte}
                     autoComplete="off"
                     min="1"
                     disabled={true}
@@ -325,8 +459,69 @@ export default function ModalAjout(props) {
                     inline="true"
                     disabled={false}
                   />
+                  <small className="text-danger d-block">
+                    {erreurs.dateRDV ? messages.dateRDV : null}
+                  </small>
                 </Col>
               </Row>
+
+              {nextInputs.numProcedure === 4 ? (
+                <Row style={rowStyle}>
+                  <Col col="md-6" ml="auto">
+                    <Form.Label> Prix par m^2 </Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      name="prixAttribue"
+                      value={nextInputs.prixAttribue}
+                      onChange={handleChange}
+                      disabled={false}
+                      autoComplete="off"
+                    />
+                    <small className="text-danger d-block">
+                      {erreurs.prixAttribue ? messages.prixAttribue : null}
+                    </small>
+                  </Col>
+                  <Col col="md-6" ml="auto">
+                    <Form.Label>Autres Avis </Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="observation_S_D"
+                      value={nextInputs.observation_S_D}
+                      onChange={handleChange}
+                      disabled={false}
+                      autoComplete="off"
+                    />
+                    <small className="text-danger d-block">
+                      {erreurs.observation_S_D
+                        ? messages.observation_S_D
+                        : null}
+                    </small>
+                  </Col>
+                </Row>
+              ) : null}
+
+              {nextInputs.numProcedure === 7 ? (
+                <Row style={rowStyle}>
+                  <Col col="md-6" ml="auto">
+                    <Form.Label> Mesure Attribuable </Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      name="mesureAttribuable"
+                      value={nextInputs.mesureAttribuable}
+                      onChange={handleChange}
+                      disabled={false}
+                      autoComplete="off"
+                    />
+                    <small className="text-danger d-block">
+                      {erreurs.mesureAttribuable
+                        ? messages.mesureAttribuable
+                        : null}
+                    </small>
+                  </Col>
+                </Row>
+              ) : null}
 
               <Row style={rowStyle}>
                 <Col>

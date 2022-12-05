@@ -5,9 +5,9 @@ const SousDossier = require("../models/sousDossier.model");
 module.exports.addSousDossier = (req, res) => {
   const {
     numAffaire,
-    obseravation_S_D,
+    observation_S_D,
     mesureAttribuable,
-    prixAttribuable,
+    prixAttribue,
     lettreDesistement,
     planMere,
     certificatSituationJuridique,
@@ -17,10 +17,10 @@ module.exports.addSousDossier = (req, res) => {
 
   const newSousDossier = {
     numAffaire,
-    obseravation_S_D,
+    observation_S_D,
     dateDepot_S_D,
     mesureAttribuable,
-    prixAttribuable,
+    prixAttribue,
     lettreDesistement,
     planMere,
     certificatSituationJuridique,
@@ -58,22 +58,22 @@ module.exports.getIdSousDossier = (req, res) => {
 
 module.exports.updateSousDossier = (req, res) => {
   let {
-    obseravation_S_D,
+    observation_S_D,
     mesureAttribuable,
-    prixAttribuable,
+    prixAttribue,
     lettreDesistement,
     planMere,
     certificatSituationJuridique,
   } = req.body;
 
   const dateDepot_S_D = new Date();
-  obseravation_S_D = obseravation_S_D + " ( rectification !) ";
+  observation_S_D = observation_S_D + " ( rectification !) ";
 
   const updateSousDossier = {
-    obseravation_S_D,
+    observation_S_D,
     dateDepot_S_D,
     mesureAttribuable,
-    prixAttribuable,
+    prixAttribue,
     lettreDesistement,
     planMere,
     certificatSituationJuridique,

@@ -202,7 +202,7 @@ module.exports.updateHistorique = (req, res) => {
 };
 
 module.exports.nextProcedureHistorique = (req, res) => {
-  const { approbationUP, numProcedure, numAffaire } = req.body;
+  const { approbationUP, numProcedure, numAffaire, numCompte } = req.body;
 
   const accomplissement = 1;
   const approbation = approbationUP;
@@ -210,6 +210,7 @@ module.exports.nextProcedureHistorique = (req, res) => {
   const updateHistorique = {
     accomplissement,
     approbation,
+    numCompte,
   };
 
   const updateDossier = {
@@ -220,6 +221,7 @@ module.exports.nextProcedureHistorique = (req, res) => {
     if (erreur){
       res.send(erreur)
     } else {
+      console.log(numCompte);
       Historique.updateHistorique(updateHistorique, req.params.id, (err, resp) => {
         if (!err) {
           res.send(resp);
