@@ -358,11 +358,11 @@ export default function ModalAjout(props) {
 
     if (isValidate) {
       toast.success("All Good");
-      // onSubmit();
-      // histoAccApp(id);
-      // if (nextInputs.numProcedure === 4 || nextInputs.numProcedure === 7) {
-      //   ajoutSousDossier();
-      // }
+      onSubmit();
+      histoAccApp(id);
+      if (nextInputs.numProcedure === 4 || nextInputs.numProcedure === 7) {
+        ajoutSousDossier();
+      }
     }
   };
   //#endregion

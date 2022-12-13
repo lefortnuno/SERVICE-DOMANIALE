@@ -225,7 +225,7 @@ export default function C_I() {
         />
 
         <div>
-          <h2> Cahier de Depart </h2>
+          <h2> Cahier en Interne </h2>
           <span> </span>
           <label>
             <input
@@ -234,7 +234,7 @@ export default function C_I() {
               className="form-control form-control-sm"
               onClick={retourALaPremierPage}
               onChange={rechercheDossier}
-              placeholder="rechercher dans un cahier de depart ...."
+              placeholder="rechercher dans un cahier Interne ...."
               autoComplete="off"
             />
           </label>

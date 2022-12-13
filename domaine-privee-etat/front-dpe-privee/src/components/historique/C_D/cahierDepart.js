@@ -34,7 +34,7 @@ export default function C_D() {
     u_etatCompte: localStorage.u_etatCompte,
   };
 
-  //#region //------------DONNEE C_I------------
+  //#region //------------DONNEE C_D------------
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function C_D() {
   }
   //#endregion
 
-  //#region //------------ MODAL AJOUT C_I------------
+  //#region //------------ MODAL AJOUT C_D------------
   const [numCompteAjout, setNumCompteAjout] = useState("");
   const [show, setShow] = useState(false);
   const showAddModal = (numCompte) => {
@@ -70,7 +70,7 @@ export default function C_D() {
   };
   //#endregion
 
-  //#region //------------MODAL EDIT C_I------------
+  //#region //------------MODAL EDIT C_D------------
   const [numCompteEdit, setNumCompteEdit] = useState("");
   const [showEdit, setShowEdit] = useState(false);
   const showEditModal = (numCompte) => {
@@ -83,7 +83,7 @@ export default function C_D() {
   };
   //#endregion
 
-  //#region //------------MODAL DELETE C_I------------
+  //#region //------------MODAL DELETE C_D------------
   const [id, setId] = useState(null);
   const [displayConfirmationModal, setDisplayConfirmationModal] =
     useState(false);
@@ -91,7 +91,7 @@ export default function C_D() {
   const showDeleteModal = (id) => {
     setId(id);
     setDeleteMessage(
-      `Etes vous sûre de vouloir supprimer l'C_I : _' ${
+      `Etes vous sûre de vouloir supprimer l'C_D : _' ${
         users.find((x) => x.idDossier === id).numAffaire
       } '_ ?`
     );

@@ -74,10 +74,10 @@ Historique.getCahierArriver = (result) => {
   );
 };
 
-Historique.getCahierNouvelleDemande = (result) => {
+Historique.getCahierDepart = (result) => {
   dbConn.query(
     REQUETE_BASE +
-      `AND ( mouvement = 'arriver' AND dispoDossier = 1 AND PROCEDURES.numProcedure = 1) ` +
+      `AND ( mouvement = 'depart' AND dispoDossier = 0 ) ` +
       ORDER_BY,
     (err, res) => {
       if (err) {
@@ -89,10 +89,10 @@ Historique.getCahierNouvelleDemande = (result) => {
   );
 };
 
-Historique.getCahierDepart = (result) => {
+Historique.getCahierNouvelleDemande = (result) => {
   dbConn.query(
     REQUETE_BASE +
-      `AND ( mouvement = 'depart' AND dispoDossier = 0 ) ` +
+      `AND ( mouvement = 'arriver' AND dispoDossier = 1 AND PROCEDURES.numProcedure = 1) ` +
       ORDER_BY,
     (err, res) => {
       if (err) {

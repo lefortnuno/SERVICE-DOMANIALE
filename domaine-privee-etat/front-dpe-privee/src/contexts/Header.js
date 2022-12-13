@@ -31,8 +31,8 @@ function Header(props) {
   };
 
   return (
-    <div className="body_of_nsvbar">
-      <nav className="sidebar close">
+    <div className="navbar navbar-expand-sm navbar-dark justify-content-center">
+      <nav >
         <header>
           <div className="image-text">
             <div className="image">{/* <img src="logo.png" alt=""> */}</div>
@@ -42,19 +42,13 @@ function Header(props) {
               <span className="profession"> by Trofel </span>
             </div>
           </div>
-          <BsChevronRight />
         </header>
 
         <div className="menu-bar">
           {u_info.u_token ? (
             <>
               <div className="menu">
-                <li class="search-box">
-                  <BsSearch />
-                  <input type="text" placeholder="Search..." />
-                </li>
-
-                <ul className="menu-links">
+                <ul className="navbar-nav">
                   <li className="nav-link">
                     <Link to="/utilisateur/" className="link-name">
                       {u_info.u_attribut} {u_info.u_numCompte} : {u_info.u_nom}
@@ -125,24 +119,12 @@ function Header(props) {
                 </ul>
               </div>
 
-              <div className="bottom-content">
+              <ul className="navbar-nav">
                 <li className="" onClick={seDeconnecter}>
                   <BsBoxArrowLeft />
                   <span className="link-name"> Deconnection </span>
                 </li>
-
-                <li className="mode">
-                  <div className="sun-moon">
-                    <BsMoon />
-                    <BsSun />
-                  </div>
-                  <span className="mode-text text">Dark mode</span>
-
-                  <div className="toggle-switch">
-                    <span className="switch"></span>
-                  </div>
-                </li>
-              </div>
+              </ul>
             </>
           ) : (
             <ul className="nav-links">
