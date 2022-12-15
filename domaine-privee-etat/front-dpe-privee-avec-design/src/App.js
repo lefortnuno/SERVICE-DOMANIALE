@@ -7,8 +7,9 @@ import LogOutProtection from "./contexts/protected/logout.protected";
 import SinInProtected from "./contexts/protected/singin.protected";
 import SeConnecter from "./components/login/SeConnecter";
 import Utilisateur from "./components/utilisateurs/Utilisateur";
-import Indiv from "./components/utilisateurs/Indi";
+import Individu from "./components/utilisateurs/Individu";
 import CahierArriver from "./components/historique/cahierArriver/cahier.arriver";
+import NouvelleDemande from "./components/dossiers/NouvelleDemande";
 
 export default function App() {
   return (
@@ -22,12 +23,16 @@ export default function App() {
             element={<SinInProtected Cmp={Utilisateur} />}
           />
           <Route
-            path="indiv/"
-            element={<SinInProtected Cmp={Indiv} />}
+            path="individu/"
+            element={<SinInProtected Cmp={Individu} />}
           />
           <Route
             path="C_A/"
             element={<SinInProtected Cmp={CahierArriver} />}
+          />
+          <Route
+            path="N_D/"
+            element={<SinInProtected Cmp={NouvelleDemande} />}
           />
         </Routes>
       </BrowserRouter>

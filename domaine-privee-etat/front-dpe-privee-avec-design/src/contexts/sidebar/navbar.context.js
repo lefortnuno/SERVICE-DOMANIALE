@@ -14,7 +14,7 @@ export default function NavbarContext() {
         <li className="nav-item">
           <a href="components.html">
             <i className="la la-table"></i>
-            <p><Link to="/indiv/"> Indiv </Link></p>
+            <p><Link to="/individu/"> Individu </Link></p>
             <span className="badge badge-count">14</span>
           </a>
         </li>
