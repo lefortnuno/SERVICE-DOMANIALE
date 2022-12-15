@@ -1,5 +1,3 @@
-
-
 export default function NotificationHeader() {
   return (
     <>
@@ -21,52 +19,43 @@ export default function NotificationHeader() {
           aria-labelledby="navbarDropdown"
         >
           <li>
-            <div className="dropdown-title">You have 4 new notification</div>
+            <div className="dropdown-title">Vous avez 3 notifications</div>
           </li>
           <li>
             <div className="notif-center">
               <a href="#">
                 <div className="notif-icon notif-primary">
-                  <i className="la la-user-plus"></i>
+                  <i className="la la-comment"></i>
                 </div>
                 <div className="notif-content">
-                  <span className="block">New user registered</span>
-                  <span className="time">5 minutes ago</span>
+                  <span className="block">17 Validation Nouvelle Demande </span>
+                  <span className="time">il y a 5 minutes </span>
                 </div>
               </a>
               <a href="#">
                 <div className="notif-icon notif-success">
-                  <i className="la la-comment"></i>
+                  <i className="la la-user-plus"></i>
                 </div>
                 <div className="notif-content">
-                  <span className="block">Rahmad commented on Admin</span>
-                  <span className="time">12 minutes ago</span>
+                  <span className="block">2 Nouveau compte a approuvé</span>
+                  <span className="time">il y a 12 minutes</span>
                 </div>
               </a>
-              <a href="#">
+              {/* <a href="#">
                 <div className="notif-img">
                   <img src="assets/img/profile2.jpg" alt="Img Profile" />
                 </div>
                 <div className="notif-content">
-                  <span className="block">Reza send messages to you</span>
-                  <span className="time">12 minutes ago</span>
+                  <span className="block">Approbation C.E.L</span>
+                  <span className="time"> il y a 12 minutes </span>
                 </div>
-              </a>
-              <a href="#">
-                <div className="notif-icon notif-danger">
-                  <i className="la la-heart"></i>
-                </div>
-                <div className="notif-content">
-                  <span className="block">Farrah liked Admin</span>
-                  <span className="time">17 minutes ago</span>
-                </div>
-              </a>
+              </a> */}
             </div>
           </li>
           <li>
             {/* <a className="see-all" href="javascript:void(0);"> */}
             <a className="see-all" href="#">
-              <strong>See all notifications</strong>
+              <strong>Voir toutes les notifications</strong>
               <i className="la la-angle-right"></i>
             </a>
           </li>

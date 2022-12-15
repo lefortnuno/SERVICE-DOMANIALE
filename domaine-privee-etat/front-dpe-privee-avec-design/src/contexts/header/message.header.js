@@ -1,5 +1,3 @@
-
-
 export default function MessageHeader() {
   return (
     <>
@@ -15,7 +13,7 @@ export default function MessageHeader() {
         >
           <i className="la la-envelope"></i>
         </a>
-        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+        {/* <div className="dropdown-menu" aria-labelledby="navbarDropdown">
           <a className="dropdown-item" href="#">
             Action
           </a>
@@ -26,7 +24,7 @@ export default function MessageHeader() {
           <a className="dropdown-item" href="#">
             Something else here
           </a>
-        </div>
+        </div> */}
       </li>
     </>
   );

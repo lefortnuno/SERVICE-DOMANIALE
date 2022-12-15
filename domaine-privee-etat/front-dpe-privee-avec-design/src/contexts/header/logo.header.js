@@ -1,11 +1,9 @@
-
-
 export default function LogoHeader() {
   return (
     <>
       <div className="logo-header">
         <a href="index.html" className="logo">
-          e-Tokotany
+          e -Tokotany
         </a>
         <button
           className="navbar-toggler sidenav-toggler ml-auto"

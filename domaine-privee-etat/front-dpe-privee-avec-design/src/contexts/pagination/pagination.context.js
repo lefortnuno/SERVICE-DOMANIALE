@@ -1,12 +1,12 @@
 import React from "react";
+import { useState } from "react";
 
-export default function PaginationContext({
-  data,
-  onSearchFirstPage,
-}) {
+import { setCurrentItems, getUserData } from "./items.list.context";
+
+export default function PaginationContext({ onSearchFirstPage }) {
   //#region  //----- MY PAGINATION -----
   const [currentPage, setcurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
 
   const [pageNumberLimit, setPageNumberLimit] = useState(5);
   const [maxPageNumberLimit, setmaxPageNumberLimit] = useState(5);
@@ -26,14 +26,17 @@ export default function PaginationContext({
     }
   }
 
+  const data = getUserData();
   const pages = [];
-  for (let i = 1; i <= Math.ceil(users.length / itemsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(data.length / itemsPerPage); i++) {
     pages.push(i);
   }
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  setCurrentItems(currentItems);
 
   const renderPageNumbers = pages.map((number) => {
     if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
@@ -71,7 +74,7 @@ export default function PaginationContext({
 
   return (
     <>
-      {renderPageNumbers || renderPageNumbers === 1 ? null : (
+      {/* {renderPageNumbers || renderPageNumbers === 1 ? null : ( */}
         <ul className="pageNumbers">
           <li>
             <button
@@ -91,7 +94,7 @@ export default function PaginationContext({
             </button>
           </li>
         </ul>
-      )}
+       {/* )} */}
     </>
   );
 }

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function NavbarContext() {
   return (
     <>
@@ -5,28 +7,28 @@ export default function NavbarContext() {
         <li className="nav-item active">
           <a href="index.html">
             <i className="la la-dashboard"></i>
-            <p>Dashboard</p>
+            <p> <Link to="/utilisateur/"> Utilisateur </Link></p>
             <span className="badge badge-count">5</span>
           </a>
         </li>
         <li className="nav-item">
           <a href="components.html">
             <i className="la la-table"></i>
-            <p>Components</p>
+            <p><Link to="/indiv/"> Indiv </Link></p>
             <span className="badge badge-count">14</span>
           </a>
         </li>
         <li className="nav-item">
           <a href="forms.html">
             <i className="la la-keyboard-o"></i>
-            <p>Forms</p>
+            <p><Link to="/C_A/"> Dossier </Link></p>
             <span className="badge badge-count">50</span>
           </a>
         </li>
         <li className="nav-item">
           <a href="tables.html">
             <i className="la la-th"></i>
-            <p>Tables</p>
+            <p><Link to="/"> Deco </Link></p>
             <span className="badge badge-count">6</span>
           </a>
         </li>
