@@ -21,7 +21,7 @@ export default function NavbarContext() {
         <li className="nav-item">
           <a href="forms.html">
             <i className="la la-keyboard-o"></i>
-            <p><Link to="/C_A/"> Dossier </Link></p>
+            <p><Link to="/C_A/"> Dossiers </Link></p>
             <span className="badge badge-count">50</span>
           </a>
         </li>
