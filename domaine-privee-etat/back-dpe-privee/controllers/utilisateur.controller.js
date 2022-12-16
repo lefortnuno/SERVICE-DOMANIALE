@@ -1,5 +1,7 @@
 "use strict";
 const Utilisateur = require("../models/utilisateur.model");
+const path = require("path");
+const multer = require("multer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const tmp = 3 * 24 * 60 * 60 * 1000;
@@ -8,12 +10,34 @@ const createToken = (numCompte) => {
   return jwt.sign({ numCompte }, process.env.TOKEN_SECRET, { expiresIn: tmp });
 };
 
+const storageFace = multer.diskStorage({
+  destination: path.join(
+    __dirname,
+    "../../front-dpe-privee-avec-design/public/",
+    "pic-user"
+  ),
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
 module.exports.addUtilisateur = (req, res) => {
-  let { identification, photoPDP, mdp, u_cin, unite } = req.body;
+  let { identification, roleU, mdp, u_cin, unite } = req.body;
+
+  console.log("classifiedsadd : ", classifiedsadd);
 
   mdp = bcrypt.hashSync(mdp, 10);
+  const photoPDP = "Aucune";
   const attribut = "utilisateur";
-  const statu = false;
+  let statu = false;
+  if (
+    roleU === "Chef" ||
+    roleU === "Chef Adjoint" ||
+    roleU === "Agent" ||
+    roleU === "Administrateur"
+  ) {
+    statu = true;
+  }
 
   //Get last ID USER for future CONCATENATION
   Utilisateur.getLastIdUtilisateurs((err, lastId) => {
@@ -30,17 +54,56 @@ module.exports.addUtilisateur = (req, res) => {
         u_cin,
       };
 
-      Utilisateur.addUtilisateur(newUtilisateur, (err, resp) => {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send(resp);
-        }
-      });
+      console.log("newUtilisateur : ", newUtilisateur);
+
+      // Utilisateur.addUtilisateur(newUtilisateur, (err, resp) => {
+      //   if (err) {
+      //     res.send(err);
+      //   } else {
+      //     res.send(resp);
+      //   }
+      // });
     } else {
       res.send(err);
     }
   });
+};
+
+module.exports.addPhotoPdp = (req, res) => {
+  try {
+    // 'avatar' is the name of our file input field in the HTML form
+    let upload = multer({ storage: storageFace }).single("photoPDP");
+
+    upload(req, res, function (err) {
+      if (!req.file) {
+        return res.send("Selectioner une image à enregistrer.");
+      } else if (err instanceof multer.MulterError) {
+        return res.send(err);
+      } else if (err) {
+        return res.send(err);
+      }
+
+      const classifiedsadd = {
+        photoPDP: req.file.filename,
+      };
+
+      console.log("classifiedsadd : ", classifiedsadd);
+      console.log("req.params.id : ", req.params.id);
+      // Utilisateur.updateUtilisateur(
+      //   classifiedsadd,
+      //   req.params.id,
+      //   (err, resp) => {
+      //     if (err) {
+      //       res.send(err);
+      //     } else {
+      //       res.send(resp);
+      //     }
+      //   }
+      // );
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 module.exports.loginUtilisateur = (req, res) => {
@@ -70,6 +133,17 @@ module.exports.loginUtilisateur = (req, res) => {
 module.exports.getAllUtilisateurs = (req, res) => {
   Utilisateur.getAllUtilisateurs((err, resp) => {
     if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
+module.exports.getLastIdUtilisateurs = (req, res) => {
+  Utilisateur.getLastIdUtilisateurs((err, resp) => {
+    if (!err) {
+      console.log("getLastIdUtilisateurs : ", resp);
       res.send(resp);
     } else {
       res.send(err);

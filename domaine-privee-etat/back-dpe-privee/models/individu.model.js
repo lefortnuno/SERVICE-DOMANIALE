@@ -59,11 +59,7 @@ Individu.searchIndividu = (valeur, result) => {
       if (err) {
         result({ err, message: "erreur !", success: false }, null);
       } else {
-        if (res.length !== 0) {
-          result(null, { res, message: "trouvable !", success: true });
-        } else {
-          result(null, { res, message: "Introuvable !", success: false });
-        }
+        result(null, res);
       }
     }
   );

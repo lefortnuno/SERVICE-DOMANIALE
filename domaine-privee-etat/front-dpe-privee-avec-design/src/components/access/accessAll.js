@@ -156,7 +156,36 @@ export function AccessCahierND() {
                 <div className="col-7 d-flex align-items-center">
                   <div className="numbers">
                     <p className="card-category">Cahier de</p>
-                    <h4 className="card-title">Nouvelle Demande</h4>
+                    <h4 className="card-title">N.D</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </div>
+    </>
+  );
+}
+
+
+export function NouvelleDemande() {
+  return (
+    <>
+      <div className="col-md-4">
+        <div className="card card-stats card-primary">
+          <Link to="/nouvelleDemande">
+            <div className="card-body ">
+              <div className="row">
+                <div className="col-5">
+                  <div className="icon-big text-center">
+                    <i className="la la-check-circle"></i>
+                  </div>
+                </div>
+                <div className="col-7 d-flex align-items-center">
+                  <div className="numbers">
+                    <p className="card-category">Nouvelle</p>
+                    <h4 className="card-title">Demande</h4>
                   </div>
                 </div>
               </div>

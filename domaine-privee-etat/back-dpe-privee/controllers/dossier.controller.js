@@ -3,15 +3,16 @@ const Dossier = require("../models/dossier.model");
 const SousDossier = require("../models/sousDossier.model");
 const AutoNumAffaire = require("../models/numeroAffaire.model");
 
-module.exports.addDossier = (req, res) => {
-  Date.prototype.addDays = function (days) {
-    let date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-  };
+Date.prototype.addDays = function (days) {
+  let date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+};
+const dateAujourdHui = new Date();
 
+module.exports.addDossier = (req, res) => {
   let {
-    numAffaire,
+    numeroAffaire,
     dependance,
     natureAffectation,
     empietement,
@@ -25,37 +26,29 @@ module.exports.addDossier = (req, res) => {
     dateRDV,
     planMere,
     certificatSituationJuridique,
-    numeroRequerant,
+    p_numeroRequerant,
+    dateDemande,
   } = req.body;
 
-  if (natureAffectation === "Non Affecté") {
-    natureAffectation = 0;
-  } else if (natureAffectation === "Affecté") {
-    natureAffectation = 1;
-  }
-
-  const dateAujourdHui = new Date();
-  const numProcedure = 1;
-  const dateDemande = dateAujourdHui;
-  
-  let observation_S_D = observationDossier;
-  if (!observation_S_D) {
-    observation_S_D = "Nouvelle Demande.";
-  }
+  const p_numeroProcedure = 1;
+  let observationSD = observationDossier;
   let mesureAttribuable = "NULL";
   let prixAttribue = "NULL";
-  let dateDepot_S_D = dateAujourdHui;
+  let dateDepotSD = dateAujourdHui;
+
+  if (!dateDemande) {
+    dateDemande = dateAujourdHui;
+  }
+  if (!observationSD) {
+    observationSD = "Nouvelle Demande.";
+  }
   if (!dateRDV) {
     let addRdvDays = 15;
     dateRDV = dateAujourdHui.addDays(addRdvDays);
   }
 
-  if (!droitDemande) {
-    droitDemande = 5000;
-  }
-
   let newDossier = {
-    numAffaire,
+    numeroAffaire,
     dependance,
     natureAffectation,
     empietement,
@@ -66,14 +59,14 @@ module.exports.addDossier = (req, res) => {
     dateDemande,
     droitDemande,
     observationDossier,
-    numeroRequerant,
-    numProcedure,
+    p_numeroRequerant,
+    p_numeroProcedure,
   };
 
   let newSousDossier = {
-    numAffaire,
-    observation_S_D,
-    dateDepot_S_D,
+    numeroAffaire,
+    observationSD,
+    dateDepotSD,
     mesureAttribuable,
     prixAttribue,
     lettreDesistement,
@@ -95,18 +88,22 @@ module.exports.addDossier = (req, res) => {
     newSousDossier.lettreDesistement = lettreDesistement;
   }
 
-  //Ajout Numero Affaire depuis NUMERO_AFFAIRE_INCREMENT_AUTOMATIQUE 
+  //Ajout Numero Affaire depuis NUMERO_AFFAIRE_INCREMENT_AUTOMATIQUE
   AutoNumAffaire.getLastIdNumeroAffaire((err, lastNumAffaire) => {
     if (!err) {
-      numAffaire =
-        lastNumAffaire + "-" + numAffaire + "/" + dateAujourdHui.getFullYear();
-      newDossier.numAffaire = numAffaire;
+      numeroAffaire =
+        lastNumAffaire +
+        "-" +
+        numeroAffaire +
+        "/" +
+        dateAujourdHui.getFullYear();
+      newDossier.numeroAffaire = numeroAffaire;
 
       Dossier.addDossier(newDossier, (err, resp) => {
         if (err) {
           res.send(err);
         } else {
-          newSousDossier.numAffaire = numAffaire;
+          newSousDossier.numeroAffaire = numeroAffaire;
           SousDossier.addSousDossierNewDemande(newSousDossier);
           res.send(resp);
         }
@@ -125,13 +122,22 @@ module.exports.getAllDossiers = (req, res) => {
   });
 };
 
+module.exports.getDossiersNouvelleDemande = (req, res) => {
+  Dossier.getDossiersNouvelleDemande((err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
 module.exports.getIdDossier = (req, res) => {
   Dossier.getIdDossier(req.params.id, (err, resp) => {
     if (!err) {
       if (resp) {
         res.send(resp);
       } else {
-        res.send({ message: "Introuvable" });
+        res.send({ success: false, message: "Introuvable" });
       }
     } else {
       res.send(err);
@@ -156,13 +162,12 @@ module.exports.updateDossier = (req, res) => {
 };
 
 module.exports.avortementDossier = (req, res) => {
-  const { numProcedure } = req.body;
+  const { p_numeroProcedure } = req.body;
 
   const updateDossier = {
-    numProcedure,
+    p_numeroProcedure,
   };
-
-  Dossier.avortementDossier(updateDossier, req.params.id, (err, resp) => {
+  Dossier.updateDossier(updateDossier, req.params.id, (err, resp) => {
     if (!err) {
       res.send(resp);
     } else {

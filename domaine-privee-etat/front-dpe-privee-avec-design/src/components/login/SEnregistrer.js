@@ -1,22 +1,19 @@
 import FormulaireEnregistrement from "./Form.Enregistrement";
+import Context from "../../contexts/Context";
+import HeaderContext from "../../contexts/header/header.context";
+import SidebarContext from "../../contexts/sidebar/sidebar.context";
+import FooterContext from "../../contexts/footer/footer.context";
 
 export default function SEnregistrer() {
   return (
     <>
-      <div class="limiter">
-        <div class="container-login100">
-          <div class="wrap-login100">
-            <div class="login100-pic js-tilt" data-tilt>
-              <img
-                src={process.env.PUBLIC_URL + `/logins/images/img-01.png`}
-                alt="image"
-              />
-            </div>
+      <Context>
+        <div className="monContainer">
+          <header>Registration</header>
 
-            <FormulaireEnregistrement />
-          </div>
+          <FormulaireEnregistrement />
         </div>
-      </div>
+      </Context>
     </>
   );
 }

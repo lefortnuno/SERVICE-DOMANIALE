@@ -6,12 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 import LogOutProtection from "./contexts/protected/logout.protected";
 import SinInProtected from "./contexts/protected/singin.protected";
 import SeConnecter from "./components/login/SeConnecter";
+import SEnregistrer from "./components/login/SEnregistrer";
 import Utilisateur from "./components/personnes/utilisateurs/Utilisateur";
 import Individu from "./components/personnes/individu/Individu";
 import Requerant from "./components/personnes/requerant/Requerant";
+import Accueil from "./components/accueil/accueil";
 import Bureau from "./components/bureau/bureau";
 import Procedure from "./components/procedures/procedure";
-
+import Dossier from "./components/dossiers/Dossiers";
 
 export default function App() {
   return (
@@ -20,26 +22,23 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<LogOutProtection Cmp={SeConnecter} />} />
+          <Route path="newUtilisateur/" element={<SEnregistrer />} />
           <Route
             path="utilisateur/"
             element={<SinInProtected Cmp={Utilisateur} />}
           />
-          <Route
-            path="individu/"
-            element={<SinInProtected Cmp={Individu} />}
-          />
+          <Route path="individu/" element={<SinInProtected Cmp={Individu} />} />
           <Route
             path="requerant/"
             element={<SinInProtected Cmp={Requerant} />}
           />
+          <Route path="accueil/" element={<SinInProtected Cmp={Accueil} />} />
           <Route
             path="procedure/"
             element={<SinInProtected Cmp={Procedure} />}
           />
-          <Route
-            path="bureau/"
-            element={<SinInProtected Cmp={Bureau} />}
-          />
+          <Route path="bureau/" element={<SinInProtected Cmp={Bureau} />} />
+          <Route path="dossier/" element={<SinInProtected Cmp={Dossier} />} />
         </Routes>
       </BrowserRouter>
     </div>

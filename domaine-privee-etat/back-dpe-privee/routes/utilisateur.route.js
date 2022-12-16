@@ -11,6 +11,10 @@ router.get(
   "/",
   agent.checkUtilisateur,
   utilisateurController.getAllUtilisateurs
+);router.get(
+  "/numeroCompte/",
+  agent.checkUtilisateur,
+  utilisateurController.getLastIdUtilisateurs
 );
 router.get(
   "/:id",
@@ -24,8 +28,13 @@ router.put(
 );
 router.put(
   "/admin/:id",
-  agent.checkUtilisateur,
+  chef.checkUtilisateur,
   utilisateurController.updateUtilisateurByAdministrateur
+);
+router.put(
+  "/photoPDP/:id",
+  agent.checkUtilisateur,
+  utilisateurController.addPhotoPdp
 );
 router.delete(
   "/:id",

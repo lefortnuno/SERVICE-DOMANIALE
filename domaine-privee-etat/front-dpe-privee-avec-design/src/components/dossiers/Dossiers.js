@@ -1,23 +1,20 @@
-import axios from "../../api/axios";
-import getDataUtilisateur from "../../api/udata";
-
-import { useNavigate } from "react-router-dom";
-
 import Context from "../../contexts/Context";
+import { libraryList, AjoutLibrary } from "../../api/file.js";
+import { AccessCahierND } from "../access/accessAll";
+import { NouvelleDemande } from "../access/accessAll";
+import ListDossier from "./listDossier";
 
-export default function Utilisateur() {
-  const navigate = useNavigate();
-  const u_info = getDataUtilisateur();
-
-  function onHangle() {
-    navigate("/indiv");
-  }
+export default function Dossier() {
   return (
     <>
       <Context>
-        <div className="wrap-login100">
-            
+        <div className="row">
+          <AccessCahierND />
+          <NouvelleDemande />
         </div>
+        <ListDossier />
+
+        {libraryList.forEach((x) => AjoutLibrary(x))}
       </Context>
     </>
   );
