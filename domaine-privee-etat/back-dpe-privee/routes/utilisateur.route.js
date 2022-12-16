@@ -6,8 +6,7 @@ const chefAdjoint = require("../middlewares/chef.adjoint.middleware");
 const agent = require("../middlewares/agent.middleware");
 
 router.post("/seConnecter", utilisateurController.loginUtilisateur);
-router.post("/", chefAdjoint.checkUtilisateur, utilisateurController.addUtilisateur);
-router.put("/role/:id", utilisateurController.roleUtilisateur);
+router.post("/", utilisateurController.addUtilisateur);
 router.get(
   "/",
   agent.checkUtilisateur,
@@ -23,13 +22,19 @@ router.put(
   agent.checkUtilisateur,
   utilisateurController.updateUtilisateur
 );
+router.put(
+  "/admin/:id",
+  agent.checkUtilisateur,
+  utilisateurController.updateUtilisateurByAdministrateur
+);
 router.delete(
   "/:id",
-  agent.checkUtilisateur,
+  chef.checkUtilisateur,
   utilisateurController.deleteUtilisateur
 );
 router.get(
   "/recherche/:valeur",
+  agent.checkUtilisateur,
   utilisateurController.searchUtilisateurByParams
 );
 

@@ -6,10 +6,12 @@ import "react-toastify/dist/ReactToastify.css";
 import LogOutProtection from "./contexts/protected/logout.protected";
 import SinInProtected from "./contexts/protected/singin.protected";
 import SeConnecter from "./components/login/SeConnecter";
-import Utilisateur from "./components/utilisateurs/Utilisateur";
-import Individu from "./components/utilisateurs/Individu";
+import Utilisateur from "./components/personnes/utilisateurs/Utilisateur";
+import Individu from "./components/personnes/individu/Individu";
+import Requerant from "./components/personnes/requerant/Requerant";
 import CahierArriver from "./components/historique/cahierArriver/cahier.arriver";
 import NouvelleDemande from "./components/dossiers/NouvelleDemande";
+
 
 export default function App() {
   return (
@@ -25,6 +27,10 @@ export default function App() {
           <Route
             path="individu/"
             element={<SinInProtected Cmp={Individu} />}
+          />
+          <Route
+            path="requerant/"
+            element={<SinInProtected Cmp={Requerant} />}
           />
           <Route
             path="C_A/"

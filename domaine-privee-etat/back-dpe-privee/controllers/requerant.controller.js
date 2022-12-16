@@ -2,15 +2,13 @@
 const Requerant = require("../models/requerant.model");
 
 module.exports.addRequerant = (req, res) => {
-  const {
-    cin,
-    etatMorale,
-    complementInformation,
-  } = req.body;
+  const { p_cin, etatMorale, numeroTelephone, complementInformation } =
+    req.body;
 
   const newRequerant = {
-    cin,
+    p_cin,
     etatMorale,
+    numeroTelephone,
     complementInformation,
   };
 
@@ -54,15 +52,13 @@ module.exports.searchRequerant = (req, res) => {
 };
 
 module.exports.updateRequerant = (req, res) => {
-  const {
-    cin,
-    etatMorale,
-    complementInformation,
-  } = req.body;
+  const { p_cin, etatMorale, complementInformation, numeroTelephone } =
+    req.body;
   const updateRequerant = {
-    cin,
+    p_cin,
     etatMorale,
     complementInformation,
+    numeroTelephone,
   };
 
   Requerant.updateRequerant(updateRequerant, req.params.id, (err, resp) => {

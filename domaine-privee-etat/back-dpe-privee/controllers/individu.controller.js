@@ -2,42 +2,46 @@
 const Individu = require("../models/individu.model");
 const EtatCivil = require("../models/etatCivil.model");
 const Requerant = require("../models/requerant.model");
+const { response } = require("express");
 
 module.exports.addIndividu = (req, res) => {
   const {
     cin,
     nom,
     prenom,
-    lieunais,
-    datenais,
+    lieuNaiss,
+    dateNaiss,
     profession,
     domicile,
     dateLivrance,
     lieuLivrance,
-    nature,
+    etatMorale,
+    numeroTelephone,
+    complementInformation,
+    etatCivil,
     cinConjoint,
     nomConjoint,
     prenomConjoint,
-    dateNature,
-    lieuNature,
-    etatMorale,
-    complementInformation,
+    dateEtatCivil,
+    lieuEtatCivil,
   } = req.body;
 
-  let codeEtatCivil = 0;
+  let p_codeEtatCivil = 0;
+  const p_cin = cin;
 
   const newEtatCivil = {
-    nature,
+    etatCivil,
     cinConjoint,
     nomConjoint,
     prenomConjoint,
-    dateNature,
-    lieuNature,
+    dateEtatCivil,
+    lieuEtatCivil,
   };
 
   const newRequerant = {
     etatMorale,
-    cin,
+    p_cin,
+    numeroTelephone,
     complementInformation,
   };
 
@@ -45,13 +49,13 @@ module.exports.addIndividu = (req, res) => {
     cin,
     nom,
     prenom,
-    lieunais,
-    datenais,
+    lieuNaiss,
+    dateNaiss,
     profession,
     domicile,
     dateLivrance,
     lieuLivrance,
-    codeEtatCivil,
+    p_codeEtatCivil,
   };
 
   EtatCivil.addEtatCivil(newEtatCivil, (err, resEC) => {
@@ -62,8 +66,8 @@ module.exports.addIndividu = (req, res) => {
         if (error) {
           res.send(error);
         } else {
-          const id = resLastID[0]
-          newIndividu.codeEtatCivil = id;
+          const id = resLastID[0];
+          newIndividu.p_codeEtatCivil = id;
 
           Individu.addIndividu(newIndividu, (erreur, resI) => {
             if (erreur) {
@@ -119,33 +123,58 @@ module.exports.updateIndividu = (req, res) => {
     cin,
     nom,
     prenom,
-    lieunais,
-    datenais,
+    lieuNaiss,
+    dateNaiss,
     profession,
     domicile,
     dateLivrance,
     lieuLivrance,
-    codeEtatCivil,
+    p_codeEtatCivil,
+    etatCivil,
+    cinConjoint,
+    nomConjoint,
+    prenomConjoint,
+    dateEtatCivil,
+    lieuEtatCivil,
   } = req.body;
+
   const updateIndividu = {
     cin,
     nom,
     prenom,
-    lieunais,
-    datenais,
+    lieuNaiss,
+    dateNaiss,
     profession,
     domicile,
     dateLivrance,
     lieuLivrance,
-    codeEtatCivil,
   };
 
+  const updateEtatCivilIndividu = {
+    p_codeEtatCivil,
+    etatCivil,
+    cinConjoint,
+    nomConjoint,
+    prenomConjoint,
+    dateEtatCivil,
+    lieuEtatCivil,
+  };
   Individu.updateIndividu(updateIndividu, req.params.cin, (err, resp) => {
     if (!err) {
       res.send(resp);
     } else {
+      EtatCivil.updateEtatCivil(
+        updateEtatCivilIndividu,
+        updateEtatCivilIndividu.p_codeEtatCivil,
+        (erreur, reponse) => {
+          if (!erreur) {
+            res.send(response);
+          } else {
+            resp.send(erreur);
+          }
+        }
+      );
       res.send(err);
     }
   });
 };
-

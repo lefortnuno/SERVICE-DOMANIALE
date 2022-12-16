@@ -1,34 +1,24 @@
 let dbConn = require("../config/db");
-const Individu = require("./individu.model");
 
 let Requerant = function (individu) {
   this.numeroRequerant = individu.numeroRequerant;
   this.etatMorale = individu.etatMorale;
   this.complementInformation = individu.complementInformation;
-  this.cin = individu.cin;
-  this.nom = individu.nom;
-  this.prenom = individu.prenom;
+  this.p_cin = individu.p_cin;
+  this.numeroTelephone = individu.numeroTelephone;
 };
 
-const REQUETE_BASE = `SELECT REQUERANT.numeroRequerant as numeroRequerant, etatMorale, complementInformation, REQUERANT.cin as cin, INDIVIDU.cin as cinEtranger, nom, prenom FROM REQUERANT, INDIVIDU WHERE REQUERANT.cin = INDIVIDU.cin `;
-const ORDER_BY = ` ORDER BY numeroRequerant DESC`;
+const REQUETE_BASE = `SELECT numeroRequerant, etatMorale, complementInformation, p_cin, nom, prenom FROM REQUERANT, INDIVIDU WHERE REQUERANT.p_cin = INDIVIDU.cin `;
+const ORDER_BY = ` ORDER BY numeroRequerant DESC `;
 
 Requerant.addRequerant = (newRequerant, result) => {
-  Individu.getCinIndividu(newRequerant.cin, (errr, resI) => {
-    if(errr){
-      result(null, err);
+  dbConn.query("INSERT INTO Requerant SET ?", newRequerant, (err, res) => {
+    if (err) {
+      result(err, null);
     } else {
-      if(resI){
-        dbConn.query("INSERT INTO Requerant SET ?", newRequerant, (err, res) => {
-          if (err) {
-            result(err, null);
-          } else {
-            result(null, res);
-          }
-        });
-      }
+      result(null, res);
     }
-  })
+  });
 };
 
 Requerant.getAllRequerants = (result) => {
@@ -42,7 +32,7 @@ Requerant.getAllRequerants = (result) => {
 };
 
 Requerant.getIdRequerant = (id, result) => {
-  dbConn.query(REQUETE_BASE + `AND REQUERANT.numeroRequerant = ?`, id, (err, res) => {
+  dbConn.query(REQUETE_BASE + `AND numeroRequerant = ?`, id, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -56,7 +46,7 @@ Requerant.getIdRequerant = (id, result) => {
 };
 
 Requerant.getCINRequerant = (id, result) => {
-  dbConn.query(REQUETE_BASE + `AND individu.cin = ?`, id, (err, res) => {
+  dbConn.query(REQUETE_BASE + `AND p_cin = ?`, id, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -72,7 +62,7 @@ Requerant.getCINRequerant = (id, result) => {
 Requerant.searchRequerant = (valeur, result) => {
   dbConn.query(
     REQUETE_BASE +
-      `AND ( REQUERANT.cin LIKE '%${valeur}%' OR nom LIKE '%${valeur}%' OR prenom LIKE '%${valeur}%' )` +
+      `AND ( p_cin LIKE '%${valeur}%' OR nom LIKE '%${valeur}%' OR prenom LIKE '%${valeur}%' )` +
       ORDER_BY,
     (err, res) => {
       if (err) {
