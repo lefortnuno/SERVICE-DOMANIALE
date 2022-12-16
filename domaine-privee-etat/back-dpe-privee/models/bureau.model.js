@@ -7,7 +7,7 @@ let Bureau = function (bureau) {
 };
 
 const REQUETE_BASE = `SELECT * FROM Bureau `
-const ORDER_BY= ` ORDER BY idBureau DESC`
+const ORDER_BY= ` ORDER BY idBureau ASC `
 
 Bureau.addBureau = (newBureau, result) => {
   dbConn.query("INSERT INTO Bureau SET ?", newBureau, (err, res) => {

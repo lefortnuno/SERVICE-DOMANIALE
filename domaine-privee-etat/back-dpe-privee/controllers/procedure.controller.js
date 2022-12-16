@@ -4,14 +4,14 @@ const Procedure = require("../models/procedure.model");
 module.exports.addProcedure = (req, res) => {
   const {
     nomProcedure,
-    idBureau,
+    p_idBureau,
     natureProcedure,
     movProcedure,
   } = req.body;
 
   const newProcedure = {
     nomProcedure,
-    idBureau,
+    p_idBureau,
     natureProcedure,
     movProcedure,
   };
@@ -49,13 +49,13 @@ module.exports.getIdProcedure = (req, res) => {
 module.exports.updateProcedure = (req, res) => {
   const {
     nomProcedure,
-    idBureau,
+    p_idBureau,
     natureProcedure,
     movProcedure,
   } = req.body;
   const updateProcedure = {
     nomProcedure,
-    idBureau,
+    p_idBureau,
     natureProcedure,
     movProcedure,
   };

@@ -3,19 +3,19 @@ const Histo = require("./historique.model");
 const Bureau = require("./bureau.model");
 
 const Procedure = function (procedure) {
-  this.numProcedure = procedure.numProcedure;
+  this.numeroProcedure = procedure.numeroProcedure;
   this.nomProcedure = procedure.nomProcedure;
   this.natureProcedure = procedure.natureProcedure;
   this.movProcedure = procedure.movProcedure;
-  this.idBureau = procedure.idBureau;
+  this.p_idBureau = procedure.p_idBureau;
 };
-const REQUETE_BASE = `SELECT numProcedure, nomProcedure, natureProcedure, movProcedure, PROCEDURES.idBureau, nomBureau, adressBureau `+
-`FROM PROCEDURES, BUREAU WHERE PROCEDURES.idBureau = BUREAU.idBureau `
-const ORDER_BY = ` ORDER BY numProcedure DESC`
+
+const REQUETE_BASE = `SELECT numeroProcedure, nomProcedure, natureProcedure, movProcedure, p_idBureau, nomBureau, adressBureau FROM PROCEDURES, BUREAU WHERE PROCEDURES.p_idBureau = BUREAU.idBureau `
+const ORDER_BY = ` ORDER BY numeroProcedure ASC `
 
 
 Procedure.addProcedure = (newProcedure, result) => {
-    Bureau.getIdBureau(newProcedure.idBureau, (err, resBureau) => {
+    Bureau.getIdBureau(newProcedure.p_idBureau, (err, resBureau) => {
       if (resBureau) {
         dbConn.query(
           "INSERT INTO Procedures SET ?",
@@ -45,7 +45,7 @@ Procedure.getAllProcedures = (result) => {
 };
 
 Procedure.getIdProcedure = (id, result) => {
-  dbConn.query("SELECT * FROM Procedures WHERE numProcedure = ?", id, (err, res) => {
+  dbConn.query(REQUETE_BASE+ `AND numeroProcedure = ? `,  id, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -56,7 +56,7 @@ Procedure.getIdProcedure = (id, result) => {
 
 Procedure.updateProcedure = (updateProcedure, id, result) => {
   dbConn.query(
-    `update Procedures set ? where numProcedure = ${id}`,
+    `update Procedures set ? where numeroProcedure = ${id}`,
     updateProcedure,
     function (err, res) {
       if (err) {
@@ -71,7 +71,7 @@ Procedure.updateProcedure = (updateProcedure, id, result) => {
 Procedure.searchProcedure = (valeur, result) => {
   dbConn.query(
     REQUETE_BASE +
-      `AND ( nomBureau LIKE '%${valeur}%' OR nomProcedure LIKE '%${valeur}%' )` +
+      `AND ( nomBureau LIKE '%${valeur}%' OR nomProcedure LIKE '%${valeur}%' OR natureProcedure LIKE '%${valeur}%')` +
       ORDER_BY,
     (err, res) => {
       if (err) {

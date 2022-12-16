@@ -9,8 +9,8 @@ import SeConnecter from "./components/login/SeConnecter";
 import Utilisateur from "./components/personnes/utilisateurs/Utilisateur";
 import Individu from "./components/personnes/individu/Individu";
 import Requerant from "./components/personnes/requerant/Requerant";
-import CahierArriver from "./components/historique/cahierArriver/cahier.arriver";
-import NouvelleDemande from "./components/dossiers/NouvelleDemande";
+import Bureau from "./components/bureau/bureau";
+import Procedure from "./components/procedures/procedure";
 
 
 export default function App() {
@@ -33,12 +33,12 @@ export default function App() {
             element={<SinInProtected Cmp={Requerant} />}
           />
           <Route
-            path="C_A/"
-            element={<SinInProtected Cmp={CahierArriver} />}
+            path="procedure/"
+            element={<SinInProtected Cmp={Procedure} />}
           />
           <Route
-            path="N_D/"
-            element={<SinInProtected Cmp={NouvelleDemande} />}
+            path="bureau/"
+            element={<SinInProtected Cmp={Bureau} />}
           />
         </Routes>
       </BrowserRouter>
