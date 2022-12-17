@@ -9,6 +9,7 @@ import { BsReplyFill, BsSave } from "react-icons/bs";
 const URL_DE_BASE = `utilisateur/`;
 const URL_CIN = `individu/`;
 let isValidate = false;
+let existanceIndividu = false;
 let contenuTab = false;
 
 export default function FormulaireEnregistrement() {
@@ -19,6 +20,9 @@ export default function FormulaireEnregistrement() {
     file: [],
     filepreview: null,
   });
+  const [latNumeroCompte, setLatNumeroCompte] = useState({
+    numeroCompte: "",
+  });
   const [inputs, setInputs] = useState({
     identification: "",
     photoPDP: "",
@@ -28,9 +32,7 @@ export default function FormulaireEnregistrement() {
     u_cin: "",
   });
   const [donnee, setDonnee] = useState({
-    nom: "",
-    prenom: "",
-    u_cin: "",
+    hisData: "",
   });
   const [erreurs, setErreurs] = useState([]);
   const [messages, setMessages] = useState({
@@ -41,7 +43,28 @@ export default function FormulaireEnregistrement() {
     confirmationMdp: "",
     unite: "",
     u_cin: "",
+    p_cin: "",
   });
+  //#endregion
+
+  //#region // DERNIERE NUMERO COMPTE UTILISATEUR FUNC
+
+  useEffect(() => {
+    getlastUtilisateur();
+  }, []);
+
+  function getlastUtilisateur() {
+    axios
+      .get(URL_DE_BASE + `numeroCompte/`, u_info.opts)
+      .then(function (response) {
+        if (response.status === 200) {
+          setLatNumeroCompte(response.data);
+        } else {
+          toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
+        }
+      });
+  }
+
   //#endregion
 
   //#region // HANDLE CHANGE IMAGE FUNC
@@ -94,6 +117,10 @@ export default function FormulaireEnregistrement() {
         setErreurs((values) => ({ ...values, [name]: false }));
         setMessages((values) => ({ ...values, [name]: "" }));
       }
+    }
+
+    if (name === "unite") {
+      setErreurs((values) => ({ ...values, [name]: false }));
     }
 
     if (name === "u_cin") {
@@ -166,16 +193,16 @@ export default function FormulaireEnregistrement() {
         const value = Object.values(inputs[element]);
         if (value.length === 0) {
           setErreurs((values) => ({ ...values, [element]: true }));
+          setMessages((values) => ({
+            ...values,
+            [element]: " champ obligatoire",
+          }));
           isValidate = false;
         }
       }
     });
 
-    if (inputs.photoPDP) {
-      ajoutPhotoPDP();
-    }
-
-    if (isValidate) {
+    if (isValidate &&  existanceIndividu) {
       onSubmit();
     }
   };
@@ -185,12 +212,19 @@ export default function FormulaireEnregistrement() {
   const onSubmit = () => {
     const dataInputs = Object.assign(inputs, { roleU: u_info.u_attribut });
 
-    console.log("dataInputs : ", dataInputs);
-
     axios.post(URL_DE_BASE, dataInputs, u_info.opts).then(function (response) {
+      console.log(response);
       if (response.status === 200) {
-        toast.success("Ajout Reussi.");
-        // onClose();
+        if (response.data.success){
+          toast.success("Ajout Reussi.");
+  
+          if (picPhotoPDP.file.length !== 0) {
+            ajoutPhotoPDP();
+          }
+          onClose();
+        } else {
+          toast.error("Echec de l'Ajout!");
+        }
       } else {
         toast.error("Echec de l'Ajout!");
       }
@@ -202,18 +236,15 @@ export default function FormulaireEnregistrement() {
   const ajoutPhotoPDP = async () => {
     const formdata = new FormData();
     formdata.append("photoPDP", picPhotoPDP.file);
-    const numeroCompteAnticiper = inputs.numeroCompte;
-
-    console.log("formdata : ", formdata);
-
+    const numeroCompteAnticiper = latNumeroCompte.numeroCompte;
     axios
       .put(
         URL_DE_BASE + `photoPDP/` + `${numeroCompteAnticiper}`,
         formdata,
+        u_info.opts,
         {
           headers: { "Content-Type": "multipart/form-data" },
-        },
-        u_info.opts
+        }
       )
       .then((res) => {
         if (res.data.success) {
@@ -237,37 +268,48 @@ export default function FormulaireEnregistrement() {
   }
   //#endregion
 
-  //#region // DONNEE Individu
-  useEffect(() => {
-    getIndividu();
-  }, []);
-
-  function getIndividu() {
-    axios.get(URL_CIN, u_info.opts).then(function (response) {
-      setDonnee(response.data);
-      console.log("responseINDIVIDU :", response);
-    });
-  }
-  //#endregion
-
   //#region // ----- MA RECHERCHE -----
   function rechercheIndividu(valeur) {
     if (!valeur) {
-      getIndividu();
+      // getIndividu();
       contenuTab = false;
     } else {
-      axios
-        .get(URL_CIN + `recherche/${valeur}`, u_info.opts)
-        .then((response) => {
-          console.log("response : ", response);
-          if (response.data.success) {
-            setDonnee(response.data);
+      axios.get(URL_CIN + `apercu/${valeur}`, u_info.opts).then((response) => {
+        if (response.status === 200) {
+          const ux = response.data;
+          if (ux.success) {
+            const u = ux.res[0];
+            const concatDonnee = u.cin + " - " + u.nom;
+            const hisData = Object.assign({}, { hisData: concatDonnee });
+            setDonnee(hisData);
+            setErreurs((values) => ({ ...values, p_cin: false }));
+            setMessages((values) => ({
+              ...values,
+              p_cin: "",
+            }));
+
             contenuTab = true;
+            existanceIndividu = true;
+
           } else {
-            setDonnee(response.data);
-            contenuTab = false;
+            const hisData = Object.assign({}, { hisData: ux.message });
+            setDonnee(hisData);
+            setErreurs((values) => ({ ...values, p_cin: true }));
+            setMessages((values) => ({
+              ...values,
+              p_cin: ux.message,
+            }));
+
+            contenuTab = true;
+            existanceIndividu = false;
           }
-        });
+        } else {
+          const hisData = Object.assign({}, { hisData: "" });
+          setDonnee(hisData);
+          contenuTab = false;
+          existanceIndividu = false;
+        }
+      });
     }
   }
   //#endregion
@@ -278,7 +320,7 @@ export default function FormulaireEnregistrement() {
         <div className="form first">
           <div className="details personal">
             <div className="fields">
-              <div className="input-field monPhotoPDP">
+              <div className="input-field monPhotoPDP login100-pic js-tilt " data-tilt>
                 {!picPhotoPDP.filepreview ? (
                   <img
                     src={process.env.PUBLIC_URL + `/logins/images/img-01.png`}
@@ -322,7 +364,12 @@ export default function FormulaireEnregistrement() {
               </div>
 
               <div className="input-field">
-                <label>Numéro de CIN : </label>
+                <label>
+                  Numéro de CIN :
+                  <small className="text-danger d-block">
+                    {erreurs.p_cin ? messages.p_cin : null}
+                  </small>{" "}
+                </label>
                 <input
                   type="number"
                   min="1"
@@ -334,29 +381,33 @@ export default function FormulaireEnregistrement() {
                 <small className="text-danger d-block">
                   {erreurs.u_cin ? messages.u_cin : null}
                 </small>
-                {contenuTab ? (
-                  <>
-                    <select
-                      name="cin"
-                      onChange={handleChange}
-                      autoComplete="off"
-                    >
-                      {/* {donnee.map((d, key) => (
-                        <option key={key} value={d.cin}>
-                          {d.cin}
-                        </option>
-                      ))} */}
-                    </select>
-                  </>
-                ) : null}
               </div>
 
+              {contenuTab && donnee.hisData ? (
+                <>
+                  <div className="input-field">
+                    <label> Pré-visualisation : </label>
+                    <input
+                      type="text"
+                      name="hisData"
+                      value={donnee.hisData}
+                      autoComplete="off"
+                      placeholder="...."
+                      disabled={true}
+                      style={{
+                        backgroundColor: "rgb(226, 226, 226)",
+                        color: "#000",
+                      }}
+                    />
+                  </div>
+                </>
+              ) : null}
               <div className="input-field">
                 <label>Occupation : </label>
                 <select name="unite" onChange={handleChange} autoComplete="off">
                   <option> </option>
-                  <option>Circonscription</option>
-                  <option>Foncier</option>
+                  <option value={true}>Circonscription</option>
+                  <option value={false}>Foncier</option>
                 </select>
                 <small className="text-danger d-block">
                   {erreurs.unite ? messages.unite : null}
@@ -390,45 +441,15 @@ export default function FormulaireEnregistrement() {
                   {erreurs.confirmationMdp ? messages.confirmationMdp : null}
                 </small>
               </div>
-
-              {contenuTab ? (
-                <>
-                  <div className="input-field">
-                    <label>Nom : </label>
-                    <input
-                      type="text"
-                      name="nom"
-                      onChange={handleChange}
-                      value={donnee.nom}
-                      autoComplete="off"
-                      placeholder="Nom de l'individu"
-                      disabled={true}
-                    />
-                  </div>
-
-                  <div className="input-field">
-                    <label>Prénom : </label>
-                    <input
-                      type="text"
-                      name="prenom"
-                      onChange={handleChange}
-                      value={donnee.prenom}
-                      autoComplete="off"
-                      placeholder="Prénom de l'individu"
-                      disabled={true}
-                    />
-                  </div>
-                </>
-              ) : null}
             </div>
             <div className="buttons">
               {/* <div className="backBtn btn btn-danger" onClick={onClose}> */}
-              <div className="backBtn btn btn-danger">
+              <div className="backBtn btn btn-danger" onClick={onClose}>
                 <BsReplyFill />
                 <span className="btnText"> Annuler</span>
               </div>
 
-              <button className="sumbit btn btn-success">
+              <button className="btn btn-success" onClick={validation}>
                 <span className="btnText"> Enregistrer</span>
               </button>
             </div>

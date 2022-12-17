@@ -24,16 +24,21 @@ const storageFace = multer.diskStorage({
 module.exports.addUtilisateur = (req, res) => {
   let { identification, roleU, mdp, u_cin, unite } = req.body;
 
-  console.log("classifiedsadd : ", classifiedsadd);
 
   mdp = bcrypt.hashSync(mdp, 10);
   const photoPDP = "Aucune";
   const attribut = "utilisateur";
   let statu = false;
+
+  if (unite === "true") {
+    unite = true;
+  } else if(unite === "false") {
+    unite = false;
+  }
+
   if (
     roleU === "Chef" ||
     roleU === "Chef Adjoint" ||
-    roleU === "Agent" ||
     roleU === "Administrateur"
   ) {
     statu = true;
@@ -54,15 +59,13 @@ module.exports.addUtilisateur = (req, res) => {
         u_cin,
       };
 
-      console.log("newUtilisateur : ", newUtilisateur);
-
-      // Utilisateur.addUtilisateur(newUtilisateur, (err, resp) => {
-      //   if (err) {
-      //     res.send(err);
-      //   } else {
-      //     res.send(resp);
-      //   }
-      // });
+      Utilisateur.addUtilisateur(newUtilisateur, (err, resp) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(resp);
+        }
+      });
     } else {
       res.send(err);
     }
@@ -87,19 +90,17 @@ module.exports.addPhotoPdp = (req, res) => {
         photoPDP: req.file.filename,
       };
 
-      console.log("classifiedsadd : ", classifiedsadd);
-      console.log("req.params.id : ", req.params.id);
-      // Utilisateur.updateUtilisateur(
-      //   classifiedsadd,
-      //   req.params.id,
-      //   (err, resp) => {
-      //     if (err) {
-      //       res.send(err);
-      //     } else {
-      //       res.send(resp);
-      //     }
-      //   }
-      // );
+      Utilisateur.updateUtilisateur(
+        classifiedsadd,
+        req.params.id,
+        (err, resp) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send(resp);
+          }
+        }
+      );
     });
   } catch (err) {
     console.log(err);
@@ -107,13 +108,13 @@ module.exports.addPhotoPdp = (req, res) => {
 };
 
 module.exports.loginUtilisateur = (req, res) => {
-  const { identification, mdp } = req.body;
-  Utilisateur.loginUtilisateur({ identification, mdp }, (err, resp) => {
+  let { identification, mdp } = req.body;
+
+  Utilisateur.loginUtilisateur({ identification }, (err, resp) => {
     if (!err) {
       if (resp.length != 0) {
         const pwd = resp[0].mdp;
-        // const validePwd = bcrypt.compareSync(mdp, pwd);
-        const validePwd = true;
+        const validePwd = bcrypt.compareSync(mdp, pwd);
 
         if (validePwd) {
           const token = createToken(resp);
@@ -140,10 +141,9 @@ module.exports.getAllUtilisateurs = (req, res) => {
   });
 };
 
-module.exports.getLastIdUtilisateurs = (req, res) => {
-  Utilisateur.getLastIdUtilisateurs((err, resp) => {
+module.exports.getLastNumeroCompteUtilisateur = (req, res) => {
+  Utilisateur.getLastNumeroCompteUtilisateur((err, resp) => {
     if (!err) {
-      console.log("getLastIdUtilisateurs : ", resp);
       res.send(resp);
     } else {
       res.send(err);

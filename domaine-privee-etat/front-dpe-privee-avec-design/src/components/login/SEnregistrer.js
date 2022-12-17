@@ -9,7 +9,7 @@ export default function SEnregistrer() {
     <>
       <Context>
         <div className="monContainer">
-          <header>Registration</header>
+          <header>Création nouveau compte</header>
 
           <FormulaireEnregistrement />
         </div>

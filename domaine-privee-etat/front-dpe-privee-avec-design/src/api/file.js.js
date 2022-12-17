@@ -24,4 +24,5 @@ export const libraryList = [
   "/logins/vendor/select2/select2.min.js",
   "/logins/vendor/tilt/tilt.jquery.min.js",
   "/logins/js/main.js",
+  "/js/script.js",
 ];

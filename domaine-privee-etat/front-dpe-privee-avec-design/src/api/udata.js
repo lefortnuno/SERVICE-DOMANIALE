@@ -8,6 +8,7 @@ export default function getDataUtilisateur() {
     u_numeroCompte: localStorage.numeroCompte,
     u_statu: localStorage.statu,
     u_unite: localStorage.unite,
+    u_photoPDP: localStorage.photoPDP,
     u_u_cin: localStorage.u_cin,
   };
 

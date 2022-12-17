@@ -2,6 +2,7 @@ import FormulaireSeConnecter from "./Form.SeConnecter";
 import HeaderContext from "../../contexts/header/header.context";
 import SidebarContext from "../../contexts/sidebar/sidebar.context";
 import FooterContext from "../../contexts/footer/footer.context";
+import { AjoutLibrary,libraryList } from "../../api/file.js";
 
 export default function SeConnecter() {
   return (
@@ -26,6 +27,7 @@ export default function SeConnecter() {
           <FooterContext />
         </div>
       </div>
+        {libraryList.forEach((x) => AjoutLibrary(x))}
     </>
   );
 }

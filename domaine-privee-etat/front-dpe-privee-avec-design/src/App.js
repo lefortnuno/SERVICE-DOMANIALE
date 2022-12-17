@@ -22,7 +22,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<LogOutProtection Cmp={SeConnecter} />} />
-          <Route path="newUtilisateur/" element={<SEnregistrer />} />
+          <Route path="newUtilisateur/" element={<SinInProtected Cmp={SEnregistrer} />} />
           <Route
             path="utilisateur/"
             element={<SinInProtected Cmp={Utilisateur} />}

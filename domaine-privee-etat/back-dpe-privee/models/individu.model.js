@@ -64,6 +64,26 @@ Individu.searchIndividu = (valeur, result) => {
     }
   );
 };
+Individu.apercuIndividu = (valeur, result) => {
+  dbConn.query(
+    REQUETE_BASE + `AND ( cin LIKE '${valeur}%' )` + ORDER_BY + ` LIMIT 1 `,
+    (err, res) => {
+      if (err) {
+        result({ err, message: "erreur !", success: false }, null);
+      } else {
+        if (res.length !== 0) {
+          result(null, {success: true, res});
+        } else {
+          result(null, {
+            success: false,
+            message:
+              "Numéro de CIN indisponible",
+          });
+        }
+      }
+    }
+  );
+};
 
 Individu.updateIndividu = (updateIndividu, cin, result) => {
   dbConn.query(

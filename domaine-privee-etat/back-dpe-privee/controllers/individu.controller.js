@@ -118,6 +118,16 @@ module.exports.searchIndividu = (req, res) => {
   });
 };
 
+module.exports.apercuIndividu = (req, res) => {
+  Individu.apercuIndividu(req.params.valeur, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
 module.exports.updateIndividu = (req, res) => {
   const {
     cin,

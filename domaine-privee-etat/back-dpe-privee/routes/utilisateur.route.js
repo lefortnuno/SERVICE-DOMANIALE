@@ -14,7 +14,7 @@ router.get(
 );router.get(
   "/numeroCompte/",
   agent.checkUtilisateur,
-  utilisateurController.getLastIdUtilisateurs
+  utilisateurController.getLastNumeroCompteUtilisateur
 );
 router.get(
   "/:id",

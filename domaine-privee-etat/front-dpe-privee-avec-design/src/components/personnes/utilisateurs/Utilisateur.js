@@ -189,6 +189,7 @@ export default function Utilisateur() {
                       <tr>
                         <th scope="col">#</th>
                         <th scope="col">Identification</th>
+                        <th scope="col">Individu</th>
                         <th scope="col">Role</th>
                         <th scope="col">Unité</th>
                         <th scope="col">Actions</th>
@@ -203,6 +204,7 @@ export default function Utilisateur() {
                         currentItems.map((user, key) => (
                           <tr key={key}>
                             <th scope="row">{user.numeroCompte} </th>
+                            <td>{user.identification}</td>
                             <td>{user.nom}</td>
                             <td>{user.attribut}</td>
                             <td>

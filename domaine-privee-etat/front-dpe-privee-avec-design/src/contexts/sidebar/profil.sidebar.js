@@ -1,9 +1,15 @@
+import getDataUtilisateur from "../../api/udata";
+
 export default function ProfilSidebar() {
+  const u_info = getDataUtilisateur();
   return (
     <>
       <div className="user">
         <div className="photo">
-          <img src="assets/img/profile.jpg" />
+          <img
+            src={process.env.PUBLIC_URL + `/pic-user/${u_info.u_photoPDP}`}
+            alt="pdp"
+          />
         </div>
         <div className="info">
           <a
@@ -13,14 +19,15 @@ export default function ProfilSidebar() {
             aria-expanded="true"
           >
             <span>
-              Trofel
-              <span className="user-level">Administrator</span>
-              <span className="caret"></span>
+              {u_info.u_identification}
+              <span className="user-level">{u_info.u_attribut}</span>
+              {/* <span className="caret"></span> */}
             </span>
           </a>
           <div className="clearfix"></div>
 
-          <div
+          {/* Help from lafatra on transforming this code to JAVASCRIPT code */}
+          {/* <div
             className="collapse in"
             id="collapseExample"
             aria-expanded="true"
@@ -43,7 +50,7 @@ export default function ProfilSidebar() {
                 </a>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

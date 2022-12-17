@@ -36,7 +36,7 @@ export default function NavbarContext() {
         <li className="nav-item">
           <a href="typography.html">
             <i className="la la-font"></i>
-            <p>Typography</p>
+            <p>Géographie</p>
             <span className="badge badge-danger">25</span>
           </a>
         </li>

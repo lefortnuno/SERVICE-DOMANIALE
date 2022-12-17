@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 
 export default function FooterContext() {
@@ -8,20 +9,20 @@ export default function FooterContext() {
           <nav className="pull-left">
             <ul className="nav">
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link to="/aide/" className="nav-link">
                   Aide
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link to="/licence/" className="nav-link">
                   Licence
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
           <div className="copyright ml-auto">
             Réaliser par
-            <a href="https://www.facebook.com/tendo.lelouch.9/">Trofel</a>, en
+            <a href="https://www.facebook.com/tendo.lelouch.9/"> Trofel</a>, en
             2022
           </div>
         </div>

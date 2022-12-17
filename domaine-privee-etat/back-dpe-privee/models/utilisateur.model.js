@@ -28,7 +28,7 @@ Utilisateur.addUtilisateur = (newUtilisateur, result) => {
 };
 
 Utilisateur.loginUtilisateur = (values, result) => {
-  const requete = `AND identification=? AND mdp=? AND statu=1`;
+  const requete = ` AND (identification=? AND statu=1)`;
   dbConn.query(
     REQUETE_ADVANCER + requete,
     [values.identification, values.mdp],
@@ -73,6 +73,27 @@ Utilisateur.getLastIdUtilisateurs = (result) => {
   );
 };
 
+Utilisateur.getLastNumeroCompteUtilisateur= (result) => {
+  dbConn.query(
+    `SELECT numeroCompte FROM compte ` + ORDER_BY + `LIMIT 1`,
+    (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        let id = 0;
+        if (res.length === 0) {
+          id = 1;
+        } else {
+          const tmpID = Object.values(res);
+          id = Object.values(tmpID[0]);
+          id = id[0] + 1;
+        }
+        result(null, {numeroCompte: id});
+      }
+    }
+  );
+};
+
 Utilisateur.getIdUtilisateur = (numeroCompte, result) => {
   dbConn.query(REQUETE_ADVANCER + ` AND numeroCompte = ?`, numeroCompte, (err, res) => {
     if (err) {
@@ -112,7 +133,7 @@ Utilisateur.updateUtilisateur = (newUtilisateur, numeroCompte, result) => {
       if (err) {
         result(err, null);
       } else {
-        result(null, res);
+        result(null, {success: true, message:"Reussi"});
       }
     }
   );
