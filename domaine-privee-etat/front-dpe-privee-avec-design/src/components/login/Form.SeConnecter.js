@@ -180,10 +180,10 @@ export default function FormulaireSeConnecter() {
         </div>
 
         <div className="text-center p-t-136">
-          <a className="txt2" href="#">
+          <Link to="/nouveauCompte/" className="txt2">
             Creer un nouveau compte
             <i className="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-          </a>
+          </Link>
         </div>
       </form>
     </>
