@@ -161,23 +161,28 @@ export default function ListDossier() {
                       currentItems.map((user, key) => (
                         <tr key={key}>
                           <th scope="row">{user.numeroAffaire} </th>
-                          <td colSpan={2}>
+                          <td>
                             {user.dependance === 1 ? (
                               <>Dependant</>
                             ) : (
                               <>Non dependant</>
                             )}
+                          </td>
+                          <td>
                             {user.natureAffectation === 1 ? (
                               <>Affecté</>
                             ) : (
                               <>Non affecté</>
                             )}
                           </td>
+                          <td>
+                            {user.p_numeroRequerant} - {user.nom}
+                          </td>
 
                           <td>
                             <button
                               type="button"
-                              className="btn btn-outline-primary btn-sm m-1 waves-effect"
+                              className="btn btn-outline-success btn-sm m-1 waves-effect"
                               variant="default"
                               name="numCompteEdit"
                               onClick={() => showEditModal(user.numeroDossier)}
@@ -201,7 +206,7 @@ export default function ListDossier() {
                             u_info.u_attribut === "Administrateur" ? (
                               <button
                                 type="button"
-                                className="btn btn-outline-primary btn-sm m-1 waves-effect"
+                                className="btn btn-outline-danger btn-sm m-1 waves-effect"
                                 variant="default"
                                 name="numCompteEdit"
                                 onClick={() =>
@@ -262,9 +267,9 @@ export default function ListDossier() {
             </div>
             <div className="card-body">
               {contenuTab || users.length !== 0 ? (
-                currentItems.map((dossier, key) => (
+                currentItems.map((dossier, index) => (
                   <>
-                    <div className="col-md-4" key={key}>
+                    <div className="col-md-12" key={index}>
                       <div
                         className={
                           dossier.p_numeroProcedure < 4

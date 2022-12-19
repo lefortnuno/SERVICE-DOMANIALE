@@ -14,8 +14,8 @@ export default function Dossier() {
         </div>
         <ListDossier />
 
-        {libraryList.forEach((x) => AjoutLibrary(x))}
       </Context>
+        {libraryList.forEach((x) => AjoutLibrary(x))}
     </>
   );
 }

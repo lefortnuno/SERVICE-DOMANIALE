@@ -92,4 +92,25 @@ Requerant.updateRequerant = (updateRequerant, numeroRequerant, result) => {
   );
 };
 
+Requerant.apercuRequerant = (valeur, result) => {
+  dbConn.query(
+    REQUETE_BASE + `AND ( p_cin LIKE '${valeur}%' )` + ORDER_BY ,
+    (err, res) => {
+      if (err) {
+        result({ err, message: "erreur !", success: false }, null);
+      } else {
+        if (res.length !== 0) {
+          result(null, {success: true, res});
+        } else {
+          result(null, {
+            success: false,
+            message:
+              "Requérant non trouvé.",
+          });
+        }
+      }
+    }
+  );
+};
+
 module.exports = Requerant;

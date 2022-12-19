@@ -69,3 +69,13 @@ module.exports.updateRequerant = (req, res) => {
     }
   });
 };
+
+module.exports.apercuRequerant = (req, res) => {
+  Requerant.apercuRequerant(req.params.valeur, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};

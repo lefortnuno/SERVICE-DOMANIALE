@@ -16,6 +16,7 @@ import Procedure from "./components/procedures/procedure";
 import Dossier from "./components/dossiers/Dossiers";
 import NouveauCompteHorsConnection from "./components/personnes/utilisateurs/nouveauCompte";
 import NouvelleDemande from "./components/dossiers/NouvelleDemande";
+import AjoutIndividu from "./components/personnes/individu/AjoutIndividu";
 
 export default function App() {
   return (
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="bureau/" element={<SinInProtected Cmp={Bureau} />} />
           <Route path="dossier/" element={<SinInProtected Cmp={Dossier} />} />
           <Route path="nouvelleDemande/" element={<SinInProtected Cmp={NouvelleDemande} />} />
+          <Route path="nouveauIndividu/" element={<SinInProtected Cmp={AjoutIndividu} />} />
         </Routes>
       </BrowserRouter>
     </div>

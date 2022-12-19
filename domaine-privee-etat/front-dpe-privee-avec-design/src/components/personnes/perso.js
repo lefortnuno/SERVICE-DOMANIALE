@@ -117,7 +117,7 @@ export function NouveauPersoIndividu() {
       <>
         <div className="col-md-4">
           <div className="card card-stats card-primary">
-            <Link to="/newIndividu">
+            <Link to="/nouveauIndividu">
               <div className="card-body ">
                 <div className="row">
                   <div className="col-5">

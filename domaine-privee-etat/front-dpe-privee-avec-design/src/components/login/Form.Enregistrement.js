@@ -202,7 +202,7 @@ export default function FormulaireEnregistrement() {
       }
     });
 
-    if (isValidate &&  existanceIndividu) {
+    if (isValidate && existanceIndividu) {
       onSubmit();
     }
   };
@@ -215,9 +215,9 @@ export default function FormulaireEnregistrement() {
     axios.post(URL_DE_BASE, dataInputs, u_info.opts).then(function (response) {
       console.log(response);
       if (response.status === 200) {
-        if (response.data.success){
+        if (response.data.success) {
           toast.success("Ajout Reussi.");
-  
+
           if (picPhotoPDP.file.length !== 0) {
             ajoutPhotoPDP();
           }
@@ -290,7 +290,6 @@ export default function FormulaireEnregistrement() {
 
             contenuTab = true;
             existanceIndividu = true;
-
           } else {
             const hisData = Object.assign({}, { hisData: ux.message });
             setDonnee(hisData);
@@ -320,7 +319,10 @@ export default function FormulaireEnregistrement() {
         <div className="form first">
           <div className="details personal">
             <div className="fields">
-              <div className="input-field monPhotoPDP login100-pic js-tilt " data-tilt>
+              <div
+                className="input-field monPhotoPDP login100-pic js-tilt "
+                data-tilt
+              >
                 {!picPhotoPDP.filepreview ? (
                   <img
                     src={process.env.PUBLIC_URL + `/logins/images/img-01.png`}
@@ -368,7 +370,7 @@ export default function FormulaireEnregistrement() {
                   Numéro de CIN :
                   <small className="text-danger d-block">
                     {erreurs.p_cin ? messages.p_cin : null}
-                  </small>{" "}
+                  </small>
                 </label>
                 <input
                   type="number"

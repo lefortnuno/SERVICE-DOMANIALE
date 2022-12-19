@@ -1,8 +1,8 @@
 -- /********************************************************/
 -- /***** // B.A.-BA \\ *****/
 create database BDD_DOMANIALE_FTSOA;
--- drop database BDD_DOMANIALE_FTSOA;
 
+-- drop database BDD_DOMANIALE_FTSOA;
 use BDD_DOMANIALE_FTSOA;
 
 -- show tables;
@@ -158,7 +158,8 @@ create table SOUS_DOSSIER (
 create table HISTORIQUE (
   numeroHisto int(255) NOT NULL AUTO_INCREMENT,
   mouvement varchar(25) NOT NULL,
-  dateMouvement date,
+  dateDebutMouvement date,
+  dateFinMouvement date,
   dateRDV date,
   dispoDossier BOOLEAN,
   approbation BOOLEAN,
@@ -250,45 +251,38 @@ VALUES
     'LEFORT',
     NULL,
     'Administrateur',
-    'Trofel.@#C',
+    '$2b$10$x7i8nWZsUh9NmkkmSGFMzeoS48BSbKbz2C0vofNloSeohLjziIEzi',
     '1',
     '1',
     '201011028460'
   ),
   (
     NULL,
-    'LEFORT',
+    'Nuno',
     NULL,
     'Administrateur',
-    'Trofel.@#D',
+    '$2b$10$x7i8nWZsUh9NmkkmSGFMzeoS48BSbKbz2C0vofNloSeohLjziIEzi',
     '0',
     '1',
     '201011028460'
   ),
   (
     NULL,
-    'nuno',
+    'Kanto',
     NULL,
     'Administrateur',
-    'nunoC',
+    '$2b$10$x7i8nWZsUh9NmkkmSGFMzeoS48BSbKbz2C0vofNloSeohLjziIEzi',
     '0',
-    '1',
-    '201011028460'
-  ),
-  (
-    NULL,
-    'nuno',
-    NULL,
-    'Administrateur',
-    'nunoD',
-    '1',
     '1',
     '201011028460'
   );
 
 -- /********************************************************/
 ALTER table
-  NUMERO_AFFAIRE AUTO_INCREMENT = 25;
+  NUMERO_AFFAIRE AUTO_INCREMENT = 50;
+
+ALTER table
+  DOSSIER AUTO_INCREMENT = 50;
 
 -- /********************************************************/
 INSERT INTO
@@ -382,3 +376,16 @@ VALUES
   );
 
 -- /********************************************************/
+INSERT INTO
+  `requerant` (
+    `numeroRequerant`,
+    `etatMorale`,
+    `numeroTelephone`,
+    `complementInformation`,
+    `p_cin`
+  )
+VALUES
+  (NULL, '1', '348658868', 'ENI', '201011028460'),
+  (NULL, '0', '380994042', NULL, '201011028460');
+  
+-- / **** FIN **** /

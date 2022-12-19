@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { BsReplyFill } from "react-icons/bs";
 
-const URL_DE_BASE = `utilisateur/`;
-const URL_CIN = `individu/`;
+const URL_DE_BASE = `dossier/`;
+const URL_CIN = `requerant/`;
 let isValidate = false;
 let existanceIndividu = false;
 let contenuTab = false;
@@ -16,45 +16,50 @@ export default function FormulaireNouvelleDemande() {
   //#region // MES VARIABLES
   const u_info = getDataUtilisateur();
   const navigate = useNavigate();
-  const [picPhotoPDP, setPicPhotoPDP] = useState({
-    file: [],
-    filepreview: null,
-  });
-  const [latNumeroCompte, setLatNumeroCompte] = useState({
-    numeroCompte: "",
-  });
-  const [inputs, setInputs] = useState({
-    identification: "",
-    photoPDP: "",
-    mdp: "",
-    confirmationMdp: "",
-    unite: "",
-    u_cin: "",
-  });
-  const [donnee, setDonnee] = useState({
-    hisData: "",
-  });
+  const dateAujourdHui = new Date();
+  const mesInputs = {
+    numeroAffaire: "",
+    natureAffectation: "",
+    dependance: false,
+    lettreDemande: false,
+    planAnnexe: false,
+    pvDelimitation: false,
+    superficieTerrain: "",
+    dateDemande: "",
+    droitDemande: "",
+    observationDossier: "",
+    p_numeroRequerant: "",
+    nom: "",
+    etatMorale: "",
+    lettreDesistement: false,
+    planMere: false,
+    certificatSituationJuridique: false,
+    dateRDV: "",
+  };
+
+  const previsualisation = {
+    numeroRequerant: "",
+    etatMorale: "",
+    complementInformation: "",
+    nomprenom: "",
+    p_cin: "",
+  };
+  const [inputs, setInputs] = useState(mesInputs);
+
+  const [donnee, setDonnee] = useState(previsualisation);
+
   const [erreurs, setErreurs] = useState([]);
   const [messages, setMessages] = useState({
-    messageErreur: "",
-    identification: "",
-    photoPDP: "",
-    mdp: "",
-    confirmationMdp: "",
-    unite: "",
-    u_cin: "",
-    p_cin: "",
+    lettreDemande: "",
+    planAnnexe: "",
+    pvDelimitation: "",
+    superficieTerrain: "",
+    observationDossier: "",
+    p_numeroRequerant: "",
+    lettreDesistement: "",
+    planMere: "",
+    certificatSituationJuridique: "",
   });
-  //#endregion
-
-  //#region // HANDLE CHANGE IMAGE FUNC
-  const handlePicturePhotoPDP = (event) => {
-    setPicPhotoPDP({
-      ...picPhotoPDP,
-      file: event.target.files[0],
-      filepreview: URL.createObjectURL(event.target.files[0]),
-    });
-  };
   //#endregion
 
   //#region // HANDLE CHANGE FONCTION
@@ -65,32 +70,29 @@ export default function FormulaireNouvelleDemande() {
     const name = target.name;
     setInputs((values) => ({ ...values, [name]: value }));
     setErreurs((values) => ({ ...values, messageErreur: false }));
+    setErreurs((values) => ({ ...values, [name]: false }));
 
-    if (
-      name === "identification" ||
-      name === "mdp" ||
-      name === "confirmationMdp"
-    ) {
+    if (name === "observationDossier") {
       if (value.length === 0) {
         isValidate = false;
         setErreurs((values) => ({ ...values, [name]: true }));
         setMessages((values) => ({
           ...values,
-          [name]: name + " obligatoire",
+          [name]: "Une observation est obligatoire",
         }));
       } else if (value.length < 4) {
         isValidate = false;
         setErreurs((values) => ({ ...values, [name]: true }));
         setMessages((values) => ({
           ...values,
-          [name]: name + " trop court",
+          [name]: " Observation trop court",
         }));
-      } else if (value.length > 8) {
+      } else if (value.length > 100) {
         isValidate = false;
         setErreurs((values) => ({ ...values, [name]: true }));
         setMessages((values) => ({
           ...values,
-          [name]: name + " trop long",
+          [name]: "Observation trop long",
         }));
       } else {
         isValidate = true;
@@ -99,12 +101,9 @@ export default function FormulaireNouvelleDemande() {
       }
     }
 
-    if (name === "unite") {
-      setErreurs((values) => ({ ...values, [name]: false }));
-    }
-
-    if (name === "u_cin") {
+    if (name === "cin") {
       rechercheIndividu(value);
+
       if (value.length === 0) {
         isValidate = false;
         setErreurs((values) => ({ ...values, [name]: true }));
@@ -133,23 +132,38 @@ export default function FormulaireNouvelleDemande() {
       }
     }
 
-    if (name === "confirmationMdp") {
-      if (value !== inputs.mdp) {
-        isValidate = false;
-        setErreurs((values) => ({ ...values, [name]: true }));
+    if (name === "empietement") {
+      if (!value) {
+        setInputs((values) => ({ ...values, lettreDesistement: false }));
+        setErreurs((values) => ({ ...values, lettreDesistement: false }));
         setMessages((values) => ({
           ...values,
-          [name]: " Les mot de pass ne correspondent pas",
+          lettreDesistement: false,
         }));
-      } else {
-        isValidate = true;
-        setErreurs((values) => ({ ...values, [name]: false }));
-        setMessages((values) => ({ ...values, [name]: "" }));
       }
     }
-    if (name === "mdp") {
-      setErreurs((values) => ({ ...values, confirmationMdp: false }));
-      setMessages((values) => ({ ...values, confirmationMdp: "" }));
+
+    if (name === "dependance") {
+      if (!value) {
+        setInputs((values) => ({ ...values, planMere: false }));
+        setInputs((values) => ({
+          ...values,
+          certificatSituationJuridique: false,
+        }));
+        setErreurs((values) => ({ ...values, planMere: false }));
+        setErreurs((values) => ({
+          ...values,
+          certificatSituationJuridique: false,
+        }));
+        setMessages((values) => ({
+          ...values,
+          planMere: false,
+        }));
+        setMessages((values) => ({
+          ...values,
+          certificatSituationJuridique: false,
+        }));
+      }
     }
   };
   //#endregion
@@ -157,50 +171,135 @@ export default function FormulaireNouvelleDemande() {
   //#region //VALIDATION FORMULAIRE
   const validation = (event) => {
     event.preventDefault();
+    const inputsObligatoire = [
+      "cin",
+      "lettreDemande",
+      "planAnnexe",
+      "pvDelimitation",
+      "superficieTerrain",
+      "observationDossier",
+      "dateRDV",
+    ];
 
-    if (!inputs.unite) {
-      setErreurs((values) => ({ ...values, unite: true }));
-      setMessages((values) => ({
-        ...values,
-        unite: "Selectionner votre domaine",
-      }));
-      isValidate = false;
+    if (!inputs.numeroAffaire) {
+      inputs.numeroAffaire = "V";
+    }
+    if (!inputs.natureAffectation) {
+      inputs.natureAffectation = "false";
     }
 
-    const inputsArray = Object.keys(inputs);
-    inputsArray.forEach((element) => {
-      if (element !== "unite" && element !== "photoPDP") {
-        const value = Object.values(inputs[element]);
-        if (value.length === 0) {
-          setErreurs((values) => ({ ...values, [element]: true }));
-          setMessages((values) => ({
-            ...values,
-            [element]: " champ obligatoire",
-          }));
-          isValidate = false;
-        }
+    if (!inputs.droitDemande) {
+      inputs.droitDemande = "5.000";
+    }
+
+    if (!inputs.p_numeroRequerant) {
+      if (existanceIndividu) {
+        inputs.p_numeroRequerant = donnee[0].numeroRequerant;
+        setErreurs((values) => ({ ...values, p_numeroRequerant: false }));
+        setMessages((values) => ({
+          ...values,
+          p_numeroRequerant: "",
+        }));
+        isValidate = true;
+      } else {
+        setErreurs((values) => ({ ...values, p_numeroRequerant: true }));
+        setMessages((values) => ({
+          ...values,
+          p_numeroRequerant: "Requérant obligatoire",
+        }));
+        isValidate = false;
+      }
+    }
+
+    if (!inputs.dependance) {
+      inputs.dependance = false;
+      inputs.planMere = false;
+      inputs.certificatSituationJuridique = false;
+      setErreurs((values) => ({ ...values, planMere: false }));
+      setMessages((values) => ({
+        ...values,
+        planMere: false,
+      }));
+      setErreurs((values) => ({
+        ...values,
+        certificatSituationJuridique: false,
+      }));
+      setMessages((values) => ({
+        ...values,
+        certificatSituationJuridique: false,
+      }));
+    } else {
+      if (!inputs.planMere) {
+        setErreurs((values) => ({ ...values, planMere: true }));
+        setMessages((values) => ({
+          ...values,
+          planMere: "Plan Mère obligatoire",
+        }));
+        isValidate = false;
+      }
+      if (!inputs.certificatSituationJuridique) {
+        setErreurs((values) => ({
+          ...values,
+          certificatSituationJuridique: true,
+        }));
+        setMessages((values) => ({
+          ...values,
+          certificatSituationJuridique: "C.S.J obligatoire",
+        }));
+        isValidate = false;
+      }
+    }
+
+    if (!inputs.empietement) {
+      inputs.empietement = false;
+      inputs.lettreDesistement = false;
+      setErreurs((values) => ({ ...values, lettreDesistement: false }));
+      setMessages((values) => ({
+        ...values,
+        lettreDesistement: false,
+      }));
+    } else {
+      if (!inputs.lettreDesistement) {
+        setErreurs((values) => ({ ...values, lettreDesistement: true }));
+        setMessages((values) => ({
+          ...values,
+          lettreDesistement: "Lettre de desistement obligatoire",
+        }));
+        isValidate = false;
+      }
+    }
+
+    inputsObligatoire.forEach((element) => {
+      if (!inputs[element]) {
+        setErreurs((values) => ({ ...values, [element]: true }));
+        setMessages((values) => ({
+          ...values,
+          [element]: "champ " + [element] + "  obligatoire",
+        }));
+        isValidate = false;
       }
     });
 
     if (isValidate && existanceIndividu) {
       onSubmit();
+    } else {
+      toast.warn("Verifier les champs!");
     }
   };
   //#endregion
 
   //#region // FONCTION DU BOUTTON ENREGISTRER
   const onSubmit = () => {
-    const dataInputs = Object.assign(inputs, { roleU: u_info.u_attribut });
+    const dataInputs = Object.assign(inputs, {
+      roleU: u_info.u_attribut,
+      numeroCompte: u_info.u_numeroCompte,
+    });
 
     axios.post(URL_DE_BASE, dataInputs, u_info.opts).then(function (response) {
-      console.log(response);
       if (response.status === 200) {
         if (response.data.success) {
           toast.success("Ajout Reussi.");
 
-          if (picPhotoPDP.file.length !== 0) {
-            ajoutPhotoPDP();
-          }
           onClose();
         } else {
           toast.error("Echec de l'Ajout!");
@@ -209,28 +308,6 @@ export default function FormulaireNouvelleDemande() {
         toast.error("Echec de l'Ajout!");
       }
     });
-  };
-  //#endregion
-
-  //#region // IMAGE PHOTO DE FICHE MERE --FACE-- DE L'INDIVIDU
-  const ajoutPhotoPDP = async () => {
-    const formdata = new FormData();
-    formdata.append("photoPDP", picPhotoPDP.file);
-    const numeroCompteAnticiper = latNumeroCompte.numeroCompte;
-    axios
-      .put(
-        URL_DE_BASE + `photoPDP/` + `${numeroCompteAnticiper}`,
-        formdata,
-        u_info.opts,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      )
-      .then((res) => {
-        if (res.data.success) {
-          toast.success("Compte creer avec success.");
-        }
-      });
   };
   //#endregion
 
@@ -258,11 +335,10 @@ export default function FormulaireNouvelleDemande() {
         if (response.status === 200) {
           const ux = response.data;
           if (ux.success) {
-            const u = ux.res[0];
-            const concatDonnee = u.cin + " - " + u.nom;
-            const hisData = Object.assign({}, { hisData: concatDonnee });
-            setDonnee(hisData);
+            const u = ux.res;
+            setDonnee(u);
             setErreurs((values) => ({ ...values, p_cin: false }));
+            setErreurs((values) => ({ ...values, p_numeroRequerant: false }));
             setMessages((values) => ({
               ...values,
               p_cin: "",
@@ -271,8 +347,19 @@ export default function FormulaireNouvelleDemande() {
             contenuTab = true;
             existanceIndividu = true;
           } else {
-            const hisData = Object.assign({}, { hisData: ux.message });
-            setDonnee(hisData);
+            const aucuneDonnee = Object.assign(
+              {},
+              {
+                numeroRequerant: "0",
+                p_cin: "0",
+                nom: ux.message,
+                etatMorale: "0",
+                complementInformation: "",
+                prenom: ux.message,
+              }
+            );
+
+            setDonnee([aucuneDonnee]);
             setErreurs((values) => ({ ...values, p_cin: true }));
             setMessages((values) => ({
               ...values,
@@ -283,8 +370,7 @@ export default function FormulaireNouvelleDemande() {
             existanceIndividu = false;
           }
         } else {
-          const hisData = Object.assign({}, { hisData: "" });
-          setDonnee(hisData);
+          setDonnee([]);
           contenuTab = false;
           existanceIndividu = false;
         }
@@ -299,80 +385,278 @@ export default function FormulaireNouvelleDemande() {
         <div className="form first">
           <div className="details personal">
             <div className="fields">
-              {/* MANOMBOKA ETO NO ANORATAN'CHERIE AN'LAY CODE POUR AJOUT DE NOUVEAU DOSSIERS VENANT DU HTML INY  */}
               <div className="input-field">
-                <label>
-                  Numéro de CIN :
-                  <small className="text-danger d-block">
-                    {erreurs.p_cin ? messages.p_cin : null}
-                  </small>{" "}
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  name="u_cin"
+                <label>Numéro d'affaire :</label>
+                <select
+                  name="numeroAffaire"
                   onChange={handleChange}
                   autoComplete="off"
-                  placeholder="Entrez votre numéro de CIN"
-                />
-                <small className="text-danger d-block">
-                  {erreurs.u_cin ? messages.u_cin : null}
-                </small>
-              </div>
-              <div className="input-field">
-                <label>
-                  Numéro de CIN :
-                  <small className="text-danger d-block">
-                    {erreurs.p_cin ? messages.p_cin : null}
-                  </small>{" "}
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  name="u_cin"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  placeholder="Entrez votre numéro de CIN"
-                />
-                <small className="text-danger d-block">
-                  {erreurs.u_cin ? messages.u_cin : null}
-                </small>
-              </div>
-              <div className="input-field">
-                <label>Occupation : </label>
-                <select name="unite" onChange={handleChange} autoComplete="off">
-                  <option> </option>
-                  <option value={true}>Circonscription</option>
-                  <option value={false}>Foncier</option>
+                >
+                  <option value="V">- V</option>
+                  <option value="AX">- AX</option>
+                  <option value="X">- X</option>
                 </select>
+              </div>
+
+              <div className="input-field">
+                <label>Nature affectation :</label>
+                <select
+                  name="natureAffectation"
+                  onChange={handleChange}
+                  autoComplete="off"
+                >
+                  <option value={false}>- Non affecté</option>
+                  <option value={true}>- Affecté</option>
+                </select>
+              </div>
+
+              <div className="input-field">
+                <label className="form-check-label">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="dependance"
+                    onChange={handleChange}
+                    autoComplete="off"
+                  />
+                  <span className="form-check-sign">Dependance</span>
+                </label>
+                {inputs.dependance ? (
+                  <>
+                    <label className="form-check-label">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="planMere"
+                        onChange={handleChange}
+                        autoComplete="off"
+                      />
+                      <span className="form-check-sign">Plan Mère</span>
+                      <small className="text-danger d-block">
+                        {erreurs.planMere ? messages.planMere : null}
+                      </small>
+                    </label>
+                    <label className="form-check-label">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="certificatSituationJuridique"
+                        onChange={handleChange}
+                        autoComplete="off"
+                      />
+                      <span className="form-check-sign">C.S.J</span>
+                      <small className="text-danger d-block">
+                        {erreurs.certificatSituationJuridique
+                          ? messages.certificatSituationJuridique
+                          : null}
+                      </small>
+                    </label>
+                  </>
+                ) : null}
+              </div>
+
+              <div className="input-field">
+                <label>
+                  Numéro de CIN :
+                  <small className="text-danger d-block">
+                    {erreurs.p_cin ? messages.p_cin : null}
+                  </small>
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  name="cin"
+                  onChange={handleChange}
+                  autoComplete="off"
+                  placeholder="Entrez le numéro de CIN"
+                />
                 <small className="text-danger d-block">
-                  {erreurs.unite ? messages.unite : null}
+                  {erreurs.cin ? messages.cin : null}
                 </small>
               </div>
 
-              {/* FARANY  ETO  CHERIE AN'LAY CODE POUR AJOUT DE NOUVEAU DOSSIERS VENANT DU HTML INY  */}
+              {contenuTab ? (
+                <div className="input-field">
+                  <label>Numéro du requerant :</label>
+                  <select
+                    name="p_numeroRequerant"
+                    value={donnee.p_numeroRequerant}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    style={{
+                      backgroundColor: "rgb(226, 226, 226)",
+                      color: "#000",
+                    }}
+                  >
+                    {donnee.map((d, index) => (
+                      <option value={d.numeroRequerant} key={index}>
+                        Req°{d.numeroRequerant} - {d.nom} :
+                        {d.etatMorale === 1 ? "P.Morale" : "P.Normale"}
+                      </option>
+                    ))}
+                  </select>
 
-              
-
-              {contenuTab && donnee.hisData ? (
-                <>
-                  <div className="input-field">
-                    <label> Pré-visualisation : </label>
-                    <input
-                      type="text"
-                      name="hisData"
-                      value={donnee.hisData}
-                      autoComplete="off"
-                      placeholder="...."
-                      disabled={true}
-                      style={{
-                        backgroundColor: "rgb(226, 226, 226)",
-                        color: "#000",
-                      }}
-                    />
-                  </div>
-                </>
+                  <small className="text-danger d-block">
+                    {erreurs.p_numeroRequerant
+                      ? messages.p_numeroRequerant
+                      : null}
+                  </small>
+                </div>
               ) : null}
+
+              <div className="input-field">
+                <label className="form-check-label">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="empietement"
+                    onChange={handleChange}
+                    autoComplete="off"
+                  />
+                  <span className="form-check-sign">Empietement</span>
+                </label>
+                {inputs.empietement ? (
+                  <>
+                    <label className="form-check-label">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="lettreDesistement"
+                        onChange={handleChange}
+                        autoComplete="off"
+                      />
+                      <span className="form-check-sign">
+                        Lettre de désistement
+                      </span>
+                      <small className="text-danger d-block">
+                        {erreurs.lettreDesistement
+                          ? messages.lettreDesistement
+                          : null}
+                      </small>
+                    </label>
+                  </>
+                ) : null}
+              </div>
+
+              <div className="input-field">
+                <label className="form-check-label">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="planAnnexe"
+                    onChange={handleChange}
+                    autoComplete="off"
+                  />
+                  <span className="form-check-sign">Plan annexe</span>
+                  <small className="text-danger d-block">
+                    {erreurs.planAnnexe ? messages.planAnnexe : null}
+                  </small>
+                </label>
+
+                <label className="form-check-label">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="lettreDemande"
+                    onChange={handleChange}
+                    autoComplete="off"
+                  />
+                  <span className="form-check-sign">Lettre de demande</span>
+                  <small className="text-danger d-block">
+                    {erreurs.lettreDemande ? messages.lettreDemande : null}
+                  </small>
+                </label>
+
+                <label className="form-check-label">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="pvDelimitation"
+                    onChange={handleChange}
+                    autoComplete="off"
+                  />
+                  <span className="form-check-sign">PV de délimitation</span>
+                  <small className="text-danger d-block">
+                    {erreurs.pvDelimitation ? messages.pvDelimitation : null}
+                  </small>
+                </label>
+              </div>
+              {inputs.pvDelimitation ? (
+                <div className="input-field">
+                  <label>Superficie du terrain :</label>
+                  <input
+                    type="number"
+                    min="1"
+                    name="superficieTerrain"
+                    onChange={handleChange}
+                    autoComplete="off"
+                    placeholder="Entrez la superficie du terrain"
+                  />
+                  <small className="text-danger d-block">
+                    {erreurs.superficieTerrain
+                      ? messages.superficieTerrain
+                      : null}
+                  </small>
+                </div>
+              ) : null}
+
+              <div className="input-field">
+                <label>Date de demande:</label>
+                <input
+                  type="date"
+                  name="dateDemande"
+                  onChange={handleChange}
+                  autoComplete="off"
+                  placeholder=""
+                />
+              </div>
+
+              <div className="input-field">
+                <label>Droit demande:</label>
+                <input
+                  type="text"
+                  name="droitDemande"
+                  onChange={handleChange}
+                  autoComplete="off"
+                  placeholder="Ar 5.000 "
+                  disabled={true}
+                  style={{
+                    backgroundColor: "rgb(226, 226, 226)",
+                    color: "#000",
+                  }}
+                />
+              </div>
+
+              <div className="input-field">
+                <label>Rendez-vous :</label>
+                <input
+                  type="date"
+                  name="dateRDV"
+                  onChange={handleChange}
+                  value={inputs.dateRDV}
+                  autoComplete="off"
+                  placeholder=""
+                />
+                <small className="text-danger d-block">
+                  {erreurs.dateRDV ? messages.dateRDV : null}
+                </small>
+              </div>
+
+              <div className="input-field">
+                <label>Observation :</label>
+                <textarea
+                  as="text"
+                  name="observationDossier"
+                  onChange={handleChange}
+                  autoComplete="off"
+                  placeholder="Une observation ? ...."
+                />
+                <small className="text-danger d-block">
+                  {erreurs.observationDossier
+                    ? messages.observationDossier
+                    : null}
+                </small>
+              </div>
             </div>
 
             <div className="buttons">

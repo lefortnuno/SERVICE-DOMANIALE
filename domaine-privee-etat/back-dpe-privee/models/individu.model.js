@@ -64,6 +64,7 @@ Individu.searchIndividu = (valeur, result) => {
     }
   );
 };
+
 Individu.apercuIndividu = (valeur, result) => {
   dbConn.query(
     REQUETE_BASE + `AND ( cin LIKE '${valeur}%' )` + ORDER_BY + ` LIMIT 1 `,

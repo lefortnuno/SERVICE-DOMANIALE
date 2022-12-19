@@ -16,4 +16,5 @@ router.get(
   requerantController.searchRequerant
 );
 
+router.get("/apercu/:valeur", agent.checkUtilisateur, requerantController.apercuRequerant);
 module.exports = router;

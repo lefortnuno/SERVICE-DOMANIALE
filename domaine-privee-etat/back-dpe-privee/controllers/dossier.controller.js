@@ -1,14 +1,21 @@
 "use strict";
 const Dossier = require("../models/dossier.model");
 const SousDossier = require("../models/sousDossier.model");
-const AutoNumAffaire = require("../models/numeroAffaire.model");
+const Histo = require("../models/historique.model");
 
 Date.prototype.addDays = function (days) {
   let date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
   return date;
 };
-const dateAujourdHui = new Date();
+let today = new Date();
+let dateAujourdHui = new Date();
+
+const y = today.getFullYear();
+const m = today.getMonth() + 1;
+const d = today.getDate();
+
+const fomatDateAujourdHui = y + "-" + m + "-" + d;
 
 module.exports.addDossier = (req, res) => {
   let {
@@ -28,19 +35,39 @@ module.exports.addDossier = (req, res) => {
     certificatSituationJuridique,
     p_numeroRequerant,
     dateDemande,
+    numeroCompte,
   } = req.body;
+
+  if (!dateDemande) {
+    dateDemande = fomatDateAujourdHui;
+  }
+  if (natureAffectation === "true") {
+    natureAffectation = true;
+  } else if (natureAffectation === "false") {
+    natureAffectation = false;
+  }
 
   const p_numeroProcedure = 1;
   let observationSD = observationDossier;
-  let mesureAttribuable = "NULL";
-  let prixAttribue = "NULL";
-  let dateDepotSD = dateAujourdHui;
+  const mesureAttribuable = "NULL";
+  const prixAttribue = "NULL";
+  let dateDepotSD = dateDemande;
+  let p_numeroDossier;
+  let p_numeroAffaire;
 
-  if (!dateDemande) {
-    dateDemande = dateAujourdHui;
-  }
+  const p_numeroCompte = numeroCompte;
+  const mouvement = "Arriver";
+  const dateDebutMouvement = dateDemande;
+  let dateFinMouvement;
+  const dispoDossier = true;
+  const accomplissement = false;
+  const approbation = false;
+  const observation = observationDossier;
+  let h_numeroAffaire;
+  let h_numeroDossier;
+
   if (!observationSD) {
-    observationSD = "Nouvelle Demande.";
+    observationSD = "Nouvelle Demande";
   }
   if (!dateRDV) {
     let addRdvDays = 15;
@@ -64,7 +91,8 @@ module.exports.addDossier = (req, res) => {
   };
 
   let newSousDossier = {
-    numeroAffaire,
+    p_numeroAffaire,
+    p_numeroDossier,
     observationSD,
     dateDepotSD,
     mesureAttribuable,
@@ -72,6 +100,20 @@ module.exports.addDossier = (req, res) => {
     lettreDesistement,
     planMere,
     certificatSituationJuridique,
+  };
+
+  let newHisto = {
+    mouvement,
+    dateDebutMouvement,
+    dateFinMouvement,
+    dateRDV,
+    dispoDossier,
+    approbation,
+    accomplissement,
+    observation,
+    h_numeroAffaire,
+    h_numeroDossier,
+    p_numeroCompte,
   };
 
   if (dependance && empietement) {
@@ -89,7 +131,7 @@ module.exports.addDossier = (req, res) => {
   }
 
   //Ajout Numero Affaire depuis NUMERO_AFFAIRE_INCREMENT_AUTOMATIQUE
-  AutoNumAffaire.getLastIdNumeroAffaire((err, lastNumAffaire) => {
+  Dossier.getLastIdNumeroDossier((err, lastNumAffaire) => {
     if (!err) {
       numeroAffaire =
         lastNumAffaire +
@@ -103,8 +145,13 @@ module.exports.addDossier = (req, res) => {
         if (err) {
           res.send(err);
         } else {
-          newSousDossier.numeroAffaire = numeroAffaire;
+          newSousDossier.p_numeroDossier = lastNumAffaire;
+          newSousDossier.p_numeroAffaire = numeroAffaire;
           SousDossier.addSousDossierNewDemande(newSousDossier);
+
+          newHisto.h_numeroAffaire = numeroAffaire;
+          newHisto.h_numeroDossier = lastNumAffaire;
+          Histo.addHistoNewDemande(newHisto);
           res.send(resp);
         }
       });
@@ -146,11 +193,30 @@ module.exports.getIdDossier = (req, res) => {
 };
 
 module.exports.updateDossier = (req, res) => {
-  const { superficieTerrain, observationDossier } = req.body;
+  const {
+    dependance,
+    natureAffectation,
+    empietement,
+    superficieTerrain,
+    observationDossier,
+    lettreDesistement,
+    planMere,
+    certificatSituationJuridique,
+    p_numeroRequerant,
+    p_numeroProcedure,
+  } = req.body;
 
   const updateDossier = {
-    observationDossier,
+    dependance,
+    natureAffectation,
+    empietement,
     superficieTerrain,
+    observationDossier,
+    lettreDesistement,
+    planMere,
+    certificatSituationJuridique,
+    p_numeroRequerant,
+    p_numeroProcedure,
   };
   Dossier.updateDossier(updateDossier, req.params.id, (err, resp) => {
     if (!err) {

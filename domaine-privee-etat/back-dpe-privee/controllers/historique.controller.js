@@ -2,43 +2,44 @@
 const Historique = require("../models/historique.model");
 const Dossier = require("../models/dossier.model");
 
-module.exports.addHistorique = (req, res) => {
-  Date.prototype.addDays = function (days) {
-    let date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-  };
+Date.prototype.addDays = function (days) {
+  let date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+};
 
-  const accomplissement = 0;
-  const approbation = 0;
+module.exports.addHistorique = (req, res) => {
+
+  const accomplissement = false;
+  const approbation = false;
   const addRdvDays = 15;
 
   let {
     mouvement,
-    dateMouvement,
+    dateDebutMouvement,
     dateRDV,
     observation,
-    numAffaire,
-    numCompte,
+    h_numeroAffaire,
+    p_numeroCompte,
     dispoDossier,
   } = req.body;
 
-  if (!dateMouvement && !dateRDV) {
-    dateMouvement = new Date();
-    dateRDV = dateMouvement.addDays(addRdvDays);
-  } else if (dateMouvement && !dateRDV) {
+  if (!dateDebutMouvement && !dateRDV) {
+    dateDebutMouvement = new Date();
+    dateRDV = dateDebutMouvement.addDays(addRdvDays);
+  } else if (dateDebutMouvement && !dateRDV) {
     dateRDV = new Date().addDays(addRdvDays);
-  } else if (!dateMouvement && dateRDV) {
-    dateMouvement = new Date();
+  } else if (!dateDebutMouvement && dateRDV) {
+    dateDebutMouvement = new Date();
   }
 
   const newHistorique = {
     mouvement,
-    dateMouvement,
+    dateDebutMouvement,
     dateRDV,
     observation,
-    numAffaire,
-    numCompte,
+    h_numeroAffaire,
+    p_numeroCompte,
     dispoDossier,
     accomplissement,
     approbation,
@@ -48,66 +49,58 @@ module.exports.addHistorique = (req, res) => {
     if (erreur) {
       res.send(erreur);
     } else {
-      
       res.send(resp);
     }
   });
 };
 
 module.exports.addHistoNewDemande = (req, res) => {
-  Date.prototype.addDays = function (days) {
-    let date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-  };
-
   const addRdvDays = 15;
   const dateAujourdHui = new Date();
   const mouvement = "Arriver";
-  const dateMouvement = dateAujourdHui;
-  const dispoDossier = 1;
-  const approbation = 0;
-  const accomplissement = 0;
+  const dateDebutMouvement = dateAujourdHui;
+  const dispoDossier = true;
+  const approbation = false;
+  const accomplissement = false;
   const observation = "Aucune";
-  const numAffaire = "NULL";
+  const h_numeroAffaire = "NULL";
+  const dateFinMouvement ="NULL"
 
-  let {
-    dateRDV,
-    numCompte,
-  } = req.body;
+  let { dateRDV, p_numeroCompte } = req.body;
 
   let newHisto = {
     mouvement,
-    dateMouvement,
+    dateDebutMouvement,
+    dateFinMouvement,
     dateRDV,
     dispoDossier,
     approbation,
     accomplissement,
     observation,
-    numAffaire,
-    numCompte,
+    h_numeroAffaire,
+    p_numeroCompte,
   };
 
-  if (!dateMouvement && !dateRDV) {
-    dateMouvement = new Date();
-    dateRDV = dateMouvement.addDays(addRdvDays);
-  } else if (dateMouvement && !dateRDV) {
+  if (!dateDebutMouvement && !dateRDV) {
+    dateDebutMouvement = new Date();
+    dateRDV = dateDebutMouvement.addDays(addRdvDays);
+  } else if (dateDebutMouvement && !dateRDV) {
     dateRDV = new Date().addDays(addRdvDays);
-  } else if (!dateMouvement && dateRDV) {
-    dateMouvement = new Date();
+  } else if (!dateDebutMouvement && dateRDV) {
+    dateDebutMouvement = new Date();
   }
   Dossier.getDerniereDossier((err, resp) => {
-    if(err){
+    if (err) {
       res.send(err);
     } else {
-      if (resp){
-        newHisto.numAffaire = resp[0].numAffaire;
+      if (resp) {
+        newHisto.h_numeroAffaire = resp[0].h_numeroAffaire;
         newHisto.observation = resp[0].observationDossier;
-        
+
         Historique.addHistoNewDemande(newHisto);
       }
     }
-  })
+  });
 };
 
 module.exports.getAllHistoriques = (req, res) => {
@@ -176,18 +169,18 @@ module.exports.searchHistorique = (req, res) => {
 
 module.exports.updateHistorique = (req, res) => {
   const {
-    dateMouvement,
+    dateDebutMouvement,
     dateRDV,
     observation,
-    numCompte,
+    p_numeroCompte,
     dispoDossier,
     approbation,
   } = req.body;
   const updateHistorique = {
-    dateMouvement,
+    dateDebutMouvement,
     dateRDV,
     observation,
-    numCompte,
+    p_numeroCompte,
     dispoDossier,
     approbation,
   };
@@ -202,7 +195,7 @@ module.exports.updateHistorique = (req, res) => {
 };
 
 module.exports.nextProcedureHistorique = (req, res) => {
-  const { approbationUP, numProcedure, numAffaire, numCompte } = req.body;
+  const { approbationUP, p_numeroProcedure, h_numeroAffaire, p_numeroCompte } = req.body;
 
   const accomplissement = 1;
   const approbation = approbationUP;
@@ -210,25 +203,33 @@ module.exports.nextProcedureHistorique = (req, res) => {
   const updateHistorique = {
     accomplissement,
     approbation,
-    numCompte,
+    p_numeroCompte,
   };
 
   const updateDossier = {
-    numProcedure,
+    p_numeroProcedure,
   };
-  
-  Dossier.updateDossierProcedureByNumAffaire(updateDossier, numAffaire, (erreur, response) => {
-    if (erreur){
-      res.send(erreur)
-    } else {
-      console.log(numCompte);
-      Historique.updateHistorique(updateHistorique, req.params.id, (err, resp) => {
-        if (!err) {
-          res.send(resp);
-        } else {
-          res.send(err);
-        }
-      });
+
+  Dossier.updateDossierProcedureByNumAffaire(
+    updateDossier,
+    h_numeroAffaire,
+    (erreur, response) => {
+      if (erreur) {
+        res.send(erreur);
+      } else {
+        console.log(p_numeroCompte);
+        Historique.updateHistorique(
+          updateHistorique,
+          req.params.id,
+          (err, resp) => {
+            if (!err) {
+              res.send(resp);
+            } else {
+              res.send(err);
+            }
+          }
+        );
+      }
     }
-  })
+  );
 };

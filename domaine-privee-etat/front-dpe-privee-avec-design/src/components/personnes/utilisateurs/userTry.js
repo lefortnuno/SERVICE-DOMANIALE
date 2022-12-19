@@ -1,12 +1,16 @@
 import axios from "../../../api/axios";
 import getDataUtilisateur from "../../../api/udata";
+import Context from "../../../contexts/Context";
 import { libraryList, AjoutLibrary } from "../../../api/file.js";
+
+import {
+  donneeRecherche,
+} from "../../../contexts/header/search.context";
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-import Context from "../../../contexts/Context";
 import {
   PersoIndividu,
   PersoRequerant,
@@ -26,17 +30,20 @@ export default function Utilisateur() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    getUsers();
+    getUsers()
   }, []);
 
+  // function getUsers() {
+  //   axios.get(URL_DE_BASE, u_info.opts).then(function (response) {
+  //     if (response.status === 200) {
+  //       setUsers(response.data);
+  //     } else {
+  //       toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
+  //     }
+  //   });
+  // }
   function getUsers() {
-    axios.get(URL_DE_BASE, u_info.opts).then(function (response) {
-      if (response.status === 200) {
-        setUsers(response.data);
-      } else {
-        toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
-      }
-    });
+        setUsers(donneeRecherche);
   }
   //#endregion
 
@@ -48,7 +55,7 @@ export default function Utilisateur() {
     setShowEdit(true);
   };
   const closeEditModal = () => {
-    getUsers();
+    // getUsers();
     setShowEdit(false);
   };
   //#endregion
@@ -72,11 +79,11 @@ export default function Utilisateur() {
   };
   const submitDelete = (id) => {
     axios.delete(URL_DE_BASE + `${id}`, u_info.opts).then(function (response) {
-      getUsers();
+      // getUsers();
       toast.success(`Suppression Réussi`);
       setDisplayConfirmationModal(false);
 
-      if (id == u_info.u_numCompte) {
+      if (id == u_info.u_numeroCompte) {
         localStorage.clear();
         navigate("/");
       }
@@ -85,26 +92,27 @@ export default function Utilisateur() {
   //#endregion
 
   //#region   //----- MA RECHERCHE -----
-  const [contenuTab, setContenuTab] = useState(true);
-  function rechercheUtilisateur(event) {
-    const valeur = event.target.value;
-    if (!valeur) {
-      getUsers();
-      setContenuTab(true);
-    } else {
-      axios
-        .get(URL_DE_BASE + `recherche/${valeur}`, u_info.opts)
-        .then((response) => {
-          if (response.data.success) {
-            setUsers(response.data.res);
-            setContenuTab(true);
-          } else {
-            setUsers(response.data.res);
-            setContenuTab(false);
-          }
-        });
-    }
-  }
+  // useEffect(() => {
+  //   retourALaPremierPage();
+  // }, [firstPageBoolean]);
+
+  // function retourALaPremierPage() {
+  //   setcurrentPage(1);
+  //   if (currentPage > 5) {
+  //     setmaxPageNumberLimit(5);
+  //     setminPageNumberLimit(0);
+  //   }
+  //   console.log(" firstPageBoolean UTILISATEUR: ", firstPageBoolean);
+  // }
+
+  // useEffect(() => {
+  //   enRechercheElement();
+  // }, [enRecherche]);
+
+  // function enRechercheElement() {
+  //   setUsers(donneeRecherche);
+  //   console.log(" enRecherche RECHERCHE : ", donneeRecherche);
+  // }
   //#endregion
 
   //#region  //----- MY PAGINATION -----
@@ -118,14 +126,6 @@ export default function Utilisateur() {
   const handleClick = (event) => {
     setcurrentPage(Number(event.target.id));
   };
-
-  function retourALaPremierPage() {
-    setcurrentPage(1);
-    if (currentPage > 5) {
-      setmaxPageNumberLimit(5);
-      setminPageNumberLimit(0);
-    }
-  }
 
   const pages = [];
   const nbrPage = Math.ceil(users.length / itemsPerPage);
@@ -173,7 +173,7 @@ export default function Utilisateur() {
 
   return (
     <>
-      <Context>
+      <Context URL_DE_BASE={URL_DE_BASE}>
         <div className="row">
           <PersoIndividu />
           <PersoRequerant />
@@ -204,7 +204,7 @@ export default function Utilisateur() {
                       </tr>
                     </thead>
                     <tbody>
-                      {contenuTab || users.length !== 0 ? (
+                      {users.length !== 0 ? (
                         currentItems.map((user, key) => (
                           <tr key={key}>
                             <th scope="row">{user.numeroCompte} </th>
@@ -270,7 +270,7 @@ export default function Utilisateur() {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={5} className="text-danger text-center">
+                          <td colSpan={6} className="text-danger text-center">
                             La liste est vide ....
                           </td>
                         </tr>

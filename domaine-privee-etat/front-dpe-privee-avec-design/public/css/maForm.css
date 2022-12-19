@@ -33,6 +33,10 @@
   min-height: 490px;
   background-color: #fff;
   overflow: hidden;
+  overflow-y: scroll;
+}
+.monContainer form::-webkit-scrollbar {
+  display: none;
 }
 .monContainer form .form {
   position: absolute;
