@@ -89,7 +89,7 @@ export function NouveauPersoUtilisateur() {
     <>
       <div className="col-md-4">
         <div className="card card-stats card-primary">
-          <Link to="/newUtilisateur">
+          <Link to="/nouveauUtilisateur">
             <div className="card-body ">
               <div className="row">
                 <div className="col-5">
@@ -145,7 +145,7 @@ export function NouveauPersoRequerant() {
       <>
         <div className="col-md-4">
           <div className="card card-stats card-primary">
-            <Link to="/newRequerant">
+            <Link to="/nouveauRequerant">
               <div className="card-body ">
                 <div className="row">
                   <div className="col-5">

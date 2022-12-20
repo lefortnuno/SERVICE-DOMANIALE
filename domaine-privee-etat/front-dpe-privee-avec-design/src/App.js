@@ -14,9 +14,9 @@ import Accueil from "./components/accueil/accueil";
 import Bureau from "./components/bureau/bureau";
 import Procedure from "./components/procedures/procedure";
 import Dossier from "./components/dossiers/Dossiers";
-import NouveauCompteHorsConnection from "./components/personnes/utilisateurs/nouveauCompte";
 import NouvelleDemande from "./components/dossiers/NouvelleDemande";
 import AjoutIndividu from "./components/personnes/individu/AjoutIndividu";
+import AjoutRequerant from "./components/personnes/requerant/AjoutRequerant";
 
 export default function App() {
   return (
@@ -25,8 +25,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<LogOutProtection Cmp={SeConnecter} />} />
-          <Route path="nouveauCompte/" element={<NouveauCompteHorsConnection />} />
-          <Route path="newUtilisateur/" element={<SinInProtected Cmp={SEnregistrer} />} />
+          <Route path="nouveauUtilisateur/" element={<SinInProtected Cmp={SEnregistrer} />} />
           <Route
             path="utilisateur/"
             element={<SinInProtected Cmp={Utilisateur} />}
@@ -45,6 +44,7 @@ export default function App() {
           <Route path="dossier/" element={<SinInProtected Cmp={Dossier} />} />
           <Route path="nouvelleDemande/" element={<SinInProtected Cmp={NouvelleDemande} />} />
           <Route path="nouveauIndividu/" element={<SinInProtected Cmp={AjoutIndividu} />} />
+          <Route path="nouveauRequerant/" element={<SinInProtected Cmp={AjoutRequerant} />} />
         </Routes>
       </BrowserRouter>
     </div>

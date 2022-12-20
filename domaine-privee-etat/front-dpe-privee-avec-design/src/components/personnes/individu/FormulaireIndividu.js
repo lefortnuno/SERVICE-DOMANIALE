@@ -1,8 +1,8 @@
 import axios from "../../../api/axios";
+import verifDiffDate from "../../../api/verifDate";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { Link } from "react-router-dom";
 import getDataUtilisateur from "../../../api/udata";
 
 import { useNavigate } from "react-router-dom";
@@ -10,10 +10,6 @@ import { toast } from "react-toastify";
 import { BsReplyFill } from "react-icons/bs";
 
 const URL_DE_BASE = `individu/`;
-const URL_DE_BASEA = `arrondissement/`;
-const URL_DE_BASEP = `profession/`;
-const URL_DE_BASEO = `origine/`;
-
 let isValidate = false;
 
 export default function FormulaireNouveauIndividu() {
@@ -22,6 +18,7 @@ export default function FormulaireNouveauIndividu() {
   const navigate = useNavigate();
   const dateAujourdHui = new Date();
   const mesInputs = {
+    etatMorale: "",
     cin: "",
     nom: "",
     prenom: "",
@@ -30,9 +27,15 @@ export default function FormulaireNouveauIndividu() {
     prenomConjoint: "",
     lieuNaiss: "",
     dateNaiss: "",
+    numeroTelephone: "",
     domicile: "",
     profession: "",
-    etatCin: "",
+    dateLivrance: "",
+    lieuLivrance: "",
+    etatCivil: "",
+    lieuEtatCivil: "",
+    dateEtatCivil: "",
+    complementInformation: "",
   };
 
   const [inputs, setInputs] = useState(mesInputs);
@@ -56,7 +59,12 @@ export default function FormulaireNouveauIndividu() {
       name === "lieuLivrance" ||
       name === "domicile" ||
       name === "profession" ||
-      name==="lieuEtatCivil"
+      name === "lieuEtatCivil" ||
+      name === "complementInformation" ||
+      name === "nom" ||
+      name === "prenom" ||
+      name === "nomConjoint" ||
+      name === "prenomConjoint"
     ) {
       if (value.length === 0) {
         isValidate = false;
@@ -86,12 +94,7 @@ export default function FormulaireNouveauIndividu() {
       }
     }
 
-    if (
-      name === "nom" ||
-      name === "prenom" ||
-      name === "nomConjoint" ||
-      name === "prenomConjoint"
-    ) {
+    if (name === "numeroTelephone") {
       if (value.length === 0) {
         isValidate = false;
         setErreurs((values) => ({ ...values, [name]: true }));
@@ -99,14 +102,14 @@ export default function FormulaireNouveauIndividu() {
           ...values,
           [name]: [name] + " obligatoire",
         }));
-      } else if (value.length < 2) {
+      } else if (value.length < 9) {
         isValidate = false;
         setErreurs((values) => ({ ...values, [name]: true }));
         setMessages((values) => ({
           ...values,
           [name]: [name] + " trop court",
         }));
-      } else if (value.length > 12) {
+      } else if (value.length > 9) {
         isValidate = false;
         setErreurs((values) => ({ ...values, [name]: true }));
         setMessages((values) => ({
@@ -148,7 +151,15 @@ export default function FormulaireNouveauIndividu() {
         setMessages((values) => ({ ...values, [name]: "" }));
       }
     }
-
+    if (
+      name === "dateNaiss" ||
+      name === "dateLivrance" ||
+      name === "dateEtatCivil"
+    ) {
+      setErreurs((values) => ({ ...values, dateNaiss: false }));
+      setErreurs((values) => ({ ...values, dateLivrance: false }));
+      setErreurs((values) => ({ ...values, dateEtatCivil: false }));
+    }
   };
   //#endregion
 
@@ -159,31 +170,40 @@ export default function FormulaireNouveauIndividu() {
       "cin",
       "nom",
       "prenom",
-      "nomPere",
-      "nomMere",
-      "lieunais",
-      "datenais",
+      "lieuNaiss",
+      "dateNaiss",
       "domicile",
-      "longueur",
-      "etatCin",
-      "numSeries",
-      "observation",
+      "profession",
+      "dateLivrance",
+      "lieuLivrance",
+      "complementInformation",
+      "numeroTelephone",
     ];
 
-    if (!inputs.etatCin) {
-      inputs.etatCin = "PRIMA";
+    const depObligatoire = [
+      "cinConjoint",
+      "nomConjoint",
+      "prenomConjoint",
+      "lieuEtatCivil",
+      "dateEtatCivil",
+    ];
+
+    if (!inputs.etatMorale) {
+      inputs.etatMorale = "false";
     }
-    if (!inputs.idOrigine) {
-      inputs.idOrigine = "1";
-    }
-    if (!inputs.idArrondissement) {
-      inputs.idArrondissement = "1";
-    }
-    if (!inputs.idProfession) {
-      inputs.idProfession = "1";
-    }
-    if (!inputs.cicatrice) {
-      inputs.cicatrice = "Aucune";
+    if (!inputs.etatCivil) {
+      inputs.etatCivil = "Célibataire";
+    } else if (inputs.etatCivil === "Marié") {
+      depObligatoire.forEach((element) => {
+        if (!inputs[element]) {
+          setErreurs((values) => ({ ...values, [element]: true }));
+          setMessages((values) => ({
+            ...values,
+            [element]: "champ " + [element] + "  obligatoire",
+          }));
+          isValidate = false;
+        }
+      });
     }
 
     inputsObligatoire.forEach((element) => {
@@ -196,6 +216,81 @@ export default function FormulaireNouveauIndividu() {
         isValidate = false;
       }
     });
+
+    if (inputs.dateNaiss) {
+      const t_dateN = new Date(inputs.dateNaiss);
+      const t_date = new Date();
+
+      const r_date = verifDiffDate(t_dateN, t_date);
+      if (r_date.year < 18 || r_date.year > 110) {
+        isValidate = false;
+        setErreurs((values) => ({ ...values, dateNaiss: true }));
+        setMessages((values) => ({
+          ...values,
+          dateNaiss: "Date de naissance anormale",
+        }));
+      }
+    }
+
+    if (inputs.dateLivrance) {
+      const t_dateL = new Date(inputs.dateLivrance);
+      const t_date = new Date();
+
+      const r_date = verifDiffDate(t_dateL, t_date);
+      if (r_date.year < 0) {
+        isValidate = false;
+        setErreurs((values) => ({ ...values, dateLivrance: true }));
+        setMessages((values) => ({
+          ...values,
+          dateLivrance: "Date de delivrance anormale",
+        }));
+      }
+    }
+
+    if (inputs.dateEtatCivil) {
+      const t_dateE = new Date(inputs.dateEtatCivil);
+      const t_date = new Date();
+
+      const r_date = verifDiffDate(t_dateE, t_date);
+      if (r_date.year < 0) {
+        isValidate = false;
+        setErreurs((values) => ({ ...values, dateEtatCivil: true }));
+        setMessages((values) => ({
+          ...values,
+          dateEtatCivil: "Date de mariage anormale",
+        }));
+      }
+    }
+
+    if (inputs.dateNaiss && inputs.dateLivrance) {
+      const t_dateNaiss = new Date(inputs.dateNaiss);
+      const t_dateLivr = new Date(inputs.dateLivrance);
+
+      const r_date = verifDiffDate(t_dateNaiss, t_dateLivr);
+      if (r_date.year < 18) {
+        isValidate = false;
+        setErreurs((values) => ({ ...values, dateLivrance: true }));
+        setMessages((values) => ({
+          ...values,
+          dateLivrance: "Date de delivrance du CIN anormale",
+        }));
+      }
+    }
+
+    if (inputs.dateNaiss && inputs.dateEtatCivil) {
+      const t_dateNaiss = new Date(inputs.dateNaiss);
+      const t_dateMariage = new Date(inputs.dateEtatCivil);
+
+      const r_date = verifDiffDate(t_dateNaiss, t_dateMariage);
+      if (r_date.year < 15 || r_date.year > 100) {
+        isValidate = false;
+        setErreurs((values) => ({ ...values, dateEtatCivil: true }));
+        setMessages((values) => ({
+          ...values,
+          dateEtatCivil: "Date de mariage anormale",
+        }));
+      }
+    }
 
     console.log(" --------- ", isValidate, " --------------");
     if (isValidate) {
@@ -210,7 +305,7 @@ export default function FormulaireNouveauIndividu() {
   const onSubmit = () => {
     const dataInputs = Object.assign(inputs, {
       roleU: u_info.u_attribut,
-      idUtilisateur: u_info.u_idUtilisateur,
+      numeroCompte: u_info.u_numeroCompte,
     });
 
     console.log(dataInputs);
@@ -252,15 +347,14 @@ export default function FormulaireNouveauIndividu() {
           <div className="details personal">
             <div className="fields">
               <div className="input-field">
-                <label>Etat Civil : </label>
+                <label>Etat Morale : </label>
                 <select
-                  name="etatCin"
+                  name="etatMorale"
                   onChange={handleChange}
                   autoComplete="off"
                 >
-                  <option value="PRIMA">- PRIMA</option>
-                  <option value="USURE">- USURE</option>
-                  <option value="PERTE">- PERTE</option>
+                  <option value={false}>- Individu Normale</option>
+                  <option value={true}> - Personne Morale </option>
                 </select>
               </div>
 
@@ -277,14 +371,6 @@ export default function FormulaireNouveauIndividu() {
                 <small className="text-danger d-block">
                   {erreurs.cin ? messages.cin : null}
                 </small>
-              </div>
-
-              <div className="input-field">
-                <label>sexe :</label>
-                <select name="sexe" onChange={handleChange} autoComplete="off">
-                  <option value={true}>- Masculin</option>
-                  <option value={false}>- Feminin</option>
-                </select>
               </div>
 
               <div className="input-field">
@@ -319,13 +405,13 @@ export default function FormulaireNouveauIndividu() {
                 <label>Date de naissance :</label>
                 <input
                   type="date"
-                  name="datenais"
+                  name="dateNaiss"
                   onChange={handleChange}
                   autoComplete="off"
                   placeholder=""
                 />
                 <small className="text-danger d-block">
-                  {erreurs.datenais ? messages.datenais : null}
+                  {erreurs.dateNaiss ? messages.dateNaiss : null}
                 </small>
               </div>
 
@@ -333,66 +419,39 @@ export default function FormulaireNouveauIndividu() {
                 <label>Lieu de naissance: </label>
                 <input
                   type="text"
-                  name="lieunais"
+                  name="lieuNaiss"
                   onChange={handleChange}
                   autoComplete="off"
                   placeholder="lieu de naissance"
                 />
                 <small className="text-danger d-block">
-                  {erreurs.lieunais ? messages.lieunais : null}
+                  {erreurs.lieuNaiss ? messages.lieuNaiss : null}
                 </small>
               </div>
 
               <div className="input-field">
-                <label>Longueur : </label>
+                <label>Numéro de téléphone : </label>
                 <input
                   type="number"
-                  name="longueur"
+                  min="1"
+                  name="numeroTelephone"
                   onChange={handleChange}
                   autoComplete="off"
-                  placeholder="longueur ..."
+                  placeholder="+261 "
                 />
                 <small className="text-danger d-block">
-                  {erreurs.longueur ? messages.longueur : null}
+                  {erreurs.numeroTelephone ? messages.numeroTelephone : null}
                 </small>
               </div>
 
               <div className="input-field">
-                <label>Nom du Père : </label>
-                <input
-                  type="text"
-                  name="nomPere"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  placeholder=" Nom du Père "
-                />
-                <small className="text-danger d-block">
-                  {erreurs.nomPere ? messages.nomPere : null}
-                </small>
-              </div>
-
-              <div className="input-field">
-                <label>Nom de la Mère: </label>
-                <input
-                  type="text"
-                  name="nomMere"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  placeholder="Nom de lq Mère"
-                />
-                <small className="text-danger d-block">
-                  {erreurs.nomMere ? messages.nomMere : null}
-                </small>
-              </div>
-
-              <div className="input-field">
-                <label>Domicile : </label>
+                <label>Adress du domicile : </label>
                 <input
                   type="text"
                   name="domicile"
                   onChange={handleChange}
                   autoComplete="off"
-                  placeholder="Domicile"
+                  placeholder="Adress du domicile"
                 />
                 <small className="text-danger d-block">
                   {erreurs.domicile ? messages.domicile : null}
@@ -402,47 +461,147 @@ export default function FormulaireNouveauIndividu() {
               <div className="input-field">
                 <label>Profession : </label>
                 <input
-                  type="number"
-                  name="idProfession"
+                  type="text"
+                  name="profession"
                   onChange={handleChange}
                   autoComplete="off"
-                  placeholder="idProfession"
+                  placeholder="Profession exercer"
                 />
+                <small className="text-danger d-block">
+                  {erreurs.profession ? messages.profession : null}
+                </small>
               </div>
 
               <div className="input-field">
-                <label>Arrondissement : </label>
+                <label>Date de délivrance du CIN :</label>
                 <input
-                  type="number"
-                  name="idArrondissement"
+                  type="date"
+                  name="dateLivrance"
                   onChange={handleChange}
                   autoComplete="off"
-                  placeholder="idArrondissement"
+                  placeholder=""
                 />
+                <small className="text-danger d-block">
+                  {erreurs.dateLivrance ? messages.dateLivrance : null}
+                </small>
               </div>
 
               <div className="input-field">
-                <label>Origine : </label>
+                <label>Lieu de délivrance du CIN : </label>
                 <input
-                  type="number"
-                  name="idOrigine"
+                  type="text"
+                  name="lieuLivrance"
                   onChange={handleChange}
                   autoComplete="off"
-                  placeholder="idOrigine"
+                  placeholder="Lieu de délivrance du CIN"
                 />
+                <small className="text-danger d-block">
+                  {erreurs.lieuLivrance ? messages.lieuLivrance : null}
+                </small>
               </div>
+
+              <div className="input-field">
+                <label>Etat Civil : </label>
+                <select
+                  name="etatCivil"
+                  onChange={handleChange}
+                  autoComplete="off"
+                >
+                  <option value="Célibataire">- Célibataire</option>
+                  <option value="Marié"> - Marié </option>
+                  <option value="Divorcé"> - Divorcé </option>
+                  <option value="Veuve"> - Veuve </option>
+                </select>
+              </div>
+
+              {inputs.etatCivil === "Marié" ? (
+                <>
+                  <div className="input-field">
+                    <label>Numéro de CIN du conjoint :</label>
+                    <input
+                      type="number"
+                      min="0"
+                      name="cinConjoint"
+                      onChange={handleChange}
+                      autoComplete="off"
+                      placeholder="Numéro CIN du conjoint...."
+                    />
+                    <small className="text-danger d-block">
+                      {erreurs.cinConjoint ? messages.cinConjoint : null}
+                    </small>
+                  </div>
+
+                  <div className="input-field">
+                    <label>Nom du conjoint : </label>
+                    <input
+                      type="text"
+                      name="nomConjoint"
+                      onChange={handleChange}
+                      autoComplete="off"
+                      placeholder="Nom du conjoint ...."
+                    />
+                    <small className="text-danger d-block">
+                      {erreurs.nomConjoint ? messages.nomConjoint : null}
+                    </small>
+                  </div>
+
+                  <div className="input-field">
+                    <label>Prenom du conjoint : </label>
+                    <input
+                      type="text"
+                      name="prenomConjoint"
+                      onChange={handleChange}
+                      autoComplete="off"
+                      placeholder="Prenom du conjoint ...."
+                    />
+                    <small className="text-danger d-block">
+                      {erreurs.prenomConjoint ? messages.prenomConjoint : null}
+                    </small>
+                  </div>
+
+                  <div className="input-field">
+                    <label>Date de Mariage :</label>
+                    <input
+                      type="date"
+                      name="dateEtatCivil"
+                      onChange={handleChange}
+                      autoComplete="off"
+                      placeholder=""
+                    />
+                    <small className="text-danger d-block">
+                      {erreurs.dateEtatCivil ? messages.dateEtatCivil : null}
+                    </small>
+                  </div>
+
+                  <div className="input-field">
+                    <label>Lieu de Mariage : </label>
+                    <input
+                      type="text"
+                      name="lieuEtatCivil"
+                      onChange={handleChange}
+                      autoComplete="off"
+                      placeholder="Lieu de mariage ...."
+                    />
+                    <small className="text-danger d-block">
+                      {erreurs.lieuEtatCivil ? messages.lieuEtatCivil : null}
+                    </small>
+                  </div>
+                </>
+              ) : null}
 
               <div className="input-field">
                 <label>Observation :</label>
                 <textarea
                   as="text"
-                  name="observation"
+                  name="complementInformation"
                   onChange={handleChange}
                   autoComplete="off"
-                  placeholder="Une observation ? ...."
+                  placeholder="Une observation à ajouter ? exemple : ''individu tres menacant et insistant, ....'' "
                 />
                 <small className="text-danger d-block">
-                  {erreurs.observation ? messages.observation : null}
+                  {erreurs.complementInformation
+                    ? messages.complementInformation
+                    : null}
                 </small>
               </div>
             </div>

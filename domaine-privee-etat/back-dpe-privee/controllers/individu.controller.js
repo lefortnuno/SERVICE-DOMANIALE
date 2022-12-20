@@ -3,9 +3,10 @@ const Individu = require("../models/individu.model");
 const EtatCivil = require("../models/etatCivil.model");
 const Requerant = require("../models/requerant.model");
 const { response } = require("express");
+const { addDossier } = require("../models/dossier.model");
 
 module.exports.addIndividu = (req, res) => {
-  const {
+  let {
     cin,
     nom,
     prenom,
@@ -24,19 +25,32 @@ module.exports.addIndividu = (req, res) => {
     prenomConjoint,
     dateEtatCivil,
     lieuEtatCivil,
+    numeroCompte,
   } = req.body;
 
   let p_codeEtatCivil = 0;
   const p_cin = cin;
 
-  const newEtatCivil = {
+  let newEtatCivil = {
     etatCivil,
-    cinConjoint,
-    nomConjoint,
-    prenomConjoint,
-    dateEtatCivil,
-    lieuEtatCivil,
   };
+
+  if (etatCivil === "Marié") {
+    const addNewEtatCivil = {
+      cinConjoint,
+      nomConjoint,
+      prenomConjoint,
+      dateEtatCivil,
+      lieuEtatCivil,
+    };
+    etatCivil = Object.assign(etatCivil, addNewEtatCivil);
+  }
+
+  if (etatMorale === "false") {
+    etatMorale = false;
+  } else if (etatMorale === "true") {
+    etatMorale = true;
+  }
 
   const newRequerant = {
     etatMorale,

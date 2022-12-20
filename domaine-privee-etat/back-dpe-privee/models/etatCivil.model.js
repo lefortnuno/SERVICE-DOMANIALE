@@ -15,7 +15,7 @@ EtatCivil.addEtatCivil = (newEtatCivil, result) => {
     if (err) {
       result(err, null);
     } else {
-      result(null, res);
+      result(null, {success: true});
     }
   });
 };

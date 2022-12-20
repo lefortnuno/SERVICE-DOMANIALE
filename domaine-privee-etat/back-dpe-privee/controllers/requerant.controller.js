@@ -2,8 +2,14 @@
 const Requerant = require("../models/requerant.model");
 
 module.exports.addRequerant = (req, res) => {
-  const { p_cin, etatMorale, numeroTelephone, complementInformation } =
-    req.body;
+  let { cin, etatMorale, numeroTelephone, complementInformation } = req.body;
+
+  const p_cin = cin;
+  if (etatMorale === "false") {
+    etatMorale = false;
+  } else if (etatMorale === "true") {
+    etatMorale = true;
+  }
 
   const newRequerant = {
     p_cin,

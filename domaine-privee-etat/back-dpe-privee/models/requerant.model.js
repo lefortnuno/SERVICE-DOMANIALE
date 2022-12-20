@@ -16,7 +16,7 @@ Requerant.addRequerant = (newRequerant, result) => {
     if (err) {
       result(err, null);
     } else {
-      result(null, res);
+      result(null,  {success: true});
     }
   });
 };

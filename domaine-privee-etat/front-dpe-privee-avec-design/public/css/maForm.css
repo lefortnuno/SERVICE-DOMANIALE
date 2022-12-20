@@ -10,7 +10,6 @@
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 
-
 .monContainer header {
   position: relative;
   font-size: 20px;
@@ -107,8 +106,8 @@ select {
   color: #333;
 }
 
-.input-field input[type="file"]{
-    height: 10%;
+.input-field input[type="file"] {
+  height: 10%;
 }
 .monContainer form button,
 .backBtn {
