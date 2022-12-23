@@ -52,14 +52,16 @@ Individu.getCinIndividu = (id, result) => {
 
 Individu.searchIndividu = (valeur, result) => {
   dbConn.query(
-    REQUETE_BASE +
-      `AND ( cin LIKE '%${valeur}%' OR nom LIKE '%${valeur}%' OR prenom LIKE '%${valeur}%' )` +
-      ORDER_BY,
+    REQUETE_BASE + `AND (cin LIKE '%${valeur}%' OR nom LIKE '%${valeur}%' OR prenom LIKE '%${valeur}%')` + ORDER_BY,
     (err, res) => {
       if (err) {
         result({ err, message: "erreur !", success: false }, null);
       } else {
-        result(null, res);
+        if (res.length !== 0) {
+          result(null, { res, message: "trouvable !", success: true });
+        } else {
+          result(null, { res, message: "Introuvable !", success: false });
+        }
       }
     }
   );

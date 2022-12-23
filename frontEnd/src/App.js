@@ -17,6 +17,7 @@ import Dossier from "./components/dossiers/Dossiers";
 import NouvelleDemande from "./components/dossiers/NouvelleDemande";
 import AjoutIndividu from "./components/personnes/individu/AjoutIndividu";
 import AjoutRequerant from "./components/personnes/requerant/AjoutRequerant";
+import CahierArriver from "./components/historique/cahierArriver/cahier.arriver";
 
 export default function App() {
   return (
@@ -25,7 +26,10 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<LogOutProtection Cmp={SeConnecter} />} />
-          <Route path="nouveauUtilisateur/" element={<SinInProtected Cmp={SEnregistrer} />} />
+          <Route
+            path="nouveauUtilisateur/"
+            element={<SinInProtected Cmp={SEnregistrer} />}
+          />
           <Route
             path="utilisateur/"
             element={<SinInProtected Cmp={Utilisateur} />}
@@ -42,9 +46,23 @@ export default function App() {
           />
           <Route path="bureau/" element={<SinInProtected Cmp={Bureau} />} />
           <Route path="dossier/" element={<SinInProtected Cmp={Dossier} />} />
-          <Route path="nouvelleDemande/" element={<SinInProtected Cmp={NouvelleDemande} />} />
-          <Route path="nouveauIndividu/" element={<SinInProtected Cmp={AjoutIndividu} />} />
-          <Route path="nouveauRequerant/" element={<SinInProtected Cmp={AjoutRequerant} />} />
+          <Route
+            path="nouvelleDemande/"
+            element={<SinInProtected Cmp={NouvelleDemande} />}
+          />
+          <Route
+            path="nouveauIndividu/"
+            element={<SinInProtected Cmp={AjoutIndividu} />}
+          />
+          <Route
+            path="nouveauRequerant/"
+            element={<SinInProtected Cmp={AjoutRequerant} />}
+          />
+
+          <Route
+            path="cahier_arriver/"
+            element={<SinInProtected Cmp={CahierArriver} />}
+          />
         </Routes>
       </BrowserRouter>
     </div>

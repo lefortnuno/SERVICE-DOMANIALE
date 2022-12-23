@@ -6,18 +6,20 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-import Context from "../../../contexts/Context";
+import HeaderContext from "../../../contexts/header/header.context";
+import SidebarContext from "../../../contexts/sidebar/sidebar.context";
+import FooterContext from "../../../contexts/footer/footer.context";
 
 import { BsFillTrashFill, BsPencilSquare, BsEye, BsShift } from "react-icons/bs";
 
-const BASE = `Cahier d'Arriver`;
+const base = `Cahier d'Arriver`;
 const URL_DE_BASE = `historique/C_A/`;
 
 export default function CahierArriver() {
   const navigate = useNavigate();
   const u_info = getDataUtilisateur();
 
-  //#region //------------DONNEE UTILISATEUR------------
+  //#region //------------DONNEE C_ ------------
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -25,14 +27,10 @@ export default function CahierArriver() {
   }, []);
 
   function getUsers() {
-    const opts = {
-      headers: {
-        Authorization: u_info.u_token,
-      },
-    };
-    axios.get(URL_DE_BASE, opts).then(function (response) {
+    axios.get(URL_DE_BASE, u_info.opts).then(function (response) {
       if (response.status === 200) {
         setUsers(response.data);
+        console.log(response.data);
       } else {
         toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
       }
@@ -40,16 +38,20 @@ export default function CahierArriver() {
   }
   //#endregion
 
-  //#region //------------ MODAL AJOUT UTILISATEUR------------
+  //#region //------------ MODAL AJOUT C_ ------------
+  const [numCompteAjout, setNumCompteAjout] = useState("");
   const [show, setShow] = useState(false);
-  const showAddModal = () => setShow(true);
+  const showAddModal = (numCompte) => {
+    setNumCompteAjout(numCompte);
+    setShow(true);
+  };
   const closeAddModal = () => {
     getUsers();
     setShow(false);
   };
   //#endregion
 
-  //#region //------------MODAL EDIT UTILISATEUR------------
+  //#region //------------MODAL EDIT C_I------------
   const [numCompteEdit, setNumCompteEdit] = useState("");
   const [showEdit, setShowEdit] = useState(false);
   const showEditModal = (numCompte) => {
@@ -62,7 +64,7 @@ export default function CahierArriver() {
   };
   //#endregion
 
-  //#region //------------MODAL DELETE UTILISATEUR------------
+  //#region //------------MODAL DELETE C_I------------
   const [id, setId] = useState(null);
   const [displayConfirmationModal, setDisplayConfirmationModal] =
     useState(false);
@@ -70,8 +72,8 @@ export default function CahierArriver() {
   const showDeleteModal = (id) => {
     setId(id);
     setDeleteMessage(
-      `Etes vous sûre de vouloir supprimer l'utilisateur : _' ${
-        users.find((x) => x.numCompte === id).identification
+      `Etes vous sûre de vouloir supprimer l'C_I : _' ${
+        users.find((x) => x.idDossier === id).numAffaire
       } '_ ?`
     );
     setDisplayConfirmationModal(true);
@@ -80,38 +82,23 @@ export default function CahierArriver() {
     setDisplayConfirmationModal(false);
   };
   const submitDelete = (id) => {
-    const opts = {
-      headers: {
-        Authorization: u_info.u_token,
-      },
-    };
-    axios.delete(URL_DE_BASE + `${id}`, opts).then(function (response) {
+    axios.delete(URL_DE_BASE + `${id}`, u_info.opts).then(function (response) {
       getUsers();
       toast.success(`Suppression Réussi`);
       setDisplayConfirmationModal(false);
-
-      if (id == u_info.u_numCompte) {
-        localStorage.clear();
-        navigate("/");
-      }
     });
   };
   //#endregion
 
   //#region   //----- MA RECHERCHE -----
   const [contenuTab, setContenuTab] = useState(true);
-  function rechercheUtilisateur(event) {
+  function rechercheDossier(event) {
     const valeur = event.target.value;
     if (!valeur) {
       getUsers();
       setContenuTab(true);
     } else {
-      const opts = {
-        headers: {
-          Authorization: u_info.u_token,
-        },
-      };
-      axios.get(URL_DE_BASE + `recherche/${valeur}`, opts).then((response) => {
+      axios.get(URL_DE_BASE + `recherche/${valeur}`,  u_info.opts).then((response) => {
         if (response.data.success) {
           setUsers(response.data.res);
           setContenuTab(true);
@@ -194,32 +181,50 @@ export default function CahierArriver() {
 
   return (
     <>
-      <Context>
-        <div className="page-header flex-wrap">
-          <div className="header-left"></div>
-          <div className="header-right d-flex flex-wrap mt-2 mt-sm-0">
-            <div className="d-flex align-items-center"></div>
-            <button
-              type="button"
-              onClick={handlePage}
-              className="btn btn-primary mt-2 mt-sm-0 btn-icon-text"
-            >
-              <i className="mdi mdi-plus-circle"></i> Nouveau
-            </button>
-          </div>
-        </div>
-        <h4 className="page-title">{BASE}</h4>
-
-        <div className="row">
-          <div className="col-md-12">
-            <div className="card">
-              <div className="card-header ">
-                <h4 className="card-title">{BASE}</h4>
+    
+    {libraryList.forEach((x) => AjoutLibrary(x))}
+      <div className="wrapper">
+        <HeaderContext>
+          <form className="navbar-left navbar-form nav-search mr-md-3">
+            <div className="input-group">
+              <input
+                type="text"
+                name="searchValue"
+                placeholder="Rechercher ...."
+                className="form-control"
+                autoComplete="off"
+                onClick={retourALaPremierPage}
+                onChange={rechercheDossier}
+              />
+              <div className="input-group-append">
+                <span className="input-group-text">
+                  <i className="la la-search search-icon"></i>
+                </span>
               </div>
-              <div className="card-body">
-                <div className="table-responsive text-nowrap">
-                  <table className="table table-striped w-auto">
-                    <thead>
+            </div>
+          </form>
+        </HeaderContext>
+        <SidebarContext />
+
+        <div className="main-panel">
+          <div className="content">
+            <div className="container-fluid">
+              <div className="row">
+                {/* <PersoIndividu />
+                <PersoUtilisateur />
+                <NouveauPersoRequerant /> */}
+              </div>
+
+              <div className="row">
+                <div className="col-md-8">
+                  <div className="card">
+                    <div className="card-header ">
+                      <h4 className="card-title">{base}</h4>
+                    </div>
+                    <div className="card-body">
+                      <div className="table-responsive text-nowrap">
+                        <table className="table table-striped w-auto">
+                          <thead>
                       <tr>
                         <th scope="col"> </th>
                         <th scope="col">Réf</th>
@@ -232,112 +237,131 @@ export default function CahierArriver() {
                         <th scope="col">Agent</th>
                         {/* <th scope="col"> Actions </th> */}
                       </tr>
-                    </thead>
-                    <tbody>
-                      {contenuTab ? (
-                        currentItems.map((user, key) => (
-                          <tr key={key}>
-                            <th>
-                              {user.accomplissement ? null : (
-                                <button
-                                  type="button"
-                                  className="btn btn-outline-primary btn-sm m-1 waves-effect"
-                                  variant="default"
-                                  name="numCompteEdit"
-                                  onClick={() => showAddModal(user.numHisto)}
+                          </thead>
+                          <tbody>
+                            {contenuTab || users.length !== 0 ? (
+                              currentItems.map((user, key) => (
+                                <tr key={key}>
+                                  <th>
+                                    {user.accomplissement ? null : (
+                                      <button
+                                        type="button"
+                                        className="btn btn-outline-primary btn-sm m-1 waves-effect"
+                                        variant="default"
+                                        name="numCompteEdit"
+                                        onClick={() => showAddModal(user.numHisto)}
+                                      >
+                                        <BsShift />
+                                      </button>
+                                    )}
+                                  </th>
+                                  <th scope="row">{user.numeroHisto} </th>
+                                  <td>{user.h_numeroAffaire}</td>
+                                  <td>
+                                    {user.nom} {user.prenom}
+                                  </td>
+                                  <td>{user.dateDepotSD}</td>
+                                  <td>{user.dateRDV}</td>
+                                  <td>{user.nomProcedure}</td>
+                                  <td>{user.observationSD}</td>
+                                  <td>{user.identification}</td>
+                                  {/* <td>
+                                    <button
+                                      type="button"
+                                      className="btn btn-outline-success btn-sm m-1 waves-effect"
+                                      variant="default"
+                                      name="numCompteEdit"
+                                      onClick={() => showEditModal(user.numHisto)}
+                                    >
+                                      <BsEye />
+                                    </button>
+      
+                                    <button
+                                      type="button"
+                                      className="btn btn-outline-primary btn-sm m-1 waves-effect"
+                                      variant="default"
+                                      name="numCompteEdit"
+                                      onClick={() => showEditModal(user.numHisto)}
+                                    >
+                                      <BsPencilSquare />
+                                    </button>
+      
+                                    <button
+                                      type="button"
+                                      className="btn btn-outline-danger btn-sm m-1 waves-effect"
+                                      variant="default"
+                                      onClick={() => showDeleteModal(user.numHisto)}
+                                    >
+                                      <BsFillTrashFill />
+                                    </button>
+                                  </td> */}
+                                </tr>
+                              ))
+                            ) : (
+                              <tr>
+                                <td
+                                  colSpan={7}
+                                  className="text-danger text-center"
                                 >
-                                  <BsShift />
-                                </button>
-                              )}
-                            </th>
-                            <th scope="row">{user.numHisto} </th>
-                            <td>{user.numAffaire}</td>
-                            <td>
-                              {user.nom} {user.prenom}
-                            </td>
-                            <td>{user.dateDepot_S_D}</td>
-                            <td>{user.dateRDV}</td>
-                            <td>{user.nomProcedure}</td>
-                            <td>{user.obseravation_S_D}</td>
-                            <td>{user.identification}</td>
-                            {/* <td>
-                              <button
-                                type="button"
-                                className="btn btn-outline-success btn-sm m-1 waves-effect"
-                                variant="default"
-                                name="numCompteEdit"
-                                onClick={() => showEditModal(user.numHisto)}
-                              >
-                                <BsEye />
-                              </button>
+                                  La liste est vide ....
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
 
-                              <button
-                                type="button"
-                                className="btn btn-outline-primary btn-sm m-1 waves-effect"
-                                variant="default"
-                                name="numCompteEdit"
-                                onClick={() => showEditModal(user.numHisto)}
-                              >
-                                <BsPencilSquare />
-                              </button>
-
-                              <button
-                                type="button"
-                                className="btn btn-outline-danger btn-sm m-1 waves-effect"
-                                variant="default"
-                                onClick={() => showDeleteModal(user.numHisto)}
-                              >
-                                <BsFillTrashFill />
-                              </button>
-                            </td> */}
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td> La liste est vide .... </td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
+                    {nbrPage !== 1 && nbrPage !== 0 && users.length !== 0 ? (
+                      <>
+                        <ul className="pageNumbers">
+                          <li>
+                            <button
+                              disabled={currentPage == pages[0] ? true : false}
+                              onClick={handlePrevbtn}
+                            >
+                              Précédent
+                            </button>
+                          </li>
+                          {renderPageNumbers}
+                          <li>
+                            <button
+                              disabled={
+                                currentPage == pages[pages.length - 1]
+                                  ? true
+                                  : false
+                              }
+                              onClick={handleNextbtn}
+                            >
+                              Suivant
+                            </button>
+                          </li>
+                        </ul>
+                        <br />
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="card">
+                    <div className="card-header">
+                      <h4 className="card-title">Users Statistics</h4>
+                      <p className="card-category">
+                        Users statistics this month
+                      </p>
+                    </div>
+                    <div className="card-body">
+                      <div id="monthlyChart" className="chart chart-pie"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              {nbrPage !== 1 ? (
-                <>
-                  <ul className="pageNumbers">
-                    <li>
-                      <button
-                        disabled={currentPage == pages[0] ? true : false}
-                        onClick={handlePrevbtn}
-                      >
-                        Précédent
-                      </button>
-                    </li>
-                    {renderPageNumbers}
-                    <li>
-                      <button
-                        disabled={
-                          currentPage == pages[pages.length - 1] ? true : false
-                        }
-                        onClick={handleNextbtn}
-                      >
-                        Suivant
-                      </button>
-                    </li>
-                  </ul>{" "}
-                  <br />
-                </>
-              ) : null}
             </div>
           </div>
+
+          <FooterContext />
         </div>
-        
-        {libraryList.forEach(x=>AjoutLibrary(x))}
-      </Context>
+      </div>
     </>
   );
 }

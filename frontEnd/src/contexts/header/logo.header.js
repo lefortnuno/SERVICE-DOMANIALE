@@ -1,4 +1,5 @@
 import getDataUtilisateur from "../../api/udata";
+import { BsList } from "react-icons/bs";
 
 export default function LogoHeader() {
   const u_info = getDataUtilisateur();
@@ -20,7 +21,7 @@ export default function LogoHeader() {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span className="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon"><BsList/></span>
           </button>
             <button className="topbar-toggler more">
               <i className="la la-ellipsis-v"></i>

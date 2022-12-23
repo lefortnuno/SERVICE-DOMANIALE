@@ -15,7 +15,72 @@ const Historique = function (historique) {
   this.p_numeroCompte = historique.p_numeroCompte;
 };
 
-const REQUETE_BASE = `SELECT numeroHisto, mouvement, DATE_FORMAT(dateDebutMouvement, '%d-%m-%Y') as dateDebutMouvement, DATE_FORMAT(dateFinMouvement, '%d-%m-%Y') as dateFinMouvement, DATE_FORMAT(dateRDV, '%d-%m-%Y') as dateRDV, dispoDossier, approbation, observation, accomplissement, h_numeroAffaire, h_numeroDossier, dependance, natureAffectation, empietement, lettreDemande, planAnnexe, pvDelimitation, superficieTerrain,DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, REQUERANT.numeroRequerant, etatMorale, p_numeroProcedure, nomProcedure, natureProcedure, movProcedure, p_numeroCompte, identification, u_cin, nom, prenom, p_idBureau, nomBureau, adressBureau, numeroSousDossier, observationSD, DATE_FORMAT(dateDepotSD, '%d-%m-%Y') as dateDepotSD, mesureAttribuable, prixAttribue, lettreDesistement, planMere, certificatSituationJuridique FROM HISTORIQUE, INDIVIDU, REQUERANT, COMPTE, BUREAU, PROCEDURES, SOUS_DOSSIER, DOSSIER WHERE HISTORIQUE.h_numeroAffaire = DOSSIER.numeroAffaire AND  HISTORIQUE.p_numeroCompte = COMPTE.numeroCompte `;
+const REQUETE_BASE = ` 
+SELECT
+    numeroHisto,
+    mouvement,
+    DATE_FORMAT(dateDebutMouvement, '%d-%m-%Y') as dateDebutMouvement,
+    DATE_FORMAT(dateFinMouvement, '%d-%m-%Y') as dateFinMouvement,
+    DATE_FORMAT(dateRDV, '%d-%m-%Y') as dateRDV,
+    dispoDossier,
+    approbation,
+    observation,
+    accomplissement,
+    h_numeroAffaire,
+    h_numeroDossier,
+    p_numeroCompte,
+    dependance,
+    natureAffectation,
+    empietement,
+    lettreDemande,
+    planAnnexe,
+    pvDelimitation,
+    superficieTerrain,
+    DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande,
+    droitDemande,
+    observationDossier,
+    numeroSousDossier,
+    observationSD,
+    DATE_FORMAT(dateDepotSD, '%d-%m-%Y') as dateDepotSD,
+    mesureAttribuable,
+    prixAttribue,
+    lettreDesistement,
+    planMere,
+    certificatSituationJuridique,
+    identification,
+    u_cin,
+    numeroRequerant,
+    etatMorale,
+    numeroTelephone,
+    complementInformation,
+    p_numeroProcedure,
+    nomProcedure,
+    natureProcedure,
+    movProcedure,
+    p_idBureau,
+    nomBureau,
+    adressBureau,
+    nom,
+    prenom
+FROM
+    HISTORIQUE,
+    REQUERANT,
+    COMPTE,
+    SOUS_DOSSIER,
+    DOSSIER,
+    PROCEDURES,
+    BUREAU,
+    INDIVIDU
+WHERE
+    HISTORIQUE.h_numeroAffaire = DOSSIER.numeroAffaire
+    AND HISTORIQUE.h_numeroDossier = DOSSIER.numeroDossier
+    AND HISTORIQUE.p_numeroCompte = COMPTE.numeroCompte
+    AND DOSSIER.p_numeroRequerant = REQUERANT.numeroRequerant
+    AND DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire
+    AND DOSSIER.numeroDossier = SOUS_DOSSIER.p_numeroDossier
+    AND DOSSIER.p_numeroProcedure = PROCEDURES.numeroProcedure
+    AND PROCEDURES.p_idBureau = BUREAU.idBureau
+    AND INDIVIDU.cin = REQUERANT.p_cin `;
 
 const ORDER_BY = ` ORDER BY numeroHisto DESC `;
 
@@ -90,6 +155,22 @@ Historique.getCahierDepart = (result) => {
 };
 
 Historique.getCahierNouvelleDemande = (result) => {
+  dbConn.query(
+    REQUETE_BASE +
+      `AND ( dispoDossier = 1 AND p_numeroProcedure = 1) ` +
+      ORDER_BY,
+    (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
+// A coder encore
+Historique.getCahierRDV = (result) => {
   dbConn.query(
     REQUETE_BASE +
       `AND ( dispoDossier = 1 AND p_numeroProcedure = 1) ` +

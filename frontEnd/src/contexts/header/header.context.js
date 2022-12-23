@@ -4,7 +4,7 @@ import NotificationHeader from "./notification.header";
 import ProfilHeader from "./profil.header";
 import getDataUtilisateur from "../../api/udata";
 
-export default function HeaderContext() {
+export default function HeaderContext(props) {
   const u_info = getDataUtilisateur();
   return (
     <>
@@ -15,7 +15,8 @@ export default function HeaderContext() {
           <>
             <nav className="navbar navbar-header navbar-expand-lg">
               <div className="container-fluid">
-                <SearchContext />
+                {/* <SearchContext /> */}
+                {props.children}
 
                 <ul className="navbar-nav topbar-nav ml-md-auto align-items-center">
                   <NotificationHeader />
