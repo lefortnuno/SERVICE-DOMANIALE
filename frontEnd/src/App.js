@@ -17,6 +17,7 @@ import Dossier from "./components/dossiers/Dossiers";
 import NouvelleDemande from "./components/dossiers/NouvelleDemande";
 import AjoutIndividu from "./components/personnes/individu/AjoutIndividu";
 import AjoutRequerant from "./components/personnes/requerant/AjoutRequerant";
+import CahierNouvelleDemande from "./components/historique/cahierNouvelleDemande/cahier.nouvelle.demande";
 import CahierArriver from "./components/historique/cahierArriver/cahier.arriver";
 
 export default function App() {
@@ -60,9 +61,10 @@ export default function App() {
           />
 
           <Route
-            path="cahier_arriver/"
-            element={<SinInProtected Cmp={CahierArriver} />}
+            path="C_ND/"
+            element={<SinInProtected Cmp={CahierNouvelleDemande} />}
           />
+          <Route path="C_A/" element={<SinInProtected Cmp={CahierArriver} />} />
         </Routes>
       </BrowserRouter>
     </div>

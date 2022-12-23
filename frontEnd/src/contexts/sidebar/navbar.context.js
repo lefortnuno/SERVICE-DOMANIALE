@@ -26,7 +26,7 @@ export default function NavbarContext() {
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="/C_N/">
+          <Link to="/C_ND/">
             <i className="la la-dashboard"></i>
             <p> Cahiers </p>
             <span className="badge badge-count">5</span>

@@ -6,6 +6,16 @@ router.post("/", agent.checkUtilisateur, HistoriqueController.addHistorique);
 router.post("/histoND/", agent.checkUtilisateur, HistoriqueController.addHistoNewDemande);
 router.get("/", agent.checkUtilisateur, HistoriqueController.getAllHistoriques);
 router.get(
+  "/C_ND/",
+  agent.checkUtilisateur,
+  HistoriqueController.getCahierNouvelleDemande
+);
+router.get(
+  "/C_RDV/",
+  agent.checkUtilisateur,
+  HistoriqueController.getCahierRendezVous
+);
+router.get(
   "/C_I/",
   agent.checkUtilisateur,
   HistoriqueController.getCahierInterne
@@ -34,6 +44,16 @@ router.put(
   "/next/:id",
   agent.checkUtilisateur,
   HistoriqueController.nextProcedureHistorique
+);
+router.get(
+  "/C_ND/recherche/:valeur",
+  agent.checkUtilisateur,
+  HistoriqueController.searchHistorique
+);
+router.get(
+  "/C_RDV/recherche/:valeur",
+  agent.checkUtilisateur,
+  HistoriqueController.searchHistorique
 );
 router.get(
   "/C_I/recherche/:valeur",

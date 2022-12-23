@@ -170,10 +170,11 @@ Historique.getCahierNouvelleDemande = (result) => {
 };
 
 // A coder encore
-Historique.getCahierRDV = (result) => {
+Historique.getCahierRendezVous = (result) => {
+  const aujourdHui = new Date();
   dbConn.query(
     REQUETE_BASE +
-      `AND ( dispoDossier = 1 AND p_numeroProcedure = 1) ` +
+      `AND ( dateRDV > '${aujourdHui}' ` +
       ORDER_BY,
     (err, res) => {
       if (err) {

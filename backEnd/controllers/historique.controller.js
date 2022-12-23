@@ -143,6 +143,26 @@ module.exports.getCahierInterne = (req, res) => {
   });
 };
 
+module.exports.getCahierNouvelleDemande = (req, res) => {
+  Historique.getCahierNouvelleDemande((err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
+module.exports.getCahierRendezVous = (req, res) => {
+  Historique.getCahierRendezVous((err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
 module.exports.getIdHistorique = (req, res) => {
   Historique.getIdHistorique(req.params.id, (err, resp) => {
     if (!err) {
