@@ -8,6 +8,8 @@ Date.prototype.addDays = function (days) {
   date.setDate(date.getDate() + days);
   return date;
 };
+ 
+// Format date aujourdhui pour mysql
 let today = new Date();
 let dateAujourdHui = new Date();
 

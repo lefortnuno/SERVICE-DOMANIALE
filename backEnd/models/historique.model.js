@@ -15,6 +15,16 @@ const Historique = function (historique) {
   this.p_numeroCompte = historique.p_numeroCompte;
 };
 
+// Format date aujourdhui pour mysql
+let today = new Date();
+let dateAujourdHui = new Date();
+
+const y = today.getFullYear();
+const m = today.getMonth() + 1;
+const d = today.getDate();
+
+const fomatDateAujourdHui = y + "-" + m + "-" + d;
+
 const REQUETE_BASE = ` 
 SELECT
     numeroHisto,
@@ -84,12 +94,15 @@ WHERE
 
 const ORDER_BY = ` ORDER BY numeroHisto DESC `;
 
+const CONDITION_RDV = ` AND ( dateRDV > '${fomatDateAujourdHui}') AND dateFinMouvement IS NULL `;
+const GROUP_BY = ` GROUP BY h_numeroAffaire `;
+const ORDER_BY_ASC = ` ORDER BY numeroHisto ASC `;
+
 Historique.addHistorique = (newHistorique, result) => {
   dbConn.query("INSERT INTO Historique SET ?", newHistorique, (err, res) => {
     if (err) {
       result(err, null);
     } else {
-      console.log(res);
       result(null, { success: true });
     }
   });
@@ -169,18 +182,40 @@ Historique.getCahierNouvelleDemande = (result) => {
   );
 };
 
-// A coder encore
 Historique.getCahierRendezVous = (result) => {
-  const aujourdHui = new Date();
   dbConn.query(
-    REQUETE_BASE +
-      `AND ( dateRDV > '${aujourdHui}' ` +
-      ORDER_BY,
+    REQUETE_BASE + CONDITION_RDV + GROUP_BY + ORDER_BY_ASC,
     (err, res) => {
       if (err) {
         result(err, null);
       } else {
         result(null, res);
+      }
+    }
+  );
+};
+
+Historique.searchHistoriqueRDV = (valeur, result) => {
+  const rNumeroAffaire = ` h_numeroAffaire LIKE '%${valeur}%' `;
+  const rNom = ` nom LIKE '%${valeur}%' `;
+  const rPrenom = ` prenom LIKE '%${valeur}%' `;
+  const rNumeroTelephone = ` numeroTelephone LIKE '%${valeur}%' `;
+  dbConn.query(
+    REQUETE_BASE +
+      ` AND ( ${rNumeroAffaire} OR ${rNom} OR ${rPrenom} OR ${rNumeroTelephone} )` +
+      CONDITION_RDV +
+      GROUP_BY +
+      ORDER_BY_ASC,
+    valeur,
+    (err, res) => {
+      if (err) {
+        result({ err, message: "erreur !", success: false }, null);
+      } else {
+        if (res.length !== 0) {
+          result(null, { res, message: "trouvable !", success: true });
+        } else {
+          result(null, { res, message: "Introuvable !", success: false });
+        }
       }
     }
   );

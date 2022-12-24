@@ -2,9 +2,19 @@
 const { data } = require("jquery");
 const SousDossier = require("../models/sousDossier.model");
 
+// Format date aujourdhui pour mysql
+let today = new Date();
+let dateAujourdHui = new Date();
+
+const y = today.getFullYear();
+const m = today.getMonth() + 1;
+const d = today.getDate();
+
+const fomatDateAujourdHui = y + "-" + m + "-" + d;
+
+
 module.exports.addSousDossier = (req, res) => {
   const {
-    numeroAffaire,
     observationSD,
     mesureAttribuable,
     prixAttribue,
@@ -15,10 +25,9 @@ module.exports.addSousDossier = (req, res) => {
     p_numeroAffaire,
   } = req.body;
 
-  const dateDepotSD = new Date();
+  const dateDepotSD = fomatDateAujourdHui;
 
   const newSousDossier = {
-    numeroAffaire,
     observationSD,
     dateDepotSD,
     mesureAttribuable,
@@ -30,6 +39,7 @@ module.exports.addSousDossier = (req, res) => {
     p_numeroAffaire,
   };
 
+  console.log(" ADD SOUS DOSSIER : ", newSousDossier);
   SousDossier.addSousDossier(
     newSousDossier, (err, resp) => {
     if (err) {

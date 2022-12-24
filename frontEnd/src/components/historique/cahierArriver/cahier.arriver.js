@@ -9,8 +9,24 @@ import { useNavigate } from "react-router-dom";
 import HeaderContext from "../../../contexts/header/header.context";
 import SidebarContext from "../../../contexts/sidebar/sidebar.context";
 import FooterContext from "../../../contexts/footer/footer.context";
+import ModalAjout from "../ModalAjout";
 
-import { BsFillTrashFill, BsPencilSquare, BsEye, BsShift } from "react-icons/bs";
+import {
+  AccessCahierND,
+  AccessCahierInterne,
+  AccessCahierRDV,
+  AccessCahierDepart,
+} from "../../access/accessCahier";
+import { NouvelleDemande } from "../../access/accessAll";
+
+import {
+  BsFillTrashFill,
+  BsPencilSquare,
+  BsEye,
+  BsFileEarmarkArrowUp,
+  BsLayerForward,
+  BsCapslock,BsCapslockFill
+} from "react-icons/bs";
 
 const base = `Cahier d'Arriver`;
 const URL_DE_BASE = `historique/C_A/`;
@@ -51,45 +67,6 @@ export default function CahierArriver() {
   };
   //#endregion
 
-  //#region //------------MODAL EDIT C_I------------
-  const [numCompteEdit, setNumCompteEdit] = useState("");
-  const [showEdit, setShowEdit] = useState(false);
-  const showEditModal = (numCompte) => {
-    setNumCompteEdit(numCompte);
-    setShowEdit(true);
-  };
-  const closeEditModal = () => {
-    getUsers();
-    setShowEdit(false);
-  };
-  //#endregion
-
-  //#region //------------MODAL DELETE C_I------------
-  const [id, setId] = useState(null);
-  const [displayConfirmationModal, setDisplayConfirmationModal] =
-    useState(false);
-  const [deleteMessage, setDeleteMessage] = useState(null);
-  const showDeleteModal = (id) => {
-    setId(id);
-    setDeleteMessage(
-      `Etes vous sûre de vouloir supprimer l'C_I : _' ${
-        users.find((x) => x.idDossier === id).numAffaire
-      } '_ ?`
-    );
-    setDisplayConfirmationModal(true);
-  };
-  const hideConfirmationModal = () => {
-    setDisplayConfirmationModal(false);
-  };
-  const submitDelete = (id) => {
-    axios.delete(URL_DE_BASE + `${id}`, u_info.opts).then(function (response) {
-      getUsers();
-      toast.success(`Suppression Réussi`);
-      setDisplayConfirmationModal(false);
-    });
-  };
-  //#endregion
-
   //#region   //----- MA RECHERCHE -----
   const [contenuTab, setContenuTab] = useState(true);
   function rechercheDossier(event) {
@@ -98,15 +75,17 @@ export default function CahierArriver() {
       getUsers();
       setContenuTab(true);
     } else {
-      axios.get(URL_DE_BASE + `recherche/${valeur}`,  u_info.opts).then((response) => {
-        if (response.data.success) {
-          setUsers(response.data.res);
-          setContenuTab(true);
-        } else {
-          setUsers(response.data.res);
-          setContenuTab(false);
-        }
-      });
+      axios
+        .get(URL_DE_BASE + `recherche/${valeur}`, u_info.opts)
+        .then((response) => {
+          if (response.data.success) {
+            setUsers(response.data.res);
+            setContenuTab(true);
+          } else {
+            setUsers(response.data.res);
+            setContenuTab(false);
+          }
+        });
     }
   }
   //#endregion
@@ -175,15 +154,14 @@ export default function CahierArriver() {
   };
   //#endregion
 
-  const handlePage = (event) =>{
-    navigate("/N_D")
-  }
-
   return (
     <>
-    
-    {libraryList.forEach((x) => AjoutLibrary(x))}
+      {libraryList.forEach((x) => AjoutLibrary(x))}
       <div className="wrapper">
+        <ModalAjout show={show} onHide={closeAddModal}>
+          {numCompteAjout}
+        </ModalAjout>
+
         <HeaderContext>
           <form className="navbar-left navbar-form nav-search mr-md-3">
             <div className="input-group">
@@ -210,13 +188,14 @@ export default function CahierArriver() {
           <div className="content">
             <div className="container-fluid">
               <div className="row">
-                {/* <PersoIndividu />
-                <PersoUtilisateur />
-                <NouveauPersoRequerant /> */}
+                <AccessCahierND />
+                <AccessCahierDepart />
+                <AccessCahierInterne />
+                <AccessCahierRDV />
               </div>
 
               <div className="row">
-                <div className="col-md-8">
+                <div className="col-md-12">
                   <div className="card">
                     <div className="card-header ">
                       <h4 className="card-title">{base}</h4>
@@ -225,36 +204,23 @@ export default function CahierArriver() {
                       <div className="table-responsive text-nowrap">
                         <table className="table table-striped w-auto">
                           <thead>
-                      <tr>
-                        <th scope="col"> </th>
-                        <th scope="col">Réf</th>
-                        <th scope="col">Numéro Affaire</th>
-                        <th scope="col">Requerant</th>
-                        <th scope="col">Date du Mouvement</th>
-                        <th scope="col">Date Rendez-vous</th>
-                        <th scope="col">Phase du dossier</th>
-                        <th scope="col">Observation</th>
-                        <th scope="col">Agent</th>
-                        {/* <th scope="col"> Actions </th> */}
-                      </tr>
+                            <tr>
+                              <th scope="col">Réf</th>
+                              <th scope="col">Numéro Affaire</th>
+                              <th scope="col">Requerant</th>
+                              <th scope="col">Date du Mouvement</th>
+                              <th scope="col">Date Rendez-vous</th>
+                              <th scope="col">Phase du dossier</th>
+                              <th scope="col">Observation</th>
+                              <th scope="col">Agent</th>
+                              <th scope="col"> </th>
+                              {/* <th scope="col"> Actions </th> */}
+                            </tr>
                           </thead>
                           <tbody>
                             {contenuTab || users.length !== 0 ? (
                               currentItems.map((user, key) => (
                                 <tr key={key}>
-                                  <th>
-                                    {user.accomplissement ? null : (
-                                      <button
-                                        type="button"
-                                        className="btn btn-outline-primary btn-sm m-1 waves-effect"
-                                        variant="default"
-                                        name="numCompteEdit"
-                                        onClick={() => showAddModal(user.numHisto)}
-                                      >
-                                        <BsShift />
-                                      </button>
-                                    )}
-                                  </th>
                                   <th scope="row">{user.numeroHisto} </th>
                                   <td>{user.h_numeroAffaire}</td>
                                   <td>
@@ -265,42 +231,28 @@ export default function CahierArriver() {
                                   <td>{user.nomProcedure}</td>
                                   <td>{user.observationSD}</td>
                                   <td>{user.identification}</td>
-                                  {/* <td>
-                                    <button
-                                      type="button"
-                                      className="btn btn-outline-success btn-sm m-1 waves-effect"
-                                      variant="default"
-                                      name="numCompteEdit"
-                                      onClick={() => showEditModal(user.numHisto)}
-                                    >
-                                      <BsEye />
-                                    </button>
-      
-                                    <button
-                                      type="button"
-                                      className="btn btn-outline-primary btn-sm m-1 waves-effect"
-                                      variant="default"
-                                      name="numCompteEdit"
-                                      onClick={() => showEditModal(user.numHisto)}
-                                    >
-                                      <BsPencilSquare />
-                                    </button>
-      
-                                    <button
-                                      type="button"
-                                      className="btn btn-outline-danger btn-sm m-1 waves-effect"
-                                      variant="default"
-                                      onClick={() => showDeleteModal(user.numHisto)}
-                                    >
-                                      <BsFillTrashFill />
-                                    </button>
-                                  </td> */}
+                                  <td>
+                                    {user.accomplissement ? null : (
+                                      <p
+                                        // type="button"
+                                        className="btn btn-outline-success btn-sm m-1 waves-effect"
+                                        // variant="default"
+                                        name="numCompteEdit"
+                                        onClick={() =>
+                                          showAddModal(user.numeroHisto)
+                                        }
+                                      >
+                                        <BsCapslockFill />
+                                      </p>
+                                    )}
+                                  </td>
+
                                 </tr>
                               ))
                             ) : (
                               <tr>
                                 <td
-                                  colSpan={7}
+                                  colSpan={10}
                                   className="text-danger text-center"
                                 >
                                   La liste est vide ....
@@ -342,6 +294,9 @@ export default function CahierArriver() {
                     ) : null}
                   </div>
                 </div>
+              </div>
+
+              <div className="row">
                 <div className="col-md-4">
                   <div className="card">
                     <div className="card-header">

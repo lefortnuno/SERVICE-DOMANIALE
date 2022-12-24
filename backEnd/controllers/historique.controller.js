@@ -8,29 +8,35 @@ Date.prototype.addDays = function (days) {
   return date;
 };
 
-module.exports.addHistorique = (req, res) => {
+// Format date aujourdhui pour mysql
+let today = new Date();
+let dateAujourdHui = new Date();
 
+const y = today.getFullYear();
+const m = today.getMonth() + 1;
+const d = today.getDate();
+
+const fomatDateAujourdHui = y + "-" + m + "-" + d;
+
+module.exports.addHistorique = (req, res) => {
   const accomplissement = false;
   const approbation = false;
   const addRdvDays = 15;
 
   let {
     mouvement,
-    dateDebutMouvement,
     dateRDV,
     observation,
     h_numeroAffaire,
+    h_numeroDossier,
     p_numeroCompte,
     dispoDossier,
   } = req.body;
 
-  if (!dateDebutMouvement && !dateRDV) {
-    dateDebutMouvement = new Date();
-    dateRDV = dateDebutMouvement.addDays(addRdvDays);
-  } else if (dateDebutMouvement && !dateRDV) {
-    dateRDV = new Date().addDays(addRdvDays);
-  } else if (!dateDebutMouvement && dateRDV) {
-    dateDebutMouvement = new Date();
+  const dateDebutMouvement = fomatDateAujourdHui;
+
+  if (!dateRDV) {
+    dateRDV = dateAujourdHui.addDays(addRdvDays);
   }
 
   const newHistorique = {
@@ -39,6 +45,7 @@ module.exports.addHistorique = (req, res) => {
     dateRDV,
     observation,
     h_numeroAffaire,
+    h_numeroDossier,
     p_numeroCompte,
     dispoDossier,
     accomplissement,
@@ -64,7 +71,7 @@ module.exports.addHistoNewDemande = (req, res) => {
   const accomplissement = false;
   const observation = "Aucune";
   const h_numeroAffaire = "NULL";
-  const dateFinMouvement ="NULL"
+  const dateFinMouvement = "NULL";
 
   let { dateRDV, p_numeroCompte } = req.body;
 
@@ -187,6 +194,20 @@ module.exports.searchHistorique = (req, res) => {
   });
 };
 
+module.exports.searchHistoriqueRDV = (req, res) => {
+  Historique.searchHistoriqueRDV(req.params.valeur, (err, resp) => {
+    if (!err) {
+      if (resp) {
+        res.send(resp);
+      } else {
+        res.send(err);
+      }
+    } else {
+      res.send(err);
+    }
+  });
+};
+
 module.exports.updateHistorique = (req, res) => {
   const {
     dateDebutMouvement,
@@ -215,15 +236,16 @@ module.exports.updateHistorique = (req, res) => {
 };
 
 module.exports.nextProcedureHistorique = (req, res) => {
-  const { approbationUP, p_numeroProcedure, h_numeroAffaire, p_numeroCompte } = req.body;
+  const { approbationUP, p_numeroProcedure, h_numeroAffaire } = req.body;
 
-  const accomplissement = 1;
+  const accomplissement = true;
   const approbation = approbationUP;
+  const dateFinMouvement = fomatDateAujourdHui;
 
   const updateHistorique = {
     accomplissement,
     approbation,
-    p_numeroCompte,
+    dateFinMouvement,
   };
 
   const updateDossier = {
@@ -237,7 +259,6 @@ module.exports.nextProcedureHistorique = (req, res) => {
       if (erreur) {
         res.send(erreur);
       } else {
-        console.log(p_numeroCompte);
         Historique.updateHistorique(
           updateHistorique,
           req.params.id,

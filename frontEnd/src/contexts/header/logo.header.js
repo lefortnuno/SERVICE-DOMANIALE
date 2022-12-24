@@ -20,7 +20,7 @@ export default function LogoHeader() {
               aria-label="Toggle navigation"
             >
               <span className="navbar-toggler-icon">
-                <BsFilterLeft />
+                {/* <BsFilterLeft /> */}
               </span>
             </button>
             <button className="topbar-toggler more">

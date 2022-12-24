@@ -2059,9 +2059,8 @@ body {
   z-index: 1001;
   display: inline-block;
 }
-.main-header .logo-header p.logo {
+.main-header .logo-header a.logo {
   color: #575962;
-  padding-top: 2%;
 }
 .main-header .logo-header .navbar-toggler {
   padding-left: 0px;
@@ -2108,8 +2107,8 @@ body {
   display: block;
 }
 .sidebar .user .photo {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   overflow: hidden;
   float: left;
   margin-right: 11px;
@@ -6618,7 +6617,6 @@ body {
     right: 15px;
     color: #545454;
     cursor: pointer;
-    padding-top: 2%;
   }
 
   .nav-search {

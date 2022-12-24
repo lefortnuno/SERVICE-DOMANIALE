@@ -53,6 +53,7 @@ export default function FormulaireNouveauIndividu() {
     setInputs((values) => ({ ...values, [name]: value }));
     setErreurs((values) => ({ ...values, messageErreur: false }));
     setErreurs((values) => ({ ...values, [name]: false }));
+    setErreurs((values) => ({ ...values, messageErreur: false }));
 
     if (
       name === "lieuNaiss" ||
@@ -310,11 +311,21 @@ export default function FormulaireNouveauIndividu() {
 
     console.log(dataInputs);
     axios.post(URL_DE_BASE, dataInputs, u_info.opts).then(function (response) {
+      console.log(response);
       if (response.status === 200) {
         if (response.data.success) {
           toast.success("Ajout Reussi.");
 
           onClose();
+        } else if (response.data.errno === 1062) {
+          setErreurs((values) => ({ ...values, messageErreur: true }));
+          setMessages((values) => ({
+            ...values,
+            messageErreur: "--- Ajout non effectuer ! Ce numéro de CIN a déjà été enregistrer ! ---",
+          }));
+          toast.error(
+            "Ajout non effectuer ! Ce numéro de CIN a déjà été enregistrer !"
+          );
         } else {
           toast.error("Echec de l'Ajout!");
         }
@@ -605,6 +616,9 @@ export default function FormulaireNouveauIndividu() {
                 </small>
               </div>
             </div>
+            {erreurs.messageErreur ? (
+              <span className="text-danger text-center d-block">{messages.messageErreur}</span>
+            ) : null}
 
             <div className="buttons">
               <div className="backBtn btn btn-danger" onClick={onClose}>
