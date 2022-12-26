@@ -160,31 +160,40 @@ export default function DetailsDossier() {
                       <h4 className="card-title">INFO REQUERANT</h4>
                     </div>
                     <div className="card-body">
-                      <div className="row">
-                        <div className="mapcontainer">
-                          <div className="map">
-                            <p> Numéro de CIN : </p>
-                            <h6> {users.cin} </h6> <br />
-                            <p> Nom : </p>
-                            <h6> {users.nom} </h6> <br />
-                            <p> Prenom : </p>
-                            <h6> {users.prenom} </h6> <br />
-                            <p> Numéro de téléphone : </p>
-                            <h6> {users.numeroTelephone} </h6> <br />
-                            <p> Etat Morale : </p>
-                            <h6>
-                              {users.etatMorale === 1
-                                ? "Personne Morale"
-                                : "Individu Normale"}
-                            </h6>
-                            <br />
-                            <p> Requerant Numéro : </p>
-                            <h6> {users.p_numeroRequerant} </h6> <br />
-                            <span>
-                              Et le reste de ses information a afficher ici plus
-                              tard
-                            </span>
-                          </div>
+                      <div class="form-row">
+                        <div className="form-group">
+                          <label> Numéro de CIN : </label>
+                          <span> {users.cin} </span>
+                        </div>
+
+                        <div className="form-group">
+                          <label> Requerant Numéro </label>
+                          <span> {users.p_numeroRequerant} </span>
+                        </div>
+
+                        <div className="form-group">
+                          <label>Nom : </label>
+                          <span> {users.nom} </span>
+                        </div>
+
+                        <div className="form-group">
+                          <label>Prènom : </label>
+                          <span> {users.prenom} </span>
+                        </div>
+
+                        <div className="form-group">
+                          <label> Numéro de téléphone : </label>
+                          <span> 0{users.numeroTelephone} </span>
+                        </div>
+
+                        <div className="form-group">
+                          <label> Etat Morale : </label>
+                          <span>
+                            {" "}
+                            {users.etatMorale === 1
+                              ? "Personne Morale"
+                              : "Individu Normale"}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -197,26 +206,52 @@ export default function DetailsDossier() {
                     </div>
                     <div className="card-body">
                       <div className="row">
-                        <div className="row">
-                          <div className="col-md-8">
-                            <p> numero d'affaire : </p>
-                            <h6> {users.numeroAffaire} </h6> <br />
-                            <p> Dependance : </p>
-                            <h6>
-                              {users.dependance === 1
-                                ? "Dependant"
-                                : "Non dependant"}
-                            </h6>
-                            <br />
-                            <span>
-                              Et le reste de ses information a afficher ici plus
-                              tard
-                            </span>
-                          </div>
+                        <div className="col-md-8">
+                          <div class="form-row">
+                            <div className="form-group">
+                              <label> Numéro d'affaire : </label>
+                              <span> {users.numeroAffaire} </span>
+                            </div>
 
-                          <div className="col-md-4">
-                            <p> stats temps perdu </p>
+                            <div className="form-group">
+                              <label>Dependance : </label>
+                              <span>
+                                {" "}
+                                {users.dependance === 1
+                                  ? "Dependant"
+                                  : "Non dependant"}
+                              </span>
+                            </div>
+
+                            <div className="form-group">
+                              <label> Prenom : </label>
+                              <span> {users.prenom} </span>
+                            </div>
+
+                            <div className="form-group">
+                              <label> Numéro de téléphone : </label>
+                              <span> 0{users.numeroTelephone} </span>
+                            </div>
+
+                            <div className="form-group">
+                              <label> Etat Morale : </label>
+                              <span>
+                                {" "}
+                                {users.etatMorale === 1
+                                  ? "Personne Morale"
+                                  : "Individu Normale"}
+                              </span>
+                            </div>
+
+                            <div className="form-group">
+                              <label> Requerant Numéro </label>
+                              <span> {users.p_numeroRequerant} </span>
+                            </div>
                           </div>
+                        </div>
+
+                        <div className="col-md-4">
+                          <p> stats temps perdu </p>
                         </div>
                       </div>
                     </div>
