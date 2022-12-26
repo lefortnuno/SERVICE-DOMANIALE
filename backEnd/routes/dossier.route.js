@@ -5,6 +5,7 @@ const agent = require("../middlewares/agent.middleware");
 
 router.get("/", agent.checkUtilisateur, DossierController.getAllDossiers);
 router.get("/nouvelledemande/", agent.checkUtilisateur, DossierController.getDossiersNouvelleDemande);
+router.get("/historique/:id", agent.checkUtilisateur, DossierController.getHistoDossier);
 router.get("/:id", agent.checkUtilisateur, DossierController.getIdDossier);
 router.post("/", chefAdjoint.checkUtilisateur, DossierController.addDossier);
 router.put("/:id", agent.checkUtilisateur, DossierController.updateDossier);

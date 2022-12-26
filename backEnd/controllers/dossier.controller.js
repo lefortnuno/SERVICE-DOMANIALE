@@ -180,8 +180,23 @@ module.exports.getDossiersNouvelleDemande = (req, res) => {
     }
   });
 };
+
 module.exports.getIdDossier = (req, res) => {
   Dossier.getIdDossier(req.params.id, (err, resp) => {
+    if (!err) {
+      if (resp) {
+        res.send(resp);
+      } else {
+        res.send({ success: false, message: "Introuvable" });
+      }
+    } else {
+      res.send(err);
+    }
+  });
+};
+
+module.exports.getHistoDossier = (req, res) => {
+  Dossier.getHistoDossier(req.params.id, (err, resp) => {
     if (!err) {
       if (resp) {
         res.send(resp);

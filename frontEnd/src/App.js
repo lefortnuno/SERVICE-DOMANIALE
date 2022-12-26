@@ -15,6 +15,7 @@ import Accueil from "./components/accueil/accueil";
 import Bureau from "./components/bureau/bureau";
 import Procedure from "./components/procedures/procedure";
 import Dossier from "./components/dossiers/Dossiers";
+import DetailsDossier from "./components/dossiers/DetailsDossier";
 import NouvelleDemande from "./components/dossiers/NouvelleDemande";
 import AjoutIndividu from "./components/personnes/individu/AjoutIndividu";
 import AjoutRequerant from "./components/personnes/requerant/AjoutRequerant";
@@ -52,6 +53,7 @@ export default function App() {
           />
           <Route path="bureau/" element={<SinInProtected Cmp={Bureau} />} />
           <Route path="dossier/" element={<SinInProtected Cmp={Dossier} />} />
+          <Route path="viewDossier/:numeroDossier" element={<SinInProtected Cmp={DetailsDossier} />} />
           <Route
             path="nouvelleDemande/"
             element={<SinInProtected Cmp={NouvelleDemande} />}

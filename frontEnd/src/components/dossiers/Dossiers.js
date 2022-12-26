@@ -207,7 +207,7 @@ export default function Dossier() {
                                       : null
                                   }
                                 >
-                                  <Link to="/nouvelleDemande">
+                                  <Link to={`/viewDossier/${dossier.numeroDossier}`}>
                                     <div className="card-body ">
                                       <div className="row">
                                         <div className="col-5">

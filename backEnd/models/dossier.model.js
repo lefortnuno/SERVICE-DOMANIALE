@@ -20,7 +20,7 @@ let Dossier = function (dossier) {
   this.certificatSituationJuridique = dossier.certificatSituationJuridique;
 };
 
-const REQUETE_BASE = ` SELECT numeroDossier, numeroAffaire, dependance, empietement, natureAffectation, lettreDemande, planAnnexe, pvDelimitation, superficieTerrain, DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, p_numeroProcedure, numeroSousDossier, observationSD, DATE_FORMAT(dateDepotSD, '%d-%m-%Y') as dateDepotSD, mesureAttribuable, prixAttribue, lettreDesistement, planMere, certificatSituationJuridique, p_numeroRequerant, etatMorale, complementInformation, cin, nom, prenom FROM DOSSIER, SOUS_DOSSIER, INDIVIDU, REQUERANT, PROCEDURES WHERE DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire AND INDIVIDU.cin = REQUERANT.p_cin AND REQUERANT.numeroRequerant = DOSSIER.p_numeroRequerant AND PROCEDURES.numeroProcedure = DOSSIER.p_numeroProcedure `;
+const REQUETE_BASE = ` SELECT numeroDossier, numeroAffaire, dependance, empietement, natureAffectation, lettreDemande, planAnnexe, pvDelimitation, superficieTerrain, DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, p_numeroProcedure, numeroSousDossier, observationSD, DATE_FORMAT(dateDepotSD, '%d-%m-%Y') as dateDepotSD, mesureAttribuable, prixAttribue, lettreDesistement, planMere, certificatSituationJuridique, p_numeroRequerant, etatMorale, complementInformation, cin, nom, prenom, numeroTelephone FROM DOSSIER, SOUS_DOSSIER, INDIVIDU, REQUERANT, PROCEDURES WHERE DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire AND INDIVIDU.cin = REQUERANT.p_cin AND REQUERANT.numeroRequerant = DOSSIER.p_numeroRequerant AND PROCEDURES.numeroProcedure = DOSSIER.p_numeroProcedure `;
 
 const REQUETE_NOUVELLE_DEMANDE = REQUETE_BASE + ` AND p_numeroProcedure=1 `;
 
@@ -86,6 +86,20 @@ Dossier.getLastIdNumeroDossier = (result) => {
 };
 
 Dossier.getIdDossier = (id, result) => {
+  dbConn.query(REQUETE_BASE + " AND numeroDossier = ?", id, (err, res) => {
+    if (err) {
+      result(err, null);
+    } else {
+      if (res.length !== 0) {
+        result(null, res);
+      } else {
+        result(null, null);
+      }
+    }
+  });
+};
+
+Dossier.getHistoDossier = (id, result) => {
   dbConn.query(REQUETE_BASE + " AND numeroDossier = ?", id, (err, res) => {
     if (err) {
       result(err, null);

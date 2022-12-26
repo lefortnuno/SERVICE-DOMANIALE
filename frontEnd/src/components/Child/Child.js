@@ -3,7 +3,7 @@ import GoogleMap from "../GoogleMapIntegration/GoogleMap";
 
 function ChildComponent(props) {
   useEffect(() => {
-    props.GetDataValue("ABCDEFG");
+    props.GetDataValue("By Trofel ");
   });
   return (
     <>
