@@ -34,11 +34,11 @@ export default function NavbarContext() {
         </li>
         <br />
         <li className="nav-item">
-          <a href="typography.html">
+          <Link to="/maps/">
             <i className="la la-font"></i>
             <p>Géographie</p>
             <span className="badge badge-danger">25</span>
-          </a>
+          </Link>
         </li>
         <li className="nav-item" data-toggle="modal" data-target="#modalUpdate">
           <Link to="/accueil/">

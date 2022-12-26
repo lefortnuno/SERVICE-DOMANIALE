@@ -1,6 +1,5 @@
-
 import axios from "../../api/axios";
-import getDataUtilisateur from "../../api/udata"; 
+import getDataUtilisateur from "../../api/udata";
 
 import { libraryList, AjoutLibrary } from "../../api/file.js";
 import { AccessCahierND } from "../access/accessCahier";
@@ -9,7 +8,6 @@ import { NouvelleDemande } from "../access/accessAll";
 import HeaderContext from "../../contexts/header/header.context";
 import FooterContext from "../../contexts/footer/footer.context";
 import SidebarContext from "../../contexts/sidebar/sidebar.context";
-
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -176,208 +174,94 @@ export default function Dossier() {
               </div>
 
               <div className="row">
-                <div className="col-md-8">
+                <div className="col-md-12">
                   <div className="card">
                     <div className="card-header ">
                       <h4 className="card-title">liste des {base}s</h4>
                     </div>
                     <div className="card-body">
-                      <div className="table-responsive text-nowrap">
-                        <table className="table table-striped w-auto">
-                          <thead>
-                            <tr>
-                              <th scope="col">Numéro d'affaire</th>
-                              <th scope="col">Nature </th>
-                              <th scope="col">Affectation</th>
-                              <th scope="col">Requerant</th>
-                              <th scope="col">+Details</th>
-                              <th scope="col">Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {contenuTab || users.length !== 0 ? (
-                              currentItems.map((user, key) => (
-                                <tr key={key}>
-                                  <th scope="row">{user.numeroAffaire} </th>
-                                  <td>
-                                    {user.dependance === 1 ? (
-                                      <>Dependant</>
-                                    ) : (
-                                      <>Non dependant</>
-                                    )}
-                                  </td>
-                                  <td>
-                                    {user.natureAffectation === 1 ? (
-                                      <>Affecté</>
-                                    ) : (
-                                      <>Non affecté</>
-                                    )}
-                                  </td>
-                                  <td>
-                                    {user.p_numeroRequerant} - {user.nom}
-                                  </td>
-
-                                  <td>
-                                    <button
-                                      type="button"
-                                      className="btn btn-outline-success btn-sm m-1 waves-effect"
-                                      variant="default"
-                                      name="numCompteEdit"
-                                      onClick={() =>
-                                        showEditModal(user.numeroDossier)
-                                      }
-                                    >
-                                      <BsEye />
-                                    </button>
-                                  </td>
-
-                                  <td>
-                                    <button
-                                      type="button"
-                                      className="btn btn-outline-primary btn-sm m-1 waves-effect"
-                                      variant="default"
-                                      name="numCompteEdit"
-                                      onClick={() =>
-                                        showEditModal(user.numeroDossier)
-                                      }
-                                    >
-                                      <BsPencilSquare />
-                                    </button>
-
-                                    {u_info.u_attribut === "Chef" ||
-                                    u_info.u_attribut === "Administrateur" ? (
-                                      <button
-                                        type="button"
-                                        className="btn btn-outline-danger btn-sm m-1 waves-effect"
-                                        variant="default"
-                                        name="numCompteEdit"
-                                        onClick={() =>
-                                          showEditModal(user.numeroDossier)
-                                        }
-                                      >
-                                        <BsTrash />
-                                      </button>
-                                    ) : null}
-                                  </td>
-                                </tr>
-                              ))
-                            ) : (
-                              <tr>
-                                <td
-                                  colSpan={6}
-                                  className="text-danger text-center"
+                      <div className="row">
+                        {contenuTab || users.length !== 0 ? (
+                          currentItems.map((dossier, index) => (
+                            <>
+                              <div className="col-md-3" key={index}>
+                                <div
+                                  className={
+                                    dossier.p_numeroProcedure === 1 ||
+                                    dossier.p_numeroProcedure === 2 ||
+                                    dossier.p_numeroProcedure === 3
+                                      ? "card card-stats card-warning"
+                                      : dossier.p_numeroProcedure === 4 ||
+                                        dossier.p_numeroProcedure === 5 ||
+                                        dossier.p_numeroProcedure === 6 ||
+                                        dossier.p_numeroProcedure === 7
+                                      ? "card card-stats card-semi-warning"
+                                      : dossier.p_numeroProcedure === 8 ||
+                                        dossier.p_numeroProcedure === 9 ||
+                                        dossier.p_numeroProcedure === 10
+                                      ? "card card-stats card-info"
+                                      : dossier.p_numeroProcedure === 11
+                                      ? "card card-stats card-success"
+                                      : dossier.p_numeroProcedure === 69
+                                      ? "card card-stats card-danger"
+                                      : null
+                                  }
                                 >
-                                  La liste est vide ....
-                                </td>
-                              </tr>
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-
-                    {nbrPage !== 1 && nbrPage !== 0 && users.length !== 0 ? (
-                      <>
-                        <ul className="pageNumbers">
-                          <li>
-                            <button
-                              disabled={currentPage == pages[0] ? true : false}
-                              onClick={handlePrevbtn}
-                            >
-                              Précédent
-                            </button>
-                          </li>
-                          {renderPageNumbers}
-                          <li>
-                            <button
-                              disabled={
-                                currentPage == pages[pages.length - 1]
-                                  ? true
-                                  : false
-                              }
-                              onClick={handleNextbtn}
-                            >
-                              Suivant
-                            </button>
-                          </li>
-                        </ul>
-                        <br />
-                      </>
-                    ) : null}
-                  </div>
-                </div>
-
-                <div className="col-md-4">
-                  <div className="card">
-                    <div className="card-header ">
-                      <h4 className="card-title">liste des {base}s</h4>
-                    </div>
-                    <div className="card-body">
-                      {contenuTab || users.length !== 0 ? (
-                        currentItems.map((dossier, index) => (
-                          <>
-                            <div className="col-md-12" key={index}>
-                              <div
-                                className={
-                                  dossier.p_numeroProcedure < 4
-                                    ? "card card-stats card-warning"
-                                    : "card card-stats card-primary"
-                                }
-                              >
-                                <Link to="/nouvelleDemande">
-                                  <div className="card-body ">
-                                    <div className="row">
-                                      <div className="col-5">
-                                        <div className="icon-big text-center">
-                                          <i
-                                            className={
-                                              dossier.p_numeroProcedure < 4
-                                                ? "la la-check-circle"
-                                                : "la la-check-circle"
-                                            }
-                                          ></i>
+                                  <Link to="/nouvelleDemande">
+                                    <div className="card-body ">
+                                      <div className="row">
+                                        <div className="col-5">
+                                          <div className="icon-big text-center">
+                                            <i
+                                              className={
+                                                dossier.p_numeroProcedure < 4
+                                                  ? "la la-check-circle"
+                                                  : "la la-check-circle"
+                                              }
+                                            ></i>
+                                          </div>
                                         </div>
-                                      </div>
-                                      <div className="col-7 d-flex align-items-center">
-                                        <div className="numbers">
-                                          <p className="card-category">
-                                            {dossier.numeroAffaire}
-                                          </p>
-                                          <h4 className="card-title">
-                                            {dossier.nom}
-                                          </h4>
+                                        <div className="col-7 d-flex align-items-center">
+                                          <div className="numbers">
+                                            <p className="card-category">
+                                              {dossier.numeroAffaire}
+                                            </p>
+                                            <h4 className="card-title">
+                                              {dossier.nom}
+                                            </h4>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </Link>
+                                  </Link>
+                                </div>
                               </div>
-                            </div>
-                          </>
-                        ))
-                      ) : (
-                        <>
-                          <div className="col-md-12">
-                            <div className="card card-stats card-danger">
-                              <div className="card-body ">
-                                <div className="row">
-                                  <div className="col-5">
-                                    <div className="icon-big text-center">
-                                      <i className="la la-times-circle-o text-danger"></i>
+                            </>
+                          ))
+                        ) : (
+                          <>
+                            <div className="col-md-4">
+                              <div className="card card-stats card-danger">
+                                <div className="card-body ">
+                                  <div className="row">
+                                    <div className="col-5">
+                                      <div className="icon-big text-center">
+                                        <i className="la la-times-circle-o text-danger"></i>
+                                      </div>
                                     </div>
-                                  </div>
-                                  <div className="col-7 d-flex align-items-center">
-                                    <div className="numbers">
-                                      <p className="card-category">Aucune</p>
-                                      <h4 className="card-title">Dossier</h4>
+                                    <div className="col-7 d-flex align-items-center">
+                                      <div className="numbers">
+                                        <p className="card-category">Aucune</p>
+                                        <h4 className="card-title">Dossier</h4>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </>
-                      )}
+                          </>
+                        )}
+                      </div>
                     </div>
 
                     {nbrPage !== 1 && nbrPage !== 0 && users.length !== 0 ? (

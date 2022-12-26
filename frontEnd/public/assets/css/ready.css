@@ -5208,7 +5208,11 @@ body {
 }
 
 .card-success {
-  background: #59d05d;
+  background: #47d34c;
+}
+
+.card-semi-warning {
+  background: #d6f300;
 }
 
 .card-warning {

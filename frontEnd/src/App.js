@@ -2,6 +2,7 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 
 import LogOutProtection from "./contexts/protected/logout.protected";
 import SinInProtected from "./contexts/protected/singin.protected";
@@ -22,6 +23,7 @@ import CahierArriver from "./components/historique/cahierArriver/cahier.arriver"
 import CahierInterne from "./components/historique/cahierInterne/cahier.interne";
 import CahierDepart from "./components/historique/cahierDepart/cahier.depart";
 import CahierRendezVous from "./components/historique/cahierRendezVous/cahier.rendez.vous";
+import MapsTany from "./maps/maps";
 
 export default function App() {
   return (
@@ -67,12 +69,17 @@ export default function App() {
             path="C_ND/"
             element={<SinInProtected Cmp={CahierNouvelleDemande} />}
           />
-          <Route path="C_A/" element={<SinInProtected Cmp={CahierArriver} />} />
-          <Route path="C_D/" element={<SinInProtected Cmp={CahierDepart} />} />
-          <Route path="C_I/" element={<SinInProtected Cmp={CahierInterne} />} />
           <Route
             path="C_RDV/"
             element={<SinInProtected Cmp={CahierRendezVous} />}
+          />
+          <Route path="C_A/" element={<SinInProtected Cmp={CahierArriver} />} />
+          <Route path="C_D/" element={<SinInProtected Cmp={CahierDepart} />} />
+          <Route path="C_I/" element={<SinInProtected Cmp={CahierInterne} />} />
+
+          <Route
+            path="maps/"
+            element={<SinInProtected Cmp={MapsTany} />}
           />
         </Routes>
       </BrowserRouter>

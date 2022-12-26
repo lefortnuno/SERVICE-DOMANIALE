@@ -85,7 +85,7 @@ export default function FormulaireSeConnecter() {
       .post(URL_DE_BASE, inputs)
       .then(function (response) {
         if (response.data.success && response.status === 200) {
-          navigate("/utilisateur/");
+          navigate("/accueil/");
           toast.success(`Connection Reussi`);
 
           const utilisateur = response.data.user[0];
@@ -94,6 +94,7 @@ export default function FormulaireSeConnecter() {
           for (const u in utilisateur) {
             localStorage.setItem(u, utilisateur[u]);
           }
+
         } else {
           setErreurs((values) => ({ ...values, messageErreur: true }));
           setMessages((values) => ({

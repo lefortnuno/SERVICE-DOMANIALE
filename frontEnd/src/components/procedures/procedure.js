@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { BsPencilSquare } from "react-icons/bs";
 import Context from "../../contexts/Context";
 import { AccessBureau } from "../access/accessAll";
+import { DrapeauFanjakana } from "../accueil/drapeauGov";
 
 const base = `procedure`;
 const URL_DE_BASE = base + `/`;
@@ -138,6 +139,7 @@ export default function Procedure() {
     <>
       <Context>
         <div className="row">
+          <DrapeauFanjakana/>
           <AccessBureau />
         </div>
 
