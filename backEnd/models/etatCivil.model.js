@@ -2,12 +2,12 @@ let dbConn = require("../config/db");
 
 let EtatCivil = function (etatcivil) {
   this.codeEtatCivil = etatcivil.codeEtatCivil;
-  this.nature = etatcivil.nature;
+  this.etatCivil = etatcivil.etatCivil;
   this.cinConjoint = etatcivil.cinConjoint;
   this.nomConjoint = etatcivil.nomConjoint;
   this.prenomConjoint = etatcivil.prenomConjoint;
-  this.dateNature = etatcivil.dateNature;
-  this.lieuNature = etatcivil.lieuNature;
+  this.dateEtatCivil = etatcivil.dateEtatCivil;
+  this.lieuEtatCivil = etatcivil.lieuEtatCivil;
 };
 
 EtatCivil.addEtatCivil = (newEtatCivil, result) => {

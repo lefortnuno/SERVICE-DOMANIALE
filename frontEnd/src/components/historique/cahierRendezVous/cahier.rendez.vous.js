@@ -47,7 +47,6 @@ export default function CahierRendezVous() {
     axios.get(URL_DE_BASE, u_info.opts).then(function (response) {
       if (response.status === 200) {
         setUsers(response.data);
-        console.log(response.data);
       } else {
         toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
       }
@@ -69,7 +68,7 @@ export default function CahierRendezVous() {
   //#endregion
 
   //#region   //----- MA RECHERCHE -----
-  const [contenuTab, setContenuTab] = useState(true);
+  const [contenuTab, setContenuTab] = useState(false);
   function rechercheDossier(event) {
     const valeur = event.target.value;
     if (!valeur) {

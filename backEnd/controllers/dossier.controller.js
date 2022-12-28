@@ -50,6 +50,7 @@ module.exports.addDossier = (req, res) => {
   }
 
   const p_numeroProcedure = 1;
+  const h_numeroProcedure = p_numeroProcedure;
   let observationSD = observationDossier;
   const mesureAttribuable = "NULL";
   const prixAttribue = "NULL";
@@ -115,6 +116,7 @@ module.exports.addDossier = (req, res) => {
     observation,
     h_numeroAffaire,
     h_numeroDossier,
+    h_numeroProcedure,
     p_numeroCompte,
   };
 

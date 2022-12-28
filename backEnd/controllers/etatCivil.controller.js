@@ -7,8 +7,8 @@ module.exports.addEtatCivil = (req, res) => {
     cinConjoint,
     nomConjoint,
     prenomConjoint,
-    dateNature,
-    lieuNature,
+    dateEtatCivil,
+    lieuEtatCivil,
   } = req.body;
 
   const newEtatCivil = {
@@ -16,10 +16,9 @@ module.exports.addEtatCivil = (req, res) => {
     cinConjoint,
     nomConjoint,
     prenomConjoint,
-    dateNature,
-    lieuNature,
+    dateEtatCivil,
+    lieuEtatCivil,
   };
-
   EtatCivil.addEtatCivil(newEtatCivil, (erreur, resp) => {
     if (erreur) {
       res.send(erreur);
@@ -55,27 +54,23 @@ module.exports.updateEtatCivil = (req, res) => {
     cinConjoint,
     nomConjoint,
     prenomConjoint,
-    dateNature,
-    lieuNature,
+    dateEtatCivil,
+    lieuEtatCivil,
   } = req.body;
   const updateEtatCivil = {
     nature,
     cinConjoint,
     nomConjoint,
     prenomConjoint,
-    dateNature,
-    lieuNature,
+    dateEtatCivil,
+    lieuEtatCivil,
   };
 
-  EtatCivil.updateEtatCivil(
-    updateEtatCivil,
-    req.params.id,
-    (err, resp) => {
-      if (!err) {
-        res.send(resp);
-      } else {
-        res.send(err);
-      }
+  EtatCivil.updateEtatCivil(updateEtatCivil, req.params.id, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
     }
-  );
+  });
 };

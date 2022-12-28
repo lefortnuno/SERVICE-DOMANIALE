@@ -30,6 +30,7 @@ module.exports.addHistorique = (req, res) => {
     h_numeroAffaire,
     h_numeroDossier,
     p_numeroCompte,
+    h_numeroProcedure,
     dispoDossier,
   } = req.body;
 
@@ -49,6 +50,7 @@ module.exports.addHistorique = (req, res) => {
     p_numeroCompte,
     dispoDossier,
     accomplissement,
+    h_numeroProcedure,
     approbation,
   };
 
@@ -63,22 +65,22 @@ module.exports.addHistorique = (req, res) => {
 
 module.exports.addHistoNewDemande = (req, res) => {
   const addRdvDays = 15;
-  const dateAujourdHui = new Date();
-  const mouvement = "Arriver";
-  const dateDebutMouvement = dateAujourdHui;
+  const mouvement = "Nouvelle Demande";
+  const dateDebutMouvement = fomatDateAujourdHui;
   const dispoDossier = true;
   const approbation = false;
   const accomplissement = false;
   const observation = "Aucune";
   const h_numeroAffaire = "NULL";
-  const dateFinMouvement = "NULL";
+  // const dateFinMouvement = "NULL";
+  const h_numeroProcedure = 1;
 
   let { dateRDV, p_numeroCompte } = req.body;
 
   let newHisto = {
     mouvement,
     dateDebutMouvement,
-    dateFinMouvement,
+    // dateFinMouvement,
     dateRDV,
     dispoDossier,
     approbation,
@@ -86,15 +88,11 @@ module.exports.addHistoNewDemande = (req, res) => {
     observation,
     h_numeroAffaire,
     p_numeroCompte,
+    h_numeroProcedure,
   };
 
-  if (!dateDebutMouvement && !dateRDV) {
-    dateDebutMouvement = new Date();
-    dateRDV = dateDebutMouvement.addDays(addRdvDays);
-  } else if (dateDebutMouvement && !dateRDV) {
-    dateRDV = new Date().addDays(addRdvDays);
-  } else if (!dateDebutMouvement && dateRDV) {
-    dateDebutMouvement = new Date();
+  if (!dateRDV) {
+    dateRDV = dateAujourdHui.addDays(addRdvDays);
   }
   Dossier.getDerniereDossier((err, resp) => {
     if (err) {

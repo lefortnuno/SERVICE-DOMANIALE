@@ -37,6 +37,7 @@ export default function DetailsDossier() {
         console.log("response : ", response.data[0]);
         if (response.status === 200) {
           setUsers(response.data[0]);
+          setHisto(response.data[0])
         } else {
           toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
         }
@@ -342,7 +343,7 @@ export default function DetailsDossier() {
                         </div>
                         <div className="col-md-4">
                           <p> google maps du terrain</p>
-                          <GoogleMapsPartiel />
+                          <GoogleMapsPartiel  />
                         </div>
                       </div>
                     </div>

@@ -13,6 +13,7 @@ const Historique = function (historique) {
   this.h_numeroAffaire = historique.h_numeroAffaire;
   this.h_numeroDossier = historique.h_numeroDossier;
   this.p_numeroCompte = historique.p_numeroCompte;
+  this.h_numeroProcedure = historique.h_numeroProcedure;
 };
 
 // Format date aujourdhui pour mysql
@@ -38,6 +39,7 @@ SELECT
     accomplissement,
     h_numeroAffaire,
     h_numeroDossier,
+    h_numeroProcedure,
     p_numeroCompte,
     dependance,
     natureAffectation,
@@ -63,10 +65,10 @@ SELECT
     etatMorale,
     numeroTelephone,
     complementInformation,
-    p_numeroProcedure,
     nomProcedure,
     natureProcedure,
     movProcedure,
+    p_numeroProcedure,
     p_idBureau,
     nomBureau,
     adressBureau,

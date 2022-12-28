@@ -309,9 +309,7 @@ export default function FormulaireNouveauIndividu() {
       numeroCompte: u_info.u_numeroCompte,
     });
 
-    console.log(dataInputs);
     axios.post(URL_DE_BASE, dataInputs, u_info.opts).then(function (response) {
-      console.log(response);
       if (response.status === 200) {
         if (response.data.success) {
           toast.success("Ajout Reussi.");
@@ -321,7 +319,8 @@ export default function FormulaireNouveauIndividu() {
           setErreurs((values) => ({ ...values, messageErreur: true }));
           setMessages((values) => ({
             ...values,
-            messageErreur: "--- Ajout non effectuer ! Ce numéro de CIN a déjà été enregistrer ! ---",
+            messageErreur:
+              "--- Ajout non effectuer ! Ce numéro de CIN a déjà été enregistrer ! ---",
           }));
           toast.error(
             "Ajout non effectuer ! Ce numéro de CIN a déjà été enregistrer !"
@@ -617,7 +616,9 @@ export default function FormulaireNouveauIndividu() {
               </div>
             </div>
             {erreurs.messageErreur ? (
-              <span className="text-danger text-center d-block">{messages.messageErreur}</span>
+              <span className="text-danger text-center d-block">
+                {messages.messageErreur}
+              </span>
             ) : null}
 
             <div className="buttons">

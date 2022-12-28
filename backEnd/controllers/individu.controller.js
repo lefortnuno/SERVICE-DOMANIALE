@@ -25,7 +25,6 @@ module.exports.addIndividu = (req, res) => {
     prenomConjoint,
     dateEtatCivil,
     lieuEtatCivil,
-    numeroCompte,
   } = req.body;
 
   let p_codeEtatCivil = 0;
@@ -43,7 +42,7 @@ module.exports.addIndividu = (req, res) => {
       dateEtatCivil,
       lieuEtatCivil,
     };
-    etatCivil = Object.assign(etatCivil, addNewEtatCivil);
+    newEtatCivil = Object.assign(newEtatCivil, addNewEtatCivil);
   }
 
   if (etatMorale === "false") {
@@ -72,12 +71,15 @@ module.exports.addIndividu = (req, res) => {
     p_codeEtatCivil,
   };
 
+
   EtatCivil.addEtatCivil(newEtatCivil, (err, resEC) => {
     if (err) {
+      console.log(err);
       res.send(err);
     } else {
       EtatCivil.getLastEtatCivil((error, resLastID) => {
         if (error) {
+          console.log(error);
           res.send(error);
         } else {
           const id = resLastID[0];
@@ -85,10 +87,12 @@ module.exports.addIndividu = (req, res) => {
 
           Individu.addIndividu(newIndividu, (erreur, resI) => {
             if (erreur) {
+              console.log(erreur);
               res.send(erreur);
             } else {
               Requerant.addRequerant(newRequerant, (erreurs, resReq) => {
                 if (erreurs) {
+                  console.log(erreurs);
                   res.send(erreurs);
                 } else {
                   res.send(resI);

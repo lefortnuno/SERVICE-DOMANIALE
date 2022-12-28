@@ -66,7 +66,9 @@ export default function ModalAjout(props) {
     axios.get(URL_BASE + `${id}`, u_info.opts).then(function (response) {
       if (response.status === 200) {
         const u = response.data[0];
+        console.log(u);
         setInputs(u);
+        console.log("u.p_numeroProcedure : ", u.p_numeroProcedure);
 
         if (u.p_numeroProcedure < 11) {
           for (let e of phase) {
@@ -92,6 +94,7 @@ export default function ModalAjout(props) {
                 };
                 e = Object.assign(e, sousDosSept);
               }
+              console.log("e : ", e);
               setNextInputs(e);
             }
           }
@@ -155,7 +158,7 @@ export default function ModalAjout(props) {
   };
   //#endregion
 
-  //#region // FUNCTION AJOUT NOUVEAU XXX
+  //#region // FUNCTION AJOUT NOUVEAU HISTO
   const onSubmit = () => {
     let newData = {
       mouvement: nextInputs.movProcedure,
@@ -163,7 +166,7 @@ export default function ModalAjout(props) {
       p_numeroCompte: u_info.u_numeroCompte,
       h_numeroDossier: inputs.h_numeroDossier,
       h_numeroAffaire: inputs.h_numeroAffaire,
-      //   numeroProcedure: nextInputs.numeroProcedure,
+      h_numeroProcedure: nextInputs.numeroProcedure,
       dispoDossier: 1,
       dateRDV: nextInputs.dateRDV,
     };
