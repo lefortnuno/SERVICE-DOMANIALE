@@ -11,18 +11,11 @@ let Terrain = function (terrain) {
 };
 
 Terrain.addTerrain = (newTerrain, result) => {
-  Individu.getCinIndividu(newTerrain.cin, (err, resIndividu) => {
-    console.log(resIndividu);
-    if (resIndividu.length) {
-      dbConn.query("INSERT INTO Terrain SET ?", newTerrain, (err, res) => {
-        if (err) {
-          result(err, null);
-        } else {
-          result(null, res);
-        }
-      });
+  dbConn.query("INSERT INTO Terrain SET ?", newTerrain, (err, res) => {
+    if (err) {
+      result(err, null);
     } else {
-      result(null, { message: "Individu non trouver ! Inconnu !" });
+      result(null, { success: true });
     }
   });
 };
@@ -42,19 +35,19 @@ Terrain.getIdTerrain = (id, result) => {
     if (err) {
       result(err, null);
     } else {
-      if(res.length !== 0){
+      if (res.length !== 0) {
         result(null, res);
       } else {
-        result(null,  null);
+        result(null, null);
       }
     }
   });
 };
 
 Terrain.searchTerrain = (valeur, result) => {
-  let req
+  let req;
   console.log(valeur.nomPropriete);
-  if(valeur.imTerrain && valeur.cin && valeur.nomPropriete){
+  if (valeur.imTerrain && valeur.cin && valeur.nomPropriete) {
     req = `select * from Terrain where imTerrain LIKE '%${valeur.imTerrain}%' AND cin LIKE '%${valeur.cin}%'  AND nomPropriete LIKE '%${valeur.nomPropriete}%' `;
   }
   /**

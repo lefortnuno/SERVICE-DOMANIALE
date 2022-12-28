@@ -3,31 +3,74 @@ const Terrain = require("../models/terrain.model");
 const NumeroIM = require("../models/numeroIM.model");
 
 module.exports.addTerrain = (req, res) => {
-  let { imTerrain, nomPropriete, etatCiviqueTerrain, prixTerrain, cin } =
-    req.body;
+  let {
+    immatriculationTerrain,
+    nomPropriete,
+    t_cin,
+  } = req.body;
 
-  NumeroIM.getLastIdNumeroIM((err, resLastIM) => {
-    if (!err) {
-      imTerrain = resLastIM + "-" + imTerrain;
+  let numeroTitre;
+  let newTerrain = {
+    numeroTitre,
+    immatriculationTerrain,
+    nomPropriete,
+    // etatCiviqueTerrain,
+    // prixTerrain,
+    t_cin,
+  };
 
-      const newTerrain = {
-        imTerrain,
-        nomPropriete,
-        etatCiviqueTerrain,
-        prixTerrain,
-        cin,
-      };
+  if (immatriculationTerrain === "V") {
+    NumeroIM.getLastNumeroIM_V((err, resLastIM) => {
+      if (!err) {
+        newTerrain.numeroTitre = resLastIM;
+        newTerrain.immatriculationTerrain =
+          resLastIM + "-" + newTerrain.immatriculationTerrain;
+          
+        Terrain.addTerrain(newTerrain, (erreur, resp) => {
+          if (erreur) {
+            res.send(erreur);
+          } else {
+            NumeroIM.addNumeroIM_V();
+            res.send(resp);
+          }
+        });
+      }
+    });
+  } else if (immatriculationTerrain === "AX") {
+    NumeroIM.getLastNumeroIM_AX((err, resLastIM) => {
+      if (!err) {
+        newTerrain.numeroTitre = resLastIM;
+        newTerrain.immatriculationTerrain =
+          resLastIM + "-" + newTerrain.immatriculationTerrain;
 
-
-      Terrain.addTerrain(newTerrain, (erreur, resp) => {
-        if (erreur) {
-          res.send(erreur);
-        } else {
-          res.send(resp);
-        }
-      });
-    }
-  });
+        Terrain.addTerrain(newTerrain, (erreur, resp) => {
+          if (erreur) {
+            res.send(erreur);
+          } else {
+            NumeroIM.addNumeroIM_AX();
+            res.send(resp);
+          }
+        });
+      }
+    });
+  } else if (immatriculationTerrain === "X") {
+    NumeroIM.getLastNumeroIM_X((err, resLastIM) => {
+      if (!err) {
+        newTerrain.numeroTitre = resLastIM;
+        newTerrain.immatriculationTerrain =
+          resLastIM + "-" + newTerrain.immatriculationTerrain;
+          
+        Terrain.addTerrain(newTerrain, (erreur, resp) => {
+          if (erreur) {
+            res.send(erreur);
+          } else {
+            NumeroIM.addNumeroIM_X();
+            res.send(resp);
+          }
+        });
+      }
+    });
+  }
 };
 
 module.exports.getAllTerrains = (req, res) => {
@@ -54,7 +97,7 @@ module.exports.searchTerrain = (req, res) => {
   const valeur = req.body;
   Terrain.searchTerrain(valeur, (err, resp) => {
     if (!err) {
-        res.send(resp);
+      res.send(resp);
     } else {
       res.send(err);
     }
@@ -62,12 +105,7 @@ module.exports.searchTerrain = (req, res) => {
 };
 
 module.exports.updateTerrain = (req, res) => {
-  const {
-    imTerrain,
-    nomPropriete,
-    etatCiviqueTerrain,
-    cin,
-  } = req.body;
+  const { imTerrain, nomPropriete, etatCiviqueTerrain, cin } = req.body;
   const updateTerrain = {
     imTerrain,
     nomPropriete,

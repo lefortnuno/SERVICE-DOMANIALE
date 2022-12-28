@@ -4,18 +4,15 @@ let NumeroIM = function (numeroIM) {
   this.autoNumIM = numeroIM.autoNumIM;
 };
 
-NumeroIM.addNumeroIM = () => {
-  dbConn.query("INSERT INTO NUMERO_IM (`autoNumIM`) VALUES (NULL)");
+NumeroIM.addNumeroIM_V = () => {
+  dbConn.query("INSERT INTO NUMERO_IM_V (`autoNumber`) VALUES (NULL)");
 };
 
-NumeroIM.getLastIdNumeroIM = (result) => {
+NumeroIM.getLastNumeroIM_V = (result) => {
   dbConn.query(
-    "SELECT autoNumIM FROM NUMERO_IM ORDER BY autoNumIM DESC LIMIT 1",
+    "SELECT autoNumber FROM NUMERO_IM_V ORDER BY autoNumber DESC LIMIT 1",
     (err, resLastIM) => {
       if (!err) {
-        /*
-        RECUPERATION DE LA DERNIERE ID + INCREMENTATION ET ENREGISTREMENENT NEW AUTO_NUMERO_IM
-      */
         let id = 0;
         if (resLastIM.length === 0) {
           id = 1;
@@ -24,7 +21,53 @@ NumeroIM.getLastIdNumeroIM = (result) => {
           id = Object.values(tmpID[0]);
           id = id[0] + 1;
         }
-        NumeroIM.addNumeroIM()
+        return result(null, id);
+      }
+    }
+  );
+};
+
+NumeroIM.addNumeroIM_AX = () => {
+  dbConn.query("INSERT INTO NUMERO_IM_AX (`autoNumber`) VALUES (NULL)");
+};
+
+NumeroIM.getLastNumeroIM_AX = (result) => {
+  dbConn.query(
+    "SELECT autoNumber FROM NUMERO_IM_AX ORDER BY autoNumber DESC LIMIT 1",
+    (err, resLastIM) => {
+      if (!err) {
+        let id = 0;
+        if (resLastIM.length === 0) {
+          id = 1;
+          console.log(id);
+        } else {
+          const tmpID = Object.values(resLastIM);
+          id = Object.values(tmpID[0]);
+          id = id[0] + 1;
+        }
+        return result(null, id);
+      }
+    }
+  );
+};
+
+NumeroIM.addNumeroIM_X = () => {
+  dbConn.query("INSERT INTO NUMERO_IM_X (`autoNumber`) VALUES (NULL)");
+};
+
+NumeroIM.getLastNumeroIM_X = (result) => {
+  dbConn.query(
+    "SELECT autoNumber FROM NUMERO_IM_X ORDER BY autoNumber DESC LIMIT 1",
+    (err, resLastIM) => {
+      if (!err) {
+        let id = 0;
+        if (resLastIM.length === 0) {
+          id = 1;
+        } else {
+          const tmpID = Object.values(resLastIM);
+          id = Object.values(tmpID[0]);
+          id = id[0] + 1;
+        }
         return result(null, id);
       }
     }

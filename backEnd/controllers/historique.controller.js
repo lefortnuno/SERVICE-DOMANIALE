@@ -234,7 +234,7 @@ module.exports.updateHistorique = (req, res) => {
 };
 
 module.exports.nextProcedureHistorique = (req, res) => {
-  const { approbationUP, p_numeroProcedure, h_numeroAffaire } = req.body;
+  let { approbationUP, p_numeroProcedure, h_numeroAffaire } = req.body;
 
   const accomplissement = true;
   const approbation = approbationUP;
@@ -245,6 +245,54 @@ module.exports.nextProcedureHistorique = (req, res) => {
     approbation,
     dateFinMouvement,
   };
+
+  const updateDossier = {
+    p_numeroProcedure,
+  };
+
+  Dossier.updateDossierProcedureByNumAffaire(
+    updateDossier,
+    h_numeroAffaire,
+    (erreur, response) => {
+      if (erreur) {
+        res.send(erreur);
+      } else {
+        Historique.updateHistorique(
+          updateHistorique,
+          req.params.id,
+          (err, resp) => {
+            if (!err) {
+              res.send(resp);
+            } else {
+              res.send(err);
+            }
+          }
+        );
+      }
+    }
+  );
+};
+
+module.exports.retourProcedureHistorique = (req, res) => {
+  let { approbationUP, p_numeroProcedure, h_numeroAffaire } = req.body;
+
+  const accomplissement = true;
+  const approbation = approbationUP;
+  const dateFinMouvement = fomatDateAujourdHui;
+
+  const updateHistorique = {
+    accomplissement,
+    approbation,
+    dateFinMouvement,
+  };
+
+  if (
+    p_numeroProcedure === 5 ||
+    p_numeroProcedure === 7 ||
+    p_numeroProcedure === 10
+  ) {
+    p_numeroProcedure = p_numeroProcedure - 1;
+  }
 
   const updateDossier = {
     p_numeroProcedure,

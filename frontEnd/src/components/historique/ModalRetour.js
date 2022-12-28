@@ -15,21 +15,17 @@ const URL_BASE = `historique/`;
 const URL_Procedure = `procedure/`;
 const URL_DOSSIER = `dossier/`;
 const URL_SOUS_DOSSIER = `sousDossier/`;
-const URL_IM_TERRAIN = `terrain/`;
 
 let i = 0;
 let isValidate = false;
 
-export default function ModalAjout(props) {
+export default function ModalRetour(props) {
   //#region // MES VARIABLES
   const u_info = getDataUtilisateur();
   const [inputs, setInputs] = useState({
     h_numeroAffaire: "",
     approbation: false,
-    nomPropriete: "",
-  });
-  const [imInputs, setIMInputs] = useState({
-    t_cin: "",
+    numeroTelephone: "",
   });
   const [nextInputs, setNextInputs] = useState({
     numeroProcedure: "",
@@ -45,10 +41,7 @@ export default function ModalAjout(props) {
   const [erreurs, setErreurs] = useState([]);
   const [messages, setMessages] = useState({
     approbation: "",
-    immatriculationTerrain: "Sigle d'I.M obligatoire",
-    nomPropriete: "Nom Propriete obligatoire",
     observation: "Une observation du dossier est obligatoire",
-    dateRDV: "Une date de rendez-vous est obligatoire",
     observationSD: "Observation obligatoire",
     prixAttribue: "Proposer un prix à soumettre au autorité !",
     mesureAttribuable: "Mesure du terrain obligatoire",
@@ -73,7 +66,9 @@ export default function ModalAjout(props) {
     axios.get(URL_BASE + `${id}`, u_info.opts).then(function (response) {
       if (response.status === 200) {
         const u = response.data[0];
+        console.log(u);
         setInputs(u);
+        console.log("u.p_numeroProcedure : ", u.p_numeroProcedure);
 
         if (u.p_numeroProcedure < 11) {
           for (let e of phase) {
@@ -99,8 +94,8 @@ export default function ModalAjout(props) {
                 };
                 e = Object.assign(e, sousDosSept);
               }
+              console.log("e : ", e);
               setNextInputs(e);
-              setIMInputs({ t_cin: u.u_cin });
             }
           }
         }
@@ -132,7 +127,7 @@ export default function ModalAjout(props) {
     setNextInputs((values) => ({ ...values, [name]: value }));
     setErreurs((values) => ({ ...values, [name]: false }));
 
-    if (name === "observation" || name === "nomPropriete") {
+    if (name === "observation") {
       if (value.length === 0) {
         isValidate = false;
         setErreurs((values) => ({ ...values, [name]: true }));
@@ -165,19 +160,32 @@ export default function ModalAjout(props) {
 
   //#region // FUNCTION AJOUT NOUVEAU HISTO
   const onSubmit = () => {
+    let mouv_mov;
+    if (
+      nextInputs.numeroProcedure === 5 ||
+      nextInputs.numeroProcedure === 7 ||
+      nextInputs.numeroProcedure === 5
+    ) {
+      mouv_mov = "Arriver";
+    } else {
+      mouv_mov = nextInputs.movProcedure;
+    }
+
     let newData = {
-      mouvement: nextInputs.movProcedure,
+      mouvement: mouv_mov,
       observation: nextInputs.observation,
       p_numeroCompte: u_info.u_numeroCompte,
       h_numeroDossier: inputs.h_numeroDossier,
       h_numeroAffaire: inputs.h_numeroAffaire,
       h_numeroProcedure: nextInputs.numeroProcedure,
       dispoDossier: 1,
-      dateRDV: nextInputs.dateRDV,
     };
 
     if (nextInputs.movProcedure === `Depart`) {
       newData.dispoDossier = 0;
+    } else if (nextInputs.movProcedure === `Interne`) {
+      newData.dispoDossier = 1;
+    } else {
     }
 
     console.log(" ADD HISTO : ", newData);
@@ -197,6 +205,10 @@ export default function ModalAjout(props) {
           toast.error("Vous n'etes pas autoriser à valider un dossier!");
         }
       });
+    //   .finally(() => {
+    //     i = 0;
+    //     props.onHide();
+    //   });
   };
   //#endregion
 
@@ -210,7 +222,7 @@ export default function ModalAjout(props) {
 
     console.log(" UPDATE HISTO : ", upData);
     axios
-      .put(URL_BASE + `/next/` + `${id}`, upData, u_info.opts)
+      .put(URL_BASE + `/retour/` + `${id}`, upData, u_info.opts)
       .then(function (response) {
         if (response.status === 200 && response.data.success) {
           toast.success("Historique: Ajout Reussi.");
@@ -225,6 +237,10 @@ export default function ModalAjout(props) {
           toast.error("Vous n'etes pas autoriser !");
         }
       });
+    //   .finally(() => {
+    //     i = 0;
+    //     props.onHide();
+    //   });
   };
   //#endregion
 
@@ -232,7 +248,7 @@ export default function ModalAjout(props) {
   const ajoutSousDossier = () => {
     const newData = {
       numeroCompte: u_info.u_numeroCompte,
-      p_numeroDossier: inputs.h_numeroDossier,
+      p_numeroDossier:inputs.h_numeroDossier,
       p_numeroAffaire: inputs.h_numeroAffaire,
       observationSD: nextInputs.observation,
       mesureAttribuable: nextInputs.mesureAttribuable,
@@ -259,34 +275,10 @@ export default function ModalAjout(props) {
           toast.error("Vous n'etes pas autoriser !");
         }
       });
-  };
-  //#endregion
-
-  //#region // FUNCTION  AJOUT NOUVEAU IMMATRICULATION selon la phase
-  const ajoutNouveauTerrain = () => {
-    const newData = {
-      immatriculationTerrain: inputs.immatriculationTerrain,
-      nomPropriete: inputs.nomPropriete,
-      t_cin: imInputs.t_cin,
-    };
-
-    console.log(" ADD IM TERRAIN : ", newData);
-    axios
-      .post(URL_IM_TERRAIN, newData, u_info.opts)
-      .then(function (response) {
-        if (response.status === 200 && response.data.success) {
-          toast.success("Historique: Ajout Reussi.");
-          i = 0;
-          props.onHide();
-        } else {
-          toast.error(response.data.message);
-        }
-      })
-      .catch((e) => {
-        if (e.response.status === 403) {
-          toast.error("Vous n'etes pas autoriser !");
-        }
-      });
+    //   .finally(() => {
+    //     i = 0;
+    //     props.onHide();
+    //   });
   };
   //#endregion
 
@@ -295,13 +287,10 @@ export default function ModalAjout(props) {
     event.preventDefault();
 
     const inputsObligatoire = ["approbation"];
-    const nextInputsObligatoire = ["observation", "dateRDV"];
+    const nextInputsObligatoire = ["observation"];
 
-    if (nextInputs.numeroProcedure === 4) {
-      nextInputsObligatoire.push("prixAttribue");
-    } else if (nextInputs.numeroProcedure === 5) {
-      nextInputsObligatoire.pop();
-      nextInputsObligatoire.push("nomPropriete", "immatriculationTerrain");
+    if (nextInputs.numeroProcedure === 7) {
+      nextInputsObligatoire.push("mesureAttribuable");
     }
 
     inputsObligatoire.forEach((element) => {
@@ -331,14 +320,8 @@ export default function ModalAjout(props) {
     if (isValidate) {
       onSubmit();
       histoAccApp(id);
-      if (
-        nextInputs.numeroProcedure === 4 
-      ) {
+      if (nextInputs.numeroProcedure === 7) {
         ajoutSousDossier();
-      }
-
-      if (nextInputs.numeroProcedure === 5) {
-        ajoutNouveauTerrain();
       }
     }
   };
@@ -348,8 +331,6 @@ export default function ModalAjout(props) {
   function onClose() {
     props.onHide();
     i = 0;
-    inputs.nomPropriete = "";
-    inputs.immatriculationTerrain = "";
   }
   const rowStyle = {
     marginTop: "1rem",
@@ -376,14 +357,14 @@ export default function ModalAjout(props) {
         <Form>
           <Modal.Header>
             <Modal.Title className="text-primary h5">
-              :-- Validation --:
+              :-- Retour --:
             </Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
             <Container>
               <Row>
-                <Col>
+                <Col col="md-6" ml="auto">
                   <Form.Label>Numéro Affaire : </Form.Label>
                   <Form.Control
                     type="text"
@@ -392,9 +373,10 @@ export default function ModalAjout(props) {
                     onChange={handleChange}
                     disabled={true}
                     autoComplete="off"
+                    style={colorStyle}
                   />
                 </Col>
-                <Col>
+                <Col col="md-8" ml="auto">
                   <Form.Label> Prochaine Phase : </Form.Label>
                   <Form.Control
                     type="text"
@@ -404,114 +386,68 @@ export default function ModalAjout(props) {
                     autoComplete="off"
                     inline="true"
                     disabled={true}
+                    style={colorStyle}
                   />
                 </Col>
               </Row>
 
-              {nextInputs.numeroProcedure === 5 ? (
-                <>
-                  <Row style={rowStyle}>
-                    <Col>
-                      <div className="fields">
-                        <div className="input-field">
-                          <label>Sigle Numéro d'I.M :</label>
-                          <select
-                            name="immatriculationTerrain"
-                            onChange={handleChange}
-                            autoComplete="off"
-                          >
-                            <option value="">- SIGLE I.M</option>
-                            <option value="V">- V</option>
-                            <option value="AX">- AX</option>
-                            <option value="X">- X</option>
-                          </select>
-                        </div>
-                      </div>
-                      <small className="text-danger d-block">
-                        {erreurs.immatriculationTerrain
-                          ? messages.immatriculationTerrain
-                          : null}
-                      </small>
-                    </Col>
-                  </Row>
-                  <Row style={rowStyle}>
-                    <Col col="md-6" ml="auto">
-                      <Form.Label> Nom Propriete : </Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="nomPropriete"
-                        value={inputs.nomPropriete}
-                        onChange={handleChange}
-                        placeholder="Nom de la propriete"
-                        autoComplete="off"
-                      />
-                      <small className="text-danger d-block">
-                        {erreurs.nomPropriete ? messages.nomPropriete : null}
-                      </small>
-                    </Col>
-                    <Col col="md-6" ml="auto">
-                      <Form.Label> CIN du requerant : </Form.Label>
-                      <Form.Control
-                        type="text"
-                        min="0"
-                        name="t_cin"
-                        value={imInputs.t_cin}
-                        onChange={handleChange}
-                        disabled={true}
-                        placeholder="Numero CIN du Requerant"
-                        autoComplete="off"
-                        style={colorStyle}
-                      />
-                      <small className="text-danger d-block">
-                        {erreurs.t_cin ? messages.t_cin : null}
-                      </small>
-                    </Col>
-                  </Row>
-                </>
-              ) : null}
+              <Row style={rowStyle}>
+                <Col col="md-8" ml="auto">
+                  <Form.Label> Requerant : {inputs.nom}</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="nom"
+                    onChange={handleChange}
+                    value={inputs.prenom}
+                    autoComplete="off"
+                    inline="true"
+                    disabled={true}
+                    style={colorStyle}
+                  />
+                  <small className="text-danger d-block">
+                    {erreurs.nom ? messages.nom : null}
+                  </small>
+                </Col>
+                <Col col="md-8" ml="auto">
+                  <Form.Label> Numéro de téléphone : +261</Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="numeroTelephone"
+                    onChange={handleChange}
+                    value={inputs.numeroTelephone}
+                    autoComplete="off"
+                    inline="true"
+                    disabled={true}
+                    style={colorStyle}
+                  />
+                  <small className="text-danger d-block">
+                    {erreurs.numeroTelephone ? messages.numeroTelephone : null}
+                  </small>
+                </Col>
+              </Row>
 
               <Row style={rowStyle}>
-                {nextInputs.numeroProcedure === 4 ? (
+                {nextInputs.numeroProcedure === 7 ? (
                   <>
                     <Col col="md-6" ml="auto">
-                      <Form.Label> prix du m² : </Form.Label>
+                      <Form.Label> Mesure Attribuable : </Form.Label>
                       <Form.Control
                         type="number"
                         min="0"
-                        name="prixAttribue"
-                        value={nextInputs.prixAttribue}
+                        name="mesureAttribuable"
+                        value={nextInputs.mesureAttribuable}
                         onChange={handleChange}
                         disabled={false}
-                        placeholder="prix par mètre carré"
                         autoComplete="off"
                       />
                       <small className="text-danger d-block">
-                        {erreurs.prixAttribue ? messages.prixAttribue : null}
+                        {erreurs.mesureAttribuable
+                          ? messages.mesureAttribuable
+                          : null}
                       </small>
                     </Col>
                   </>
                 ) : null}
-              </Row>
-
-              <Row style={rowStyle}>
-                {nextInputs.numeroProcedure !== 5 ? (
-                  <Col>
-                    <Form.Label> Date de Rendez-vous : </Form.Label>
-                    <Form.Control
-                      type="date"
-                      name="dateRDV"
-                      onChange={handleChange}
-                      value={nextInputs.dateRDV}
-                      autoComplete="off"
-                      inline="true"
-                      disabled={false}
-                    />
-                    <small className="text-danger d-block">
-                      {erreurs.dateRDV ? messages.dateRDV : null}
-                    </small>
-                  </Col>
-                ) : null}
-
                 <Col>
                   <Form.Label> Observation : </Form.Label>
                   <Form.Control

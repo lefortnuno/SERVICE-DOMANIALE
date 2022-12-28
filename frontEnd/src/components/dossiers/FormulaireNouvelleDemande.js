@@ -302,7 +302,7 @@ export default function FormulaireNouvelleDemande() {
         if (response.data.success) {
           toast.success("Ajout Reussi.");
 
-          // onClose();
+          onClose();
         } else {
           toast.error("Echec de l'Ajout!");
         }

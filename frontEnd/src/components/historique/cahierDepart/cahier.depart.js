@@ -10,6 +10,7 @@ import HeaderContext from "../../../contexts/header/header.context";
 import SidebarContext from "../../../contexts/sidebar/sidebar.context";
 import FooterContext from "../../../contexts/footer/footer.context";
 import ModalAjout from "../ModalAjout";
+import ModalRetour from "../ModalRetour";
 
 import {
   AccessCahierArriver,
@@ -18,15 +19,7 @@ import {
   AccessCahierND,
 } from "../../access/accessCahier";
 
-import {
-  BsFillTrashFill,
-  BsPencilSquare,
-  BsEye,
-  BsFileEarmarkArrowUp,
-  BsLayerForward,
-  BsCapslock,
-  BsCapslockFill
-} from "react-icons/bs";
+import { BsArrowDownUp, BsCapslockFill } from "react-icons/bs";
 
 const base = `Cahier de Depart`;
 const URL_DE_BASE = `historique/C_D/`;
@@ -63,6 +56,19 @@ export default function CahierDepart() {
   const closeAddModal = () => {
     getUsers();
     setShow(false);
+  };
+  //#endregion
+
+  //#region //------------ MODAL RETOUR C_ ------------
+  const [numRetour, setNumRetour] = useState("");
+  const [showRetour, setShowRetour] = useState(false);
+  const showReturnModal = (num) => {
+    setNumRetour(num);
+    setShowRetour(true);
+  };
+  const closeReturnModal = () => {
+    getUsers();
+    setShowRetour(false);
   };
   //#endregion
 
@@ -161,6 +167,10 @@ export default function CahierDepart() {
           {numCompteAjout}
         </ModalAjout>
 
+        <ModalRetour show={showRetour} onHide={closeReturnModal}>
+          {numRetour}
+        </ModalRetour>
+
         <HeaderContext>
           <form className="navbar-left navbar-form nav-search mr-md-3">
             <div className="input-group">
@@ -230,7 +240,7 @@ export default function CahierDepart() {
                                   <td>{user.observationSD}</td>
                                   <td>{user.identification}</td>
                                   <td>
-                                    {user.accomplissement ? null : (
+                                    {/* {user.accomplissement ? null : (
                                       <p
                                         type="button"
                                         className="btn btn-outline-success btn-sm m-1 waves-effect"
@@ -242,10 +252,40 @@ export default function CahierDepart() {
                                       >
                                         <BsCapslockFill />
                                       </p>
-                                    )}
-                                  </td>
+                                    )} */}
 
-                                  
+                                    {!user.accomplissement &&
+                                    user.h_numeroProcedure === 3 ? (
+                                      <p
+                                        type="button"
+                                        className="btn btn-outline-success btn-sm m-1 waves-effect"
+                                        variant="default"
+                                        name="numCompteEdit"
+                                        onClick={() =>
+                                          showAddModal(user.numeroHisto)
+                                        }
+                                        style={{ transform: "rotate(180deg)" }}
+                                      >
+                                        <BsArrowDownUp />
+                                      </p>
+                                    ) : null}
+
+                                    {!user.accomplissement &&
+                                    (user.h_numeroProcedure === 4 || user.h_numeroProcedure === 6) ? (
+                                      <p
+                                        type="button"
+                                        className="btn btn-outline-success btn-sm m-1 waves-effect"
+                                        variant="default"
+                                        name="numCompteEdit"
+                                        onClick={() =>
+                                          showReturnModal(user.numeroHisto)
+                                        }
+                                        style={{ transform: "rotate(180deg)" }}
+                                      >
+                                        <BsCapslockFill />
+                                      </p>
+                                    ) : null}
+                                  </td>
                                 </tr>
                               ))
                             ) : (

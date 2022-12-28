@@ -49,6 +49,11 @@ router.put(
   agent.checkUtilisateur,
   HistoriqueController.nextProcedureHistorique
 );
+router.put(
+  "/retour/:id",
+  agent.checkUtilisateur,
+  HistoriqueController.retourProcedureHistorique
+);
 router.get(
   "/C_ND/recherche/:valeur",
   agent.checkUtilisateur,
