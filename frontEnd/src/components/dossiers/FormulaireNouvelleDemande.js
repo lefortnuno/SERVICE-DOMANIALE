@@ -41,7 +41,7 @@ export default function FormulaireNouvelleDemande() {
     numeroRequerant: "",
     etatMorale: "",
     complementInformation: "",
-    nom:"",
+    nom: "",
     prenom: "",
     p_cin: "",
   };
@@ -314,6 +314,11 @@ export default function FormulaireNouvelleDemande() {
   //#endregion
 
   //#region // QUAND JE FERMER MON MODAL, CETTE FONCTIO EST APPELLER
+  const resetDonnee = async () => {
+    donnee.splice(0, donnee.length);
+    contenuTab = false;
+  };
+
   function onClose() {
     const inputsArray = Object.keys(inputs);
 
@@ -322,6 +327,8 @@ export default function FormulaireNouvelleDemande() {
       isValidate = false;
       setErreurs((values) => ({ ...values, [element]: false }));
     });
+
+    resetDonnee();
 
     navigate("/dossier/");
   }
@@ -411,7 +418,6 @@ export default function FormulaireNouvelleDemande() {
                   <option value={true}>- Affecté</option>
                 </select>
               </div>
-              
 
               <div className="input-field">
                 <label className="form-check-label">

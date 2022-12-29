@@ -266,7 +266,7 @@ export default function CahierDepart() {
                                         }
                                         style={{ transform: "rotate(180deg)" }}
                                       >
-                                        <BsArrowDownUp />
+                                        <BsArrowDownUp /> 
                                       </p>
                                     ) : null}
 

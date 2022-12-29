@@ -21,7 +21,7 @@ const fomatDateAujourdHui = y + "-" + m + "-" + d;
 module.exports.addHistorique = (req, res) => {
   const accomplissement = false;
   const approbation = false;
-  const addRdvDays = 15;
+  const addRdvDays = 8;
 
   let {
     mouvement,
@@ -104,6 +104,52 @@ module.exports.addHistoNewDemande = (req, res) => {
 
         Historique.addHistoNewDemande(newHisto);
       }
+    }
+  });
+};
+
+module.exports.addAutoHistorique = (req, res) => {
+  const accomplissement = true;
+  const approbation = true;
+  const dispoDossier = true;
+  const mouvement = "Interne";
+
+  let {
+    observation,
+    h_numeroAffaire,
+    h_numeroDossier,
+    p_numeroCompte,
+    h_numeroProcedure,
+  } = req.body;
+
+  const dateDebutMouvement = fomatDateAujourdHui;
+  let dateFinMouvement;
+
+  let newHistorique = {
+    mouvement,
+    dateDebutMouvement,
+    dateFinMouvement,
+    observation,
+    h_numeroAffaire,
+    h_numeroDossier,
+    p_numeroCompte,
+    dispoDossier,
+    accomplissement,
+    h_numeroProcedure,
+    approbation,
+  };
+
+  if (h_numeroProcedure === 9) {
+    delete newHistorique.dateFinMouvement;
+  } else {
+    newHistorique.dateFinMouvement = fomatDateAujourdHui;
+  }
+
+  Historique.addHistorique(newHistorique, (erreur, resp) => {
+    if (erreur) {
+      res.send(erreur);
+    } else {
+      res.send(resp);
     }
   });
 };

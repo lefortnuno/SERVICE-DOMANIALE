@@ -8,6 +8,12 @@ router.post(
   agent.checkUtilisateur,
   HistoriqueController.addHistoNewDemande
 );
+router.post(
+  "/autoProcedure/",
+  agent.checkUtilisateur,
+  HistoriqueController.addAutoHistorique
+);
+
 router.get("/", agent.checkUtilisateur, HistoriqueController.getAllHistoriques);
 router.get(
   "/C_ND/",

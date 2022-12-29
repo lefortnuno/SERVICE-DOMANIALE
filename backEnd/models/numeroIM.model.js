@@ -1,7 +1,7 @@
 let dbConn = require("../config/db");
 
 let NumeroIM = function (numeroIM) {
-  this.autoNumIM = numeroIM.autoNumIM;
+  this.autoNumber = numeroIM.autoNumber;
 };
 
 NumeroIM.addNumeroIM_V = () => {

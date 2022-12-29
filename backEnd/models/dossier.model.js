@@ -20,7 +20,49 @@ let Dossier = function (dossier) {
   this.certificatSituationJuridique = dossier.certificatSituationJuridique;
 };
 
-const REQUETE_BASE = ` SELECT numeroDossier, numeroAffaire, dependance, empietement, natureAffectation, lettreDemande, planAnnexe, pvDelimitation, superficieTerrain, DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande, droitDemande, observationDossier, p_numeroProcedure, numeroSousDossier, observationSD, DATE_FORMAT(dateDepotSD, '%d-%m-%Y') as dateDepotSD, mesureAttribuable, prixAttribue, lettreDesistement, planMere, certificatSituationJuridique, p_numeroRequerant, etatMorale, complementInformation, cin, nom, prenom, numeroTelephone FROM DOSSIER, SOUS_DOSSIER, INDIVIDU, REQUERANT, PROCEDURES WHERE DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire AND INDIVIDU.cin = REQUERANT.p_cin AND REQUERANT.numeroRequerant = DOSSIER.p_numeroRequerant AND PROCEDURES.numeroProcedure = DOSSIER.p_numeroProcedure `;
+const REQUETE_BASE = ` 
+SELECT
+    max(numeroSousDossier) as numeroSousDossier,
+    numeroDossier,
+    numeroAffaire,
+    dependance,
+    empietement,
+    natureAffectation,
+    lettreDemande,
+    planAnnexe,
+    pvDelimitation,
+    superficieTerrain,
+    DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande,
+    droitDemande,
+    observationDossier,
+    p_numeroProcedure,
+    observationSD,
+    DATE_FORMAT(dateDepotSD, '%d-%m-%Y') as dateDepotSD,
+    mesureAttribuable,
+    prixAttribue,
+    lettreDesistement,
+    planMere,
+    certificatSituationJuridique,
+    p_numeroRequerant,
+    etatMorale,
+    complementInformation,
+    cin,
+    nom,
+    prenom,
+    numeroTelephone
+FROM
+    DOSSIER,
+    SOUS_DOSSIER,
+    INDIVIDU,
+    REQUERANT,
+    PROCEDURES
+WHERE
+    DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire
+    AND INDIVIDU.cin = REQUERANT.p_cin
+    AND REQUERANT.numeroRequerant = DOSSIER.p_numeroRequerant
+    AND PROCEDURES.numeroProcedure = DOSSIER.p_numeroProcedure
+GROUP BY
+    numeroAffaire `;
 
 const REQUETE_NOUVELLE_DEMANDE = REQUETE_BASE + ` AND p_numeroProcedure=1 `;
 
@@ -67,22 +109,25 @@ Dossier.getDerniereDossier = (result) => {
 };
 
 Dossier.getLastIdNumeroDossier = (result) => {
-  dbConn.query("SELECT numeroDossier FROM dossier ORDER BY numeroDossier DESC LIMIT 1", (err, resLastID) => {
-    if (!err) {
-      /*
+  dbConn.query(
+    "SELECT numeroDossier FROM dossier ORDER BY numeroDossier DESC LIMIT 1",
+    (err, resLastID) => {
+      if (!err) {
+        /*
       RECUPERATION DE LA DERNIERE ID + INCREMENTATION ET ENREGISTREMENENT NEW AUTO_NUMERO_IM
     */
-      let id = 0;
-      if (resLastID.length === 0) {
-        id = 1;
-      } else {
-        const tmpID = Object.values(resLastID);
-        id = Object.values(tmpID[0]);
-        id = id[0] + 1;
+        let id = 0;
+        if (resLastID.length === 0) {
+          id = 1;
+        } else {
+          const tmpID = Object.values(resLastID);
+          id = Object.values(tmpID[0]);
+          id = id[0] + 1;
+        }
+        return result(null, id);
       }
-      return result(null, id);
     }
-  });
+  );
 };
 
 Dossier.getIdDossier = (id, result) => {
@@ -192,6 +237,5 @@ Dossier.searchDossier = (valeur, result) => {
     }
   );
 };
-
 
 module.exports = Dossier;

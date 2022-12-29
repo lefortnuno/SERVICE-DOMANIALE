@@ -3,6 +3,7 @@ import getDataUtilisateur from "../../api/udata";
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useNavigate, Link } from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -12,6 +13,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 const URL_BASE = `historique/`;
+const URL_BASE_AUTO_ETAPE = URL_BASE + `autoProcedure/`;
 const URL_Procedure = `procedure/`;
 const URL_DOSSIER = `dossier/`;
 const URL_SOUS_DOSSIER = `sousDossier/`;
@@ -21,6 +23,7 @@ let isValidate = false;
 
 export default function ModalRetour(props) {
   //#region // MES VARIABLES
+  const navigate = useNavigate();
   const u_info = getDataUtilisateur();
   const [inputs, setInputs] = useState({
     h_numeroAffaire: "",
@@ -164,7 +167,7 @@ export default function ModalRetour(props) {
     if (
       nextInputs.numeroProcedure === 5 ||
       nextInputs.numeroProcedure === 7 ||
-      nextInputs.numeroProcedure === 5
+      nextInputs.numeroProcedure === 10
     ) {
       mouv_mov = "Arriver";
     } else {
@@ -237,10 +240,6 @@ export default function ModalRetour(props) {
           toast.error("Vous n'etes pas autoriser !");
         }
       });
-    //   .finally(() => {
-    //     i = 0;
-    //     props.onHide();
-    //   });
   };
   //#endregion
 
@@ -248,7 +247,7 @@ export default function ModalRetour(props) {
   const ajoutSousDossier = () => {
     const newData = {
       numeroCompte: u_info.u_numeroCompte,
-      p_numeroDossier:inputs.h_numeroDossier,
+      p_numeroDossier: inputs.h_numeroDossier,
       p_numeroAffaire: inputs.h_numeroAffaire,
       observationSD: nextInputs.observation,
       mesureAttribuable: nextInputs.mesureAttribuable,
@@ -266,6 +265,9 @@ export default function ModalRetour(props) {
           toast.success("Historique: Ajout Reussi.");
           i = 0;
           props.onHide();
+          autoProcedure(7, "Remise Valide.");
+          autoProcedure(8, "F.L.C Valide.");
+          autoProcedure(9, "Decompte Encours ....");
         } else {
           toast.error(response.data.message);
         }
@@ -275,10 +277,31 @@ export default function ModalRetour(props) {
           toast.error("Vous n'etes pas autoriser !");
         }
       });
-    //   .finally(() => {
-    //     i = 0;
-    //     props.onHide();
-    //   });
+  };
+  //#endregion
+
+  //#region // FUNCTION AJOUT NOUVEAU HISTO
+  const autoProcedure = (etape, obs) => {
+    let newData = {
+      h_numeroProcedure: etape,
+      observation: obs,
+      p_numeroCompte: u_info.u_numeroCompte,
+      h_numeroDossier: inputs.h_numeroDossier,
+      h_numeroAffaire: inputs.h_numeroAffaire,
+    };
+
+    console.log(" ADD HISTO AUTO ETAPE ", etape, " : ", newData);
+    axios
+      .post(URL_BASE_AUTO_ETAPE, newData, u_info.opts)
+      .then(function (response) {
+        if (response.status === 200) {
+          if (etape === 9) {
+            navigate(`/dossier/${inputs.h_numeroDossier}`);
+          }
+          i = 0;
+          props.onHide();
+        }
+      });
   };
   //#endregion
 

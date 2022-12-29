@@ -28,6 +28,7 @@ const fomatDateAujourdHui = y + "-" + m + "-" + d;
 
 const REQUETE_BASE = ` 
 SELECT
+    -- max(numeroSousDossier) as numeroSousDossier,
     numeroHisto,
     mouvement,
     DATE_FORMAT(dateDebutMouvement, '%d-%m-%Y') as dateDebutMouvement,
@@ -50,8 +51,7 @@ SELECT
     superficieTerrain,
     DATE_FORMAT(dateDemande, '%d-%m-%Y') as dateDemande,
     droitDemande,
-    observationDossier,
-    numeroSousDossier,
+    observationDossier, 
     observationSD,
     DATE_FORMAT(dateDepotSD, '%d-%m-%Y') as dateDepotSD,
     mesureAttribuable,
@@ -86,15 +86,16 @@ FROM
 WHERE
     HISTORIQUE.h_numeroAffaire = DOSSIER.numeroAffaire
     AND HISTORIQUE.h_numeroDossier = DOSSIER.numeroDossier
+    AND HISTORIQUE.h_numeroProcedure = PROCEDURES.numeroProcedure
     AND HISTORIQUE.p_numeroCompte = COMPTE.numeroCompte
     AND DOSSIER.p_numeroRequerant = REQUERANT.numeroRequerant
     AND DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire
-    AND DOSSIER.numeroDossier = SOUS_DOSSIER.p_numeroDossier
-    AND DOSSIER.p_numeroProcedure = PROCEDURES.numeroProcedure
+    AND DOSSIER.numeroDossier = SOUS_DOSSIER.p_numeroDossier 
     AND PROCEDURES.p_idBureau = BUREAU.idBureau
     AND INDIVIDU.cin = REQUERANT.p_cin `;
 
 const ORDER_BY = ` ORDER BY numeroHisto DESC `;
+const GROUP_BY_numHisto = ` GROUP BY numeroHisto`;
 
 const CONDITION_RDV = ` AND ( dateRDV > '${fomatDateAujourdHui}') AND dateFinMouvement IS NULL `;
 const GROUP_BY = ` GROUP BY h_numeroAffaire `;
@@ -128,6 +129,7 @@ Historique.getCahierInterne = (result) => {
   dbConn.query(
     REQUETE_BASE +
       `AND ( mouvement = 'Interne' AND dispoDossier = 1 ) ` +
+      GROUP_BY_numHisto +
       ORDER_BY,
     (err, res) => {
       if (err) {
@@ -143,6 +145,7 @@ Historique.getCahierArriver = (result) => {
   dbConn.query(
     REQUETE_BASE +
       `AND ( mouvement = 'Arriver' AND dispoDossier = 1 ) ` +
+      GROUP_BY_numHisto +
       ORDER_BY,
     (err, res) => {
       if (err) {
@@ -158,6 +161,7 @@ Historique.getCahierDepart = (result) => {
   dbConn.query(
     REQUETE_BASE +
       `AND ( mouvement = 'Depart' AND dispoDossier = 0 ) ` +
+      GROUP_BY_numHisto +
       ORDER_BY,
     (err, res) => {
       if (err) {
@@ -173,6 +177,7 @@ Historique.getCahierNouvelleDemande = (result) => {
   dbConn.query(
     REQUETE_BASE +
       `AND ( dispoDossier = 1 AND p_numeroProcedure = 1) ` +
+      GROUP_BY_numHisto +
       ORDER_BY,
     (err, res) => {
       if (err) {
@@ -224,19 +229,24 @@ Historique.searchHistoriqueRDV = (valeur, result) => {
 };
 
 Historique.getIdHistorique = (id, result) => {
-  dbConn.query(REQUETE_BASE + ` AND numeroHisto = ?`, id, (err, res) => {
-    if (err) {
-      result(err, null);
-    } else {
-      result(null, res);
+  dbConn.query(
+    REQUETE_BASE + ` AND numeroHisto = ?` + GROUP_BY_numHisto,
+    id,
+    (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
+      }
     }
-  });
+  );
 };
 
 Historique.searchHistorique = (valeur, result) => {
   dbConn.query(
     REQUETE_BASE +
       ` AND (h_numeroAffaire LIKE '%${valeur}%' OR u_cin LIKE '%${valeur}%'  OR nom LIKE '%${valeur}%'  OR prenom LIKE '%${valeur}%' )` +
+      GROUP_BY_numHisto +
       ORDER_BY,
     valeur,
     (err, res) => {

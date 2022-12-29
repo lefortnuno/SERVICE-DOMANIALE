@@ -2,20 +2,16 @@ let dbConn = require("../config/db");
 const Dossier = require("./dossier.model");
 
 let NumeroAffaire = function (numeroAffaire) {
-  this.autoNumAffaire = numeroAffaire.autoNumAffaire;
+  this.autoNumber = numeroAffaire.autoNumber;
 };
 
-NumeroAffaire.addNumeroAffaire = () => {
-  dbConn.query("INSERT INTO numero_affaire  (`autoNumAffaire`) VALUES (NULL)");
+NumeroAffaire.addNumeroAffaire_V = () => {
+  dbConn.query("INSERT INTO numero_affaire_V  (`autoNumber`) VALUES (NULL)");
 };
 
-
-NumeroAffaire.getLastIdNumeroAffaire = (result) => {
-  dbConn.query("SELECT autoNumAffaire FROM numero_affaire ORDER BY autoNumAffaire DESC LIMIT 1", (err, resLastNumAffaire) => {
+NumeroAffaire.getLastNumeroAffaire_V = (result) => {
+  dbConn.query("SELECT autoNumber FROM numero_affaire_V ORDER BY autoNumber DESC LIMIT 1", (err, resLastNumAffaire) => {
     if (!err) {
-      /*
-      RECUPERATION DE LA DERNIERE ID + INCREMENTATION ET ENREGISTREMENENT NEW AUTO_NUMERO_IM
-    */
       let id = 0;
       if (resLastNumAffaire.length === 0) {
         id = 1;
@@ -24,7 +20,49 @@ NumeroAffaire.getLastIdNumeroAffaire = (result) => {
         id = Object.values(tmpID[0]);
         id = id[0] + 1;
       }
-      NumeroAffaire.addNumeroAffaire()
+      NumeroAffaire.addNumeroAffaire_V()
+      return result(null, id);
+    }
+  });
+};
+
+NumeroAffaire.addNumeroAffaire_AX = () => {
+  dbConn.query("INSERT INTO numero_affaire_AX  (`autoNumber`) VALUES (NULL)");
+};
+
+NumeroAffaire.getLastNumeroAffaire_ = (result) => {
+  dbConn.query("SELECT autoNumber FROM numero_affaire_AX ORDER BY autoNumber DESC LIMIT 1", (err, resLastNumAffaire) => {
+    if (!err) {
+      let id = 0;
+      if (resLastNumAffaire.length === 0) {
+        id = 1;
+      } else {
+        const tmpID = Object.values(resLastNumAffaire);
+        id = Object.values(tmpID[0]);
+        id = id[0] + 1;
+      }
+      NumeroAffaire.addNumeroAffaire_AX()
+      return result(null, id);
+    }
+  });
+};
+
+NumeroAffaire.addNumeroAffaire_X = () => {
+  dbConn.query("INSERT INTO numero_affaire_X  (`autoNumber`) VALUES (NULL)");
+};
+
+NumeroAffaire.getLastNumeroAffaire_X = (result) => {
+  dbConn.query("SELECT autoNumber FROM numero_affaire_X ORDER BY autoNumber DESC LIMIT 1", (err, resLastNumAffaire) => {
+    if (!err) {
+      let id = 0;
+      if (resLastNumAffaire.length === 0) {
+        id = 1;
+      } else {
+        const tmpID = Object.values(resLastNumAffaire);
+        id = Object.values(tmpID[0]);
+        id = id[0] + 1;
+      }
+      NumeroAffaire.addNumeroAffaire_X()
       return result(null, id);
     }
   });

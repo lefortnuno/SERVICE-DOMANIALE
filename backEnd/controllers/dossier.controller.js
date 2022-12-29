@@ -2,13 +2,14 @@
 const Dossier = require("../models/dossier.model");
 const SousDossier = require("../models/sousDossier.model");
 const Histo = require("../models/historique.model");
+const NumeroAFF = require("../models/numeroAffaire.model");
 
 Date.prototype.addDays = function (days) {
   let date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
   return date;
 };
- 
+
 // Format date aujourdhui pour mysql
 let today = new Date();
 let dateAujourdHui = new Date();
@@ -77,8 +78,11 @@ module.exports.addDossier = (req, res) => {
     dateRDV = dateAujourdHui.addDays(addRdvDays);
   }
 
+  let numeroDossier;
+
   let newDossier = {
     numeroAffaire,
+    numeroDossier,
     dependance,
     natureAffectation,
     empietement,
@@ -135,32 +139,91 @@ module.exports.addDossier = (req, res) => {
   }
 
   //Ajout Numero Affaire depuis NUMERO_AFFAIRE_INCREMENT_AUTOMATIQUE
-  Dossier.getLastIdNumeroDossier((err, lastNumAffaire) => {
-    if (!err) {
-      numeroAffaire =
-        lastNumAffaire +
-        "-" +
-        numeroAffaire +
-        "/" +
-        dateAujourdHui.getFullYear();
-      newDossier.numeroAffaire = numeroAffaire;
+  if (numeroAffaire === "V") {
+    NumeroAFF.getLastNumeroAffaire_V((err, lastNumAffaire) => {
+      if (!err) {
+        numeroAffaire =
+          lastNumAffaire +
+          "-" +
+          numeroAffaire +
+          "/" +
+          dateAujourdHui.getFullYear();
+        newDossier.numeroAffaire = numeroAffaire;
+        newDossier.numeroDossier = lastNumAffaire;
 
-      Dossier.addDossier(newDossier, (err, resp) => {
-        if (err) {
-          res.send(err);
-        } else {
-          newSousDossier.p_numeroDossier = lastNumAffaire;
-          newSousDossier.p_numeroAffaire = numeroAffaire;
-          SousDossier.addSousDossierNewDemande(newSousDossier);
+        Dossier.addDossier(newDossier, (err, resp) => {
+          if (err) {
+            res.send(err);
+          } else {
+            newSousDossier.p_numeroDossier = lastNumAffaire;
+            newSousDossier.p_numeroAffaire = numeroAffaire;
+            SousDossier.addSousDossierNewDemande(newSousDossier);
 
-          newHisto.h_numeroAffaire = numeroAffaire;
-          newHisto.h_numeroDossier = lastNumAffaire;
-          Histo.addHistoNewDemande(newHisto);
-          res.send(resp);
-        }
-      });
-    }
-  });
+            newHisto.h_numeroAffaire = numeroAffaire;
+            newHisto.h_numeroDossier = lastNumAffaire;
+            Histo.addHistoNewDemande(newHisto);
+            res.send(resp);
+          }
+        });
+      }
+    });
+  } else if (numeroAffaire === "AX") {
+    NumeroAFF.getLastNumeroAffaire_AX((err, lastNumAffaire) => {
+      if (!err) {
+        numeroAffaire =
+          lastNumAffaire +
+          "-" +
+          numeroAffaire +
+          "/" +
+          dateAujourdHui.getFullYear();
+        newDossier.numeroAffaire = numeroAffaire;
+        newDossier.numeroDossier = lastNumAffaire;
+
+        Dossier.addDossier(newDossier, (err, resp) => {
+          if (err) {
+            res.send(err);
+          } else {
+            newSousDossier.p_numeroDossier = lastNumAffaire;
+            newSousDossier.p_numeroAffaire = numeroAffaire;
+            SousDossier.addSousDossierNewDemande(newSousDossier);
+
+            newHisto.h_numeroAffaire = numeroAffaire;
+            newHisto.h_numeroDossier = lastNumAffaire;
+            Histo.addHistoNewDemande(newHisto);
+            res.send(resp);
+          }
+        });
+      }
+    });
+  } else if (numeroAffaire === "X") {
+    NumeroAFF.getLastNumeroAffaire_X((err, lastNumAffaire) => {
+      if (!err) {
+        numeroAffaire =
+          lastNumAffaire +
+          "-" +
+          numeroAffaire +
+          "/" +
+          dateAujourdHui.getFullYear();
+        newDossier.numeroAffaire = numeroAffaire;
+        newDossier.numeroDossier = lastNumAffaire;
+
+        Dossier.addDossier(newDossier, (err, resp) => {
+          if (err) {
+            res.send(err);
+          } else {
+            newSousDossier.p_numeroDossier = lastNumAffaire;
+            newSousDossier.p_numeroAffaire = numeroAffaire;
+            SousDossier.addSousDossierNewDemande(newSousDossier);
+
+            newHisto.h_numeroAffaire = numeroAffaire;
+            newHisto.h_numeroDossier = lastNumAffaire;
+            Histo.addHistoNewDemande(newHisto);
+            res.send(resp);
+          }
+        });
+      }
+    });
+  }
 };
 
 module.exports.getAllDossiers = (req, res) => {
