@@ -8,6 +8,16 @@ router.get(
   SousDossierController.getAllSousDossiersOfDossier
 );
 router.get(
+  "/lastSousDossier/:id",
+  agent.checkUtilisateur,
+  SousDossierController.getLastSousDossierOfDossier
+);
+router.get(
+  "/decompte/:id",
+  agent.checkUtilisateur,
+  SousDossierController.getDecompte
+);
+router.get(
   "/:id",
   agent.checkUtilisateur,
   SousDossierController.getIdSousDossier

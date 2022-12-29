@@ -23,15 +23,23 @@ let isValidate = false;
 export default function ModalAjout(props) {
   //#region // MES VARIABLES
   const u_info = getDataUtilisateur();
-  const [inputs, setInputs] = useState({
+
+  const mesInputs = {
     h_numeroAffaire: "",
     approbation: false,
+    prixTerrain: false,
     nomPropriete: "",
-  });
-  const [imInputs, setIMInputs] = useState({
+  };
+  const mesInputsDecompte = {
+    prixTerrain: "",
+  };
+  const mesInputsTerrain = {
+    prixTerrain: "",
+  };
+  const mesIMInputs = {
     t_cin: "",
-  });
-  const [nextInputs, setNextInputs] = useState({
+  };
+  const mesNextInputs = {
     numeroProcedure: "",
     nomProcedure: "",
     observation: "",
@@ -41,7 +49,13 @@ export default function ModalAjout(props) {
     prixAttribue: "",
     movProcedure: "",
     numeroCompte: "",
-  });
+  };
+
+  const [inputs, setInputs] = useState(mesInputs);
+  const [inputsDecompte, setInputsDecompte] = useState(mesInputsDecompte);
+  const [inputsTerrain, setInputsTerrain] = useState(mesInputsTerrain);
+  const [imInputs, setIMInputs] = useState(mesIMInputs);
+  const [nextInputs, setNextInputs] = useState(mesNextInputs);
   const [erreurs, setErreurs] = useState([]);
   const [messages, setMessages] = useState({
     approbation: "",
@@ -66,6 +80,10 @@ export default function ModalAjout(props) {
     getOneUser(id);
     i = 1;
   }
+
+  useEffect(() => {
+    getPhase();
+  }, []);
   //#endregion
 
   //#region // RECUPERER UN HISTO DOSSIER
@@ -74,8 +92,9 @@ export default function ModalAjout(props) {
       if (response.status === 200) {
         const u = response.data[0];
         setInputs(u);
+        console.log(u);
 
-        if (u.p_numeroProcedure < 11) {
+        if (u.p_numeroProcedure <= 11) {
           for (let e of phase) {
             if (u.p_numeroProcedure + 1 === e.numeroProcedure) {
               const d = new Date();
@@ -101,6 +120,11 @@ export default function ModalAjout(props) {
               }
               setNextInputs(e);
               setIMInputs({ t_cin: u.u_cin });
+
+              if (u.p_numeroProcedure === 9) {
+                getDecompte(u.h_numeroDossier);
+                getTerrain(u.u_cin, u.numeroRequerant, u.h_numeroDossier);
+              }
             }
           }
         }
@@ -120,6 +144,37 @@ export default function ModalAjout(props) {
         toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
       }
     });
+  }
+  //#endregion
+
+  //#region // RECUPERER LA DERNIERE SOUS DOSSIER
+  function getDecompte(xxx) {
+    axios
+      .get(URL_SOUS_DOSSIER + `decompte/` + `${xxx}`, u_info.opts)
+      .then(function (response) {
+        if (response.status === 200) {
+          setInputsDecompte(response.data[0]);
+        }
+      });
+  }
+  //#endregion
+
+  //#region // RECUPERER LE TERRAIN EN QUESTION
+  function getTerrain(cin, numeroRequerant, numeroDossier) {
+    const valeur_de_recherche = {
+      cin,
+      numeroDossier,
+      numeroRequerant,
+    };
+
+    axios
+      .post(URL_IM_TERRAIN + `le_Terrain/`, valeur_de_recherche, u_info.opts)
+      .then(function (response) {
+        if (response.status === 200) {
+          console.log(" ATO VE ? ", response.data[0]);
+          setInputsTerrain(response.data[0]);
+        }
+      });
   }
   //#endregion
 
@@ -180,7 +235,6 @@ export default function ModalAjout(props) {
       newData.dispoDossier = 0;
     }
 
-    console.log(" ADD HISTO : ", newData);
     axios
       .post(URL_BASE, newData, u_info.opts)
       .then(function (response) {
@@ -208,9 +262,8 @@ export default function ModalAjout(props) {
       approbationUP: inputs.approbation,
     };
 
-    console.log(" UPDATE HISTO : ", upData);
     axios
-      .put(URL_BASE + `/next/` + `${id}`, upData, u_info.opts)
+      .put(URL_BASE + `next/` + `${id}`, upData, u_info.opts)
       .then(function (response) {
         if (response.status === 200 && response.data.success) {
           toast.success("Historique: Ajout Reussi.");
@@ -223,6 +276,23 @@ export default function ModalAjout(props) {
       .catch((e) => {
         if (e.response.status === 403) {
           toast.error("Vous n'etes pas autoriser !");
+        }
+      });
+  };
+  //#endregion
+
+  //#region // FUNCTION AJOUT PRIX DU TERRAIN A LA TABLE TERRAIN
+  const prixDuTerrain = (id) => {
+    const upData = {
+      prixTerrain: inputsDecompte.prixTerrain,
+    };
+
+    axios
+      .put(URL_IM_TERRAIN + `prixTerrain/` + `${id}`, upData, u_info.opts)
+      .then(function (response) {
+        if (response.status === 200) {
+          i = 0;
+          props.onHide();
         }
       });
   };
@@ -242,7 +312,6 @@ export default function ModalAjout(props) {
       certificatSituationJuridique: inputs.certificatSituationJuridique,
     };
 
-    console.log(" ADD SOUS DOSSIER : ", newData);
     axios
       .post(URL_SOUS_DOSSIER, newData, u_info.opts)
       .then(function (response) {
@@ -270,7 +339,6 @@ export default function ModalAjout(props) {
       t_cin: imInputs.t_cin,
     };
 
-    console.log(" ADD IM TERRAIN : ", newData);
     axios
       .post(URL_IM_TERRAIN, newData, u_info.opts)
       .then(function (response) {
@@ -302,6 +370,8 @@ export default function ModalAjout(props) {
     } else if (nextInputs.numeroProcedure === 5) {
       nextInputsObligatoire.pop();
       nextInputsObligatoire.push("nomPropriete", "immatriculationTerrain");
+    } else if (nextInputs.numeroProcedure === 10) {
+      nextInputsObligatoire.push("prixTerrain");
     }
 
     inputsObligatoire.forEach((element) => {
@@ -331,26 +401,57 @@ export default function ModalAjout(props) {
     if (isValidate) {
       onSubmit();
       histoAccApp(id);
-      if (
-        nextInputs.numeroProcedure === 4 
-      ) {
+      if (nextInputs.numeroProcedure === 4) {
         ajoutSousDossier();
       }
 
       if (nextInputs.numeroProcedure === 5) {
         ajoutNouveauTerrain();
       }
+      if (nextInputs.numeroProcedure === 10) {
+        prixDuTerrain(inputsTerrain.numeroTitre);
+      }
     }
   };
   //#endregion
 
   //#region // CLOSE MODAL
+  const resetDonnee = async () => {
+    // inputsDecompte.splice(0, inputsDecompte.length);
+    // inputsTerrain.splice(0, inputsTerrain.length);
+    // imInputs.splice(0, imInputs.length);
+    // nextInputs.splice(0, nextInputs.length);
+    setInputs(mesInputs);
+    setInputsDecompte(mesInputsDecompte);
+    setInputsTerrain(mesInputsTerrain);
+    setIMInputs(mesIMInputs);
+    setNextInputs(mesNextInputs);
+
+    const inputsArray = [];
+    inputsArray.push(
+      mesInputs,
+      mesInputsDecompte,
+      mesInputsTerrain,
+      mesIMInputs,
+      mesNextInputs
+    );
+
+    
+    isValidate = false;
+    setErreurs((values) => ({ ...values, observation: false }));
+    setErreurs((values) => ({ ...values, dateRDV: false }));
+    setErreurs((values) => ({ ...values, approbation: false }));
+    setErreurs((values) => ({ ...values, prixTerrain: false }));
+  };
+
   function onClose() {
     props.onHide();
     i = 0;
-    inputs.nomPropriete = "";
-    inputs.immatriculationTerrain = "";
+
+    resetDonnee();
   }
+  //#endregion
+
   const rowStyle = {
     marginTop: "1rem",
   };
@@ -358,12 +459,6 @@ export default function ModalAjout(props) {
     color: "#000",
   };
 
-  useEffect(() => {
-    getPhase();
-  }, []);
-  //#endregion
-
-  //#region // RENU HTML
   return (
     <>
       <Modal
@@ -548,6 +643,28 @@ export default function ModalAjout(props) {
                     {erreurs.approbation ? messages.approbation : null}
                   </small>
                 </Col>
+
+                {inputs.p_numeroProcedure === 9 ? (
+                  <Col>
+                    <label className="form-check-label">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="prixTerrain"
+                        checked={inputs.prixTerrain}
+                        onChange={handleChange}
+                        autoComplete="off"
+                      />
+                      <span className="form-check-sign">
+                        Payement de Ar {inputsDecompte.prixTerrain},00 fait ?
+                      </span>
+                    </label>
+
+                    <small className="text-danger d-block">
+                      {erreurs.prixTerrain ? messages.prixTerrain : null}
+                    </small>
+                  </Col>
+                ) : null}
               </Row>
             </Container>
           </Modal.Body>
@@ -564,5 +681,4 @@ export default function ModalAjout(props) {
       </Modal>
     </>
   );
-  //#endregion
 }

@@ -70,6 +70,27 @@ module.exports.getIdSousDossier = (req, res) => {
   });
 };
 
+module.exports.getLastSousDossierOfDossier = (req, res) => {
+  SousDossier.getLastSousDossierOfDossier(req.params.id, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
+
+module.exports.getDecompte = (req, res) => {
+  SousDossier.getDecompte(req.params.id, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
 module.exports.updateSousDossier = (req, res) => {
   let {
     observationSD,

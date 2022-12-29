@@ -7,13 +7,18 @@ router.get("/", agent.checkUtilisateur, DossierController.getAllDossiers);
 router.get("/nouvelledemande/", agent.checkUtilisateur, DossierController.getDossiersNouvelleDemande);
 router.get("/historique/:id", agent.checkUtilisateur, DossierController.getHistoDossier);
 router.get("/:id", agent.checkUtilisateur, DossierController.getIdDossier);
+
 router.post("/", chefAdjoint.checkUtilisateur, DossierController.addDossier);
-router.put("/:id", agent.checkUtilisateur, DossierController.updateDossier);
+
 router.put(
   "/avc/:id",
   chefAdjoint.checkUtilisateur,
   DossierController.avortementDossier
 );
+router.put("/autoUpD/", agent.checkUtilisateur, DossierController.updateAutoDossier);
+
+router.put("/:id", agent.checkUtilisateur, DossierController.updateDossier);
+
 router.get(
   "/recherche/:valeur",
   agent.checkUtilisateur,

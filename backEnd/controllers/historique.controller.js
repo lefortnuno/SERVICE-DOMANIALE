@@ -109,10 +109,10 @@ module.exports.addHistoNewDemande = (req, res) => {
 };
 
 module.exports.addAutoHistorique = (req, res) => {
-  const accomplissement = true;
-  const approbation = true;
+  let accomplissement = true;
+  let approbation = true;
   const dispoDossier = true;
-  const mouvement = "Interne";
+  let mouvement = "Interne";
 
   let {
     observation,
@@ -121,6 +121,14 @@ module.exports.addAutoHistorique = (req, res) => {
     p_numeroCompte,
     h_numeroProcedure,
   } = req.body;
+
+  if (h_numeroProcedure === 7) {
+    mouvement = "Arriver";
+  }
+  if (h_numeroProcedure === 9) {
+    accomplissement = false;
+    approbation = false;
+  }
 
   const dateDebutMouvement = fomatDateAujourdHui;
   let dateFinMouvement;

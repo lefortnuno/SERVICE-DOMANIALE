@@ -3,11 +3,7 @@ const Terrain = require("../models/terrain.model");
 const NumeroIM = require("../models/numeroIM.model");
 
 module.exports.addTerrain = (req, res) => {
-  let {
-    immatriculationTerrain,
-    nomPropriete,
-    t_cin,
-  } = req.body;
+  let { immatriculationTerrain, nomPropriete, t_cin } = req.body;
 
   let numeroTitre;
   let newTerrain = {
@@ -25,7 +21,7 @@ module.exports.addTerrain = (req, res) => {
         newTerrain.numeroTitre = resLastIM;
         newTerrain.immatriculationTerrain =
           resLastIM + "-" + newTerrain.immatriculationTerrain;
-          
+
         Terrain.addTerrain(newTerrain, (erreur, resp) => {
           if (erreur) {
             res.send(erreur);
@@ -59,7 +55,7 @@ module.exports.addTerrain = (req, res) => {
         newTerrain.numeroTitre = resLastIM;
         newTerrain.immatriculationTerrain =
           resLastIM + "-" + newTerrain.immatriculationTerrain;
-          
+
         Terrain.addTerrain(newTerrain, (erreur, resp) => {
           if (erreur) {
             res.send(erreur);
@@ -71,6 +67,19 @@ module.exports.addTerrain = (req, res) => {
       }
     });
   }
+};
+
+module.exports.le_Terrain = (req, res) => {
+  let { numeroRequerant, numeroDossier, cin } = req.body;
+  const valeur = { numeroRequerant, numeroDossier, cin };
+
+  Terrain.rechercher_le_Terrain(valeur, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
 };
 
 module.exports.getAllTerrains = (req, res) => {
@@ -105,12 +114,36 @@ module.exports.searchTerrain = (req, res) => {
 };
 
 module.exports.updateTerrain = (req, res) => {
-  const { imTerrain, nomPropriete, etatCiviqueTerrain, cin } = req.body;
-  const updateTerrain = {
-    imTerrain,
-    nomPropriete,
+  const {
     etatCiviqueTerrain,
-    cin,
+    immatriculationTerrain,
+    nomPropriete,
+    t_cin,
+    prixTerrain,
+  } = req.body;
+
+  const updateTerrain = {
+    etatCiviqueTerrain,
+    immatriculationTerrain,
+    nomPropriete,
+    t_cin,
+    prixTerrain,
+  };
+
+  Terrain.updateTerrain(updateTerrain, req.params.id, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
+module.exports.ajoutPrixDuTerrain = (req, res) => {
+  const { prixTerrain } = req.body;
+
+  const updateTerrain = {
+    prixTerrain,
   };
 
   Terrain.updateTerrain(updateTerrain, req.params.id, (err, resp) => {

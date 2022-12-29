@@ -271,7 +271,7 @@ export default function CahierDepart() {
                                     ) : null}
 
                                     {!user.accomplissement &&
-                                    (user.h_numeroProcedure === 4 || user.h_numeroProcedure === 6) ? (
+                                    (user.h_numeroProcedure === 4 || user.h_numeroProcedure === 6 || user.h_numeroProcedure === 10) ? (
                                       <p
                                         type="button"
                                         className="btn btn-outline-success btn-sm m-1 waves-effect"

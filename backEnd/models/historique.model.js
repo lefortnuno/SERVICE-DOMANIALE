@@ -95,7 +95,7 @@ WHERE
     AND INDIVIDU.cin = REQUERANT.p_cin `;
 
 const ORDER_BY = ` ORDER BY numeroHisto DESC `;
-const GROUP_BY_numHisto = ` GROUP BY numeroHisto`;
+const GROUP_BY_numHisto = ` GROUP BY numeroHisto `;
 
 const CONDITION_RDV = ` AND ( dateRDV > '${fomatDateAujourdHui}') AND dateFinMouvement IS NULL `;
 const GROUP_BY = ` GROUP BY h_numeroAffaire `;
@@ -116,7 +116,7 @@ Historique.addHistoNewDemande = (newHistorique) => {
 };
 
 Historique.getAllHistoriques = (result) => {
-  dbConn.query(REQUETE_BASE + ORDER_BY, (err, res) => {
+  dbConn.query(REQUETE_BASE + GROUP_BY_numHisto + ORDER_BY, (err, res) => {
     if (err) {
       result(err, null);
     } else {
