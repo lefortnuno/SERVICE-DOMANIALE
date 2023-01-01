@@ -19,12 +19,16 @@ const base = `dossier`;
 const URL_DE_BASE = base + `/`;
 const URL_HISTO = `historique/`;
 const URL_SOUS_DOSSIER = `sousDossier/`;
+const URL_IM_TERRAIN = `terrain/`;
 
 export default function DetailsDossier() {
   const navigate = useNavigate();
   const { numeroDossier } = useParams();
   const u_info = getDataUtilisateur();
   const mesInputsDecompte = {
+    prixTerrain: "",
+  };
+  const mesInputsTerrain = {
     prixTerrain: "",
   };
 
@@ -43,6 +47,7 @@ export default function DetailsDossier() {
   const [users, setUsers] = useState([]);
   const [histo, setHisto] = useState([]);
   const [inputsDecompte, setInputsDecompte] = useState(mesInputsDecompte);
+  const [inputsTerrain, setInputsTerrain] = useState(mesInputsTerrain);
 
   useEffect(() => {
     getOneUser();
@@ -54,10 +59,15 @@ export default function DetailsDossier() {
       .get(URL_DE_BASE + `${numeroDossier}`, u_info.opts)
       .then(function (response) {
         if (response.status === 200) {
-          setUsers(response.data[0]);
+          const u = response.data[0];
+          setUsers(u);
+          console.log(u);
 
-          if (response.data[0].p_numeroProcedure >= 9) {
-            getDecompte(numeroDossier);
+          if (u.p_numeroProcedure >= 9) {
+            getDecompte(u.numeroDossier);
+          }
+          if (u.p_numeroProcedure >= 9) {
+            getTerrain(u.cin, u.p_numeroRequerant, u.numeroDossier);
           }
         } else {
           toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
@@ -78,14 +88,51 @@ export default function DetailsDossier() {
   }
   //#endregion
 
+  //#region // RECUPERER LE TERRAIN EN QUESTION
+  function getTerrain(cin, numeroRequerant, numeroDossier) {
+    const valeur_de_recherche = {
+      cin,
+      numeroDossier,
+      numeroRequerant,
+    };
+    console.log(valeur_de_recherche);
+    axios
+      .post(URL_IM_TERRAIN + `le_Terrain/`, valeur_de_recherche, u_info.opts)
+      .then(function (response) {
+        if (response.status === 200) {
+          console.log(" REPONSE RECHERCHE TERRAIN CORRSPD", response.data[0]);
+          setInputsTerrain(response.data[0]);
+        }
+      });
+  }
+  //#endregion
+
   //#region // RECUPERER LA DERNIERE SOUS DOSSIER
   function getDecompte(xxx) {
     axios
       .get(URL_SOUS_DOSSIER + `decompte/` + `${xxx}`, u_info.opts)
       .then(function (response) {
         if (response.status === 200) {
-          console.log(response.data[0]);
-          setInputsDecompte(response.data[0]);
+          const dataDecompte = response.data[0];
+          let arrPrixT = dataDecompte.prixTerrain;
+
+          // Arrondir la somme a payer de 02 dezaine d'unite
+          let arr = arrPrixT.split(".");
+          let str = "";
+
+          arr.forEach((e) => {
+            str = str + e;
+          });
+          str = str / 100;
+          str = Math.round(str);
+          str = str * 100;
+          str = new Intl.NumberFormat("de-DE").format(str);
+
+          const inputsDecompteComplet = Object.assign(dataDecompte, {
+            prixTerrainAroundi: str,
+          });
+
+          setInputsDecompte(inputsDecompteComplet);
         }
       });
   }
@@ -100,6 +147,7 @@ export default function DetailsDossier() {
   };
   const closeAddModal = () => {
     getOneUser();
+    getHistoDossier();
     setShow(false);
   };
   //#endregion
@@ -409,7 +457,8 @@ export default function DetailsDossier() {
                     <div className="card">
                       <div className="card-header ">
                         <h4 className="card-title">
-                          DECOMPTE PRIX <BsPrinterFill
+                          DECOMPTE PRIX{" "}
+                          <BsPrinterFill
                             style={{ cursor: "pointer" }}
                             onClick={handlePrint}
                             className="text-success"
@@ -417,8 +466,18 @@ export default function DetailsDossier() {
                         </h4>
                       </div>
                       <div className="card-body" ref={compRef}>
-                        <div class="form-row">
-                          <label> I - PRIX de TERRAIN </label>
+                        <div className="form-row">
+                          <div className="form-group">
+                            <label> " {inputsTerrain.nomPropriete} " : </label>
+                            <span>
+                              {" "}
+                              TN ° {inputsTerrain.immatriculationTerrain}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="form-row">
+                          <label> I - PROVISION DOMANIALE </label>
                           <div className="form-group">
                             <label>
                               {" "}
@@ -434,7 +493,7 @@ export default function DetailsDossier() {
                           </div>
 
                           <div className="form-group">
-                            <label> PT + FCD = </label>
+                            <label> === </label>
                             <span> {inputsDecompte.PT_TTL} </span>
                           </div>
                         </div>
@@ -462,7 +521,7 @@ export default function DetailsDossier() {
                           </div>
 
                           <div className="form-group">
-                            <label> FCD = </label>
+                            <label> === </label>
                             <span> 75.000 </span>
                           </div>
                         </div>
@@ -470,8 +529,12 @@ export default function DetailsDossier() {
                         <div class="form-row">
                           <label> III - TOTAL A PAYER </label>
                           <div className="form-group">
-                            <label> somme à payer : Ar</label>
+                            <label> TOTAL = </label>
                             <span> {inputsDecompte.prixTerrain} </span>
+                          </div>
+                          <div className="form-group">
+                            <label> somme à payer : Ar </label>
+                            <span> {inputsDecompte.prixTerrainAroundi},00</span>
                           </div>
                         </div>
                       </div>

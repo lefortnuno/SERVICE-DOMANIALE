@@ -111,15 +111,19 @@ Terrain.searchTerrain = (valeur, result) => {
 };
 
 Terrain.rechercher_le_Terrain = (valeur, result) => {
-  const TRIPLE_CONDITION = ` AND cin = ${valeur.cin} AND numeroRequerant = ${valeur.numeroRequerant} AND numeroDossier LIKE ${valeur.numeroDossier} `;
+  console.log(valeur);
+  const TRIPLE_CONDITION = ` AND cin = ${valeur.cin} AND numeroRequerant = ${valeur.numeroRequerant} AND numeroDossier = ${valeur.numeroDossier} `;
 
-  dbConn.query(REQUETE_EXTRA + TRIPLE_CONDITION, (err, res) => {
-    if (err) { 
-      result(err, null);
-    } else {
-      result(null, res);
+  dbConn.query(
+    REQUETE_EXTRA + TRIPLE_CONDITION + ` GROUP BY numeroDossier `,
+    (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
+      }
     }
-  });
+  );
 };
 
 Terrain.updateTerrain = (updateTerrain, numeroTitre, result) => {

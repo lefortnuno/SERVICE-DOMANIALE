@@ -91,8 +91,7 @@ export default function ModalAjout(props) {
     axios.get(URL_BASE + `${id}`, u_info.opts).then(function (response) {
       if (response.status === 200) {
         const u = response.data[0];
-        setInputs(u);
-        console.log(u);
+        setInputs(u); 
 
         if (u.p_numeroProcedure <= 11) {
           for (let e of phase) {
@@ -119,11 +118,11 @@ export default function ModalAjout(props) {
                 e = Object.assign(e, sousDosSept);
               }
               setNextInputs(e);
-              setIMInputs({ t_cin: u.u_cin });
+              setIMInputs({ t_cin: u.p_cin });
 
               if (u.p_numeroProcedure === 9) {
                 getDecompte(u.h_numeroDossier);
-                getTerrain(u.u_cin, u.numeroRequerant, u.h_numeroDossier);
+                getTerrain(u.p_cin, u.numeroRequerant, u.h_numeroDossier);
               }
             }
           }

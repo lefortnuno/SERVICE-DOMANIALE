@@ -26,9 +26,9 @@ export default function verifDiffDate(date1, date2){
     return diff;
   }
   
-//   date1 = new Date('2021-04-3');
-//   date2 = new Date('2022-12-20');
-//   diff = dateDiff(date1, date2);
-//   console.log(diff)
+  // date1 = new Date('2021-04-3');
+  // date2 = new Date('2022-12-20');
+  // diff = dateDiff(date1, date2);
+  // console.log(diff)
   
   

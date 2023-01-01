@@ -61,6 +61,7 @@ SELECT
     certificatSituationJuridique,
     identification,
     u_cin,
+    p_cin,
     numeroRequerant,
     etatMorale,
     numeroTelephone,
