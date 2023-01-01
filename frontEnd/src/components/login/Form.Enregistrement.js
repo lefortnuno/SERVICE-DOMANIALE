@@ -23,7 +23,7 @@ export default function FormulaireEnregistrement() {
   const [latNumeroCompte, setLatNumeroCompte] = useState({
     numeroCompte: "",
   });
-  
+
   const [inputs, setInputs] = useState({
     identification: "",
     photoPDP: "",
@@ -219,6 +219,7 @@ export default function FormulaireEnregistrement() {
         if (response.data.success) {
           toast.success("Ajout Reussi.");
 
+          console.log(picPhotoPDP.file.length);
           if (picPhotoPDP.file.length !== 0) {
             ajoutPhotoPDP();
           }

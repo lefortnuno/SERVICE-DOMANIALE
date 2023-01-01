@@ -41,28 +41,34 @@ router.get(
   HistoriqueController.getCahierArriver
 );
 router.get(
+  "/histoDossier/:id",
+  agent.checkUtilisateur,
+  HistoriqueController.getHistoriqueDossier
+);
+
+router.get(
   "/:id",
   agent.checkUtilisateur,
   HistoriqueController.getIdHistorique
 );
-
 
 router.put(
   "/:id",
   agent.checkUtilisateur,
   HistoriqueController.updateHistorique
 );
+
 router.put(
   "/next/:id",
   agent.checkUtilisateur,
   HistoriqueController.nextProcedureHistorique
 );
+
 router.put(
   "/retour/:id",
   agent.checkUtilisateur,
   HistoriqueController.retourProcedureHistorique
 );
-
 
 router.get(
   "/C_ND/recherche/:valeur",

@@ -58,10 +58,15 @@ module.exports.searchRequerant = (req, res) => {
 };
 
 module.exports.updateRequerant = (req, res) => {
-  const { p_cin, etatMorale, complementInformation, numeroTelephone } =
-    req.body;
+  let { etatMorale, complementInformation, numeroTelephone } = req.body;
+
+  if (etatMorale === "false") {
+    etatMorale = false;
+  } else if (etatMorale === "true") {
+    etatMorale = true;
+  }
+
   const updateRequerant = {
-    p_cin,
     etatMorale,
     complementInformation,
     numeroTelephone,
@@ -78,6 +83,17 @@ module.exports.updateRequerant = (req, res) => {
 
 module.exports.apercuRequerant = (req, res) => {
   Requerant.apercuRequerant(req.params.valeur, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
+
+module.exports.deleteRequerant = (req, res) => {
+  Requerant.deleteRequerant(req.params.id, (err, resp) => {
     if (!err) {
       res.send(resp);
     } else {

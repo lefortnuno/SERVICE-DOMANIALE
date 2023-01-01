@@ -36,6 +36,7 @@ SELECT
     droitDemande,
     observationDossier,
     p_numeroProcedure,
+    nomProcedure,
     observationSD,
     DATE_FORMAT(dateDepotSD, '%d-%m-%Y') as dateDepotSD,
     mesureAttribuable,
@@ -60,12 +61,10 @@ WHERE
     DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire
     AND INDIVIDU.cin = REQUERANT.p_cin
     AND REQUERANT.numeroRequerant = DOSSIER.p_numeroRequerant
-    AND PROCEDURES.numeroProcedure = DOSSIER.p_numeroProcedure
-GROUP BY
-    numeroAffaire `;
+    AND PROCEDURES.numeroProcedure = DOSSIER.p_numeroProcedure `;
 
 const REQUETE_NOUVELLE_DEMANDE = REQUETE_BASE + ` AND p_numeroProcedure=1 `;
-
+const GROUP_BY = ` GROUP BY numeroAffaire `
 const ORDER_BY = ` ORDER BY numeroDossier DESC `;
 
 Dossier.addDossier = (newDossier, result) => {
@@ -79,7 +78,7 @@ Dossier.addDossier = (newDossier, result) => {
 };
 
 Dossier.getAllDossiers = (result) => {
-  dbConn.query(REQUETE_BASE + ORDER_BY, (err, res) => {
+  dbConn.query(REQUETE_BASE +GROUP_BY + ORDER_BY, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -89,7 +88,7 @@ Dossier.getAllDossiers = (result) => {
 };
 
 Dossier.getDossiersNouvelleDemande = (result) => {
-  dbConn.query(REQUETE_NOUVELLE_DEMANDE + ORDER_BY, (err, res) => {
+  dbConn.query(REQUETE_NOUVELLE_DEMANDE+GROUP_BY + ORDER_BY, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -145,7 +144,7 @@ Dossier.getIdDossier = (id, result) => {
 };
 
 Dossier.getHistoDossier = (id, result) => {
-  dbConn.query(REQUETE_BASE + " AND numeroDossier = ?", id, (err, res) => {
+  dbConn.query(REQUETE_BASE + " AND numeroDossier = ?"+GROUP_BY, id, (err, res) => {
     if (err) {
       result(err, null);
     } else {

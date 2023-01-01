@@ -211,7 +211,7 @@ export default function Dossier() {
                                   <Link to={`/viewDossier/${dossier.numeroDossier}`}>
                                     <div className="card-body ">
                                       <div className="row">
-                                        <div className="col-5">
+                                        <div className="col-3">
                                           <div className="icon-big text-center">
                                             <i
                                               className={

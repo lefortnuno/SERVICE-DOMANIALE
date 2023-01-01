@@ -93,12 +93,13 @@ WHERE
     AND DOSSIER.numeroDossier = SOUS_DOSSIER.p_numeroDossier 
     AND PROCEDURES.p_idBureau = BUREAU.idBureau
     AND INDIVIDU.cin = REQUERANT.p_cin `;
+    
 
+const GROUP_BY = ` GROUP BY h_numeroAffaire `;
 const ORDER_BY = ` ORDER BY numeroHisto DESC `;
 const GROUP_BY_numHisto = ` GROUP BY numeroHisto `;
 
 const CONDITION_RDV = ` AND ( dateRDV > '${fomatDateAujourdHui}') AND dateFinMouvement IS NULL `;
-const GROUP_BY = ` GROUP BY h_numeroAffaire `;
 const ORDER_BY_ASC = ` ORDER BY numeroHisto ASC `;
 
 Historique.addHistorique = (newHistorique, result) => {
@@ -117,6 +118,16 @@ Historique.addHistoNewDemande = (newHistorique) => {
 
 Historique.getAllHistoriques = (result) => {
   dbConn.query(REQUETE_BASE + GROUP_BY_numHisto + ORDER_BY, (err, res) => {
+    if (err) {
+      result(err, null);
+    } else {
+      result(null, res);
+    }
+  });
+};
+
+Historique.getHistoriqueDossier = (id, result) => {
+  dbConn.query(REQUETE_BASE + ` AND h_numeroDossier = ? `+ GROUP_BY_numHisto + ORDER_BY_ASC, id, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -230,7 +241,7 @@ Historique.searchHistoriqueRDV = (valeur, result) => {
 
 Historique.getIdHistorique = (id, result) => {
   dbConn.query(
-    REQUETE_BASE + ` AND numeroHisto = ?` + GROUP_BY_numHisto,
+    REQUETE_BASE + ` AND numeroHisto = ? ` + GROUP_BY_numHisto,
     id,
     (err, res) => {
       if (err) {

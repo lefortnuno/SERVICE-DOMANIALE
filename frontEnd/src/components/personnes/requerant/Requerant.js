@@ -5,6 +5,8 @@ import { libraryList, AjoutLibrary } from "../../../api/file.js";
 import HeaderContext from "../../../contexts/header/header.context";
 import FooterContext from "../../../contexts/footer/footer.context";
 import SidebarContext from "../../../contexts/sidebar/sidebar.context";
+import ModalEdition from "./ModalEdit";
+import DeleteConfirmation from "../../../contexts/ModalSuppr";
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -64,24 +66,34 @@ export default function Requerant() {
   const showDeleteModal = (id) => {
     setId(id);
     setDeleteMessage(
-      `Etes vous sûre de vouloir supprimer l'utilisateur : _' ${
-        users.find((x) => x.numCompte === id).identification
-      } '_ ?`
+      `Etes vous sûre de vouloir supprimer le requerant N°${
+        users.find((x) => x.numeroRequerant === id).numeroRequerant
+      } 
+      ${users.find((x) => x.numeroRequerant === id).nom} 
+      ${
+        users.find((x) => x.numeroRequerant === id).prenom
+      } definitivement de notre base de donnée ?`
     );
     setDisplayConfirmationModal(true);
   };
+
   const hideConfirmationModal = () => {
     setDisplayConfirmationModal(false);
   };
+
   const submitDelete = (id) => {
     axios.delete(URL_DE_BASE + `${id}`, u_info.opts).then(function (response) {
       getUsers();
-      toast.success(`Suppression Réussi`);
       setDisplayConfirmationModal(false);
 
-      if (id == u_info.u_numCompte) {
-        localStorage.clear();
-        navigate("/");
+      if (response.data.success) {
+        toast.success("Suppression Reussi.");
+      } else if (response.data.errno === 1451) {
+        toast.error(
+          "Suppression non effectuer ! Le requerant possede des dossiers !"
+        );
+      } else {
+        toast.error("Echec de l'Ajout!");
       }
     });
   };
@@ -200,6 +212,18 @@ export default function Requerant() {
         </HeaderContext>
         <SidebarContext />
 
+        <ModalEdition showEdit={showEdit} onHide={closeEditModal}>
+          {numCompteEdit}
+        </ModalEdition>
+
+        <DeleteConfirmation
+          showModal={displayConfirmationModal}
+          confirmModal={submitDelete}
+          hideModal={hideConfirmationModal}
+          id={id}
+          message={deleteMessage}
+        />
+
         <div className="main-panel">
           <div className="content">
             <div className="container-fluid">
@@ -221,14 +245,15 @@ export default function Requerant() {
                           <thead>
                             <tr>
                               <th scope="col">#</th>
-                              <th scope="col">Numéro de CIN</th>
+                              <th scope="col">Numéro_CIN</th>
                               <th scope="col">Nom et Prénom</th>
-                              <th scope="col">Type de requerant</th>
+                              <th scope="col">Moralité_Requerant</th>
                               <th scope="col">Téléphone</th>
-                              <th scope="col">+Details</th>
+                              <th scope="col" style={{width : '250px'}}>Information_Complementaire</th>
+                              <th scope="col">Modifier</th>
                               {u_info.u_attribut === "Chef" ||
                               u_info.u_attribut === "Administrateur" ? (
-                                <th scope="col">Actions</th>
+                                <th scope="col">Supprimer</th>
                               ) : null}
                             </tr>
                           </thead>
@@ -248,47 +273,39 @@ export default function Requerant() {
                                       <>Personne normale</>
                                     )}
                                   </td>
-                                  <td>{user.numeroTelephone}</td>
-                                  <td>
-                                    <button
-                                      type="button"
-                                      className="btn btn-outline-success btn-sm m-1 waves-effect"
-                                      variant="default"
-                                      name="numCompteEdit"
-                                      onClick={() =>
-                                        showEditModal(user.numCompte)
-                                      }
-                                    >
-                                      <BsEye />
-                                    </button>
-                                  </td>
-                                  <td>
+                                  <td>0{user.numeroTelephone}</td>
+                                  <td>{user.complementInformation}</td>
+
+                                  <td  className="text-center">
                                     <button
                                       type="button"
                                       className="btn btn-outline-primary btn-sm m-1 waves-effect"
                                       variant="default"
                                       name="numCompteEdit"
                                       onClick={() =>
-                                        showEditModal(user.numCompte)
+                                        showEditModal(user.numeroRequerant)
                                       }
                                     >
                                       <BsPencilSquare />
                                     </button>
+                                  </td>
 
-                                    {u_info.u_attribut === "Chef" ||
-                                    u_info.u_attribut === "Administrateur" ? (
+                                  {u_info.u_attribut === "Chef" ||
+                                  u_info.u_attribut === "Chef Adjoint" ||
+                                  u_info.u_attribut === "Administrateur" ? (
+                                    <td  className="text-center"> 
                                       <button
                                         type="button"
                                         className="btn btn-outline-danger btn-sm m-1 waves-effect"
                                         variant="default"
                                         onClick={() =>
-                                          showDeleteModal(user.numCompte)
+                                          showDeleteModal(user.numeroRequerant)
                                         }
                                       >
                                         <BsFillTrashFill />
-                                      </button>
-                                    ) : null}
-                                  </td>
+                                      </button> 
+                                    </td>
+                                  ) : null}
                                 </tr>
                               ))
                             ) : (

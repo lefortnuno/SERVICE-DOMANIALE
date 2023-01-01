@@ -17,6 +17,8 @@ import { BsFillTrashFill, BsPencilSquare, BsEye } from "react-icons/bs";
 import HeaderContext from "../../../contexts/header/header.context";
 import FooterContext from "../../../contexts/footer/footer.context";
 import SidebarContext from "../../../contexts/sidebar/sidebar.context";
+import ModalEdition from "./ModalEdit";
+import DeleteConfirmation from "../../../contexts/ModalSuppr";
 
 const base = `utilisateur`;
 const URL_DE_BASE = base + `/`;
@@ -56,6 +58,7 @@ export default function Utilisateur() {
   };
   //#endregion
 
+  
   //#region //------------MODAL DELETE UTILISATEUR------------
   const [id, setId] = useState(null);
   const [displayConfirmationModal, setDisplayConfirmationModal] =
@@ -64,28 +67,39 @@ export default function Utilisateur() {
   const showDeleteModal = (id) => {
     setId(id);
     setDeleteMessage(
-      `Etes vous sûre de vouloir supprimer l'utilisateur : _' ${
-        users.find((x) => x.numCompte === id).identification
-      } '_ ?`
+      `Etes vous sûre de vouloir supprimer l'utilisateur N°${
+        users.find((x) => x.numeroCompte === id).numeroCompte
+      } , identifiant :  
+      ${users.find((x) => x.numeroCompte === id).identification}, if°   
+      ${
+        users.find((x) => x.numeroCompte === id).u_cin
+      } definitivement de notre base de donnée ?`
     );
     setDisplayConfirmationModal(true);
   };
+
   const hideConfirmationModal = () => {
     setDisplayConfirmationModal(false);
   };
+
   const submitDelete = (id) => {
     axios.delete(URL_DE_BASE + `${id}`, u_info.opts).then(function (response) {
       getUsers();
-      toast.success(`Suppression Réussi`);
       setDisplayConfirmationModal(false);
-
-      if (id == u_info.u_numCompte) {
-        localStorage.clear();
-        navigate("/");
+      console.log(response);
+      if (response.data.success) {
+        toast.success("Suppression Reussi.");
+      } else if (response.data.errno === 1451) {
+        toast.error(
+          "Suppression non effectuer ! Le requerant possede des dossiers !"
+        );
+      } else {
+        toast.error(response.data.message);
       }
     });
   };
   //#endregion
+
 
   //#region   //----- MA RECHERCHE -----
   const [contenuTab, setContenuTab] = useState(true);
@@ -200,6 +214,19 @@ export default function Utilisateur() {
         </HeaderContext>
         <SidebarContext />
 
+
+        <ModalEdition showEdit={showEdit} onHide={closeEditModal}>
+          {numCompteEdit}
+        </ModalEdition>
+
+        <DeleteConfirmation
+          showModal={displayConfirmationModal}
+          confirmModal={submitDelete}
+          hideModal={hideConfirmationModal}
+          id={id}
+          message={deleteMessage}
+        />
+
         <div className="main-panel">
           <div className="content">
             <div className="container-fluid">
@@ -255,7 +282,7 @@ export default function Utilisateur() {
                                       variant="default"
                                       name="numCompteEdit"
                                       onClick={() =>
-                                        showEditModal(user.numCompte)
+                                        showEditModal(user.numeroCompte)
                                       }
                                     >
                                       <BsEye />
@@ -267,7 +294,7 @@ export default function Utilisateur() {
                                       variant="default"
                                       name="numCompteEdit"
                                       onClick={() =>
-                                        showEditModal(user.numCompte)
+                                        showEditModal(user.numeroCompte)
                                       }
                                     >
                                       <BsPencilSquare />
@@ -275,29 +302,35 @@ export default function Utilisateur() {
                                   </td>
 
                                   {u_info.u_attribut === "Chef" ||
+                                  u_info.u_attribut === "Chef Adjoint" ||
                                   u_info.u_attribut === "Administrateur" ? (
-                                    <td>
+                                    <td className="text-center">
                                       <button
                                         type="button"
                                         className="btn btn-outline-danger btn-sm m-1 waves-effect"
                                         variant="default"
                                         onClick={() =>
-                                          showDeleteModal(user.numCompte)
+                                          showDeleteModal(user.numeroCompte)
                                         }
                                       >
                                         <BsFillTrashFill />
                                       </button>
 
-                                      <button
-                                        type="button"
-                                        className="btn btn-outline-danger btn-sm m-1 waves-effect"
-                                        variant="default"
-                                        onClick={() =>
-                                          showDeleteModal(user.numCompte)
-                                        }
-                                      >
-                                        <BsFillTrashFill />
-                                      </button>
+                                      {u_info.u_attribut === "Chef" ||
+                                      u_info.u_attribut === "Administrateur" ? (
+                                        <button
+                                          type="button"
+                                          className="btn btn-outline-danger btn-sm m-1 waves-effect"
+                                          variant="default"
+                                          onClick={() =>
+                                            showDeleteModal(
+                                              user.numeroCompte
+                                            )
+                                          }
+                                        >
+                                          <BsFillTrashFill />
+                                        </button>
+                                      ) : null}
                                     </td>
                                   ) : null}
                                 </tr>

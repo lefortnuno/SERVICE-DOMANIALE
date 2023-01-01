@@ -18,13 +18,13 @@ const REQUETE_ADVANCER = `SELECT numeroCompte, identification, photoPDP, attribu
 const ORDER_BY = ` ORDER BY numeroCompte DESC `;
 
 Utilisateur.addUtilisateur = (newUtilisateur, result) => {
-      dbConn.query("INSERT INTO compte SET ?", newUtilisateur, (err, res) => {
-        if (!err) {
-          result(null, { success: true, message: "Ajout reussi !" });
-        } else {
-          result(err, null);
-        }
-      });
+  dbConn.query("INSERT INTO compte SET ?", newUtilisateur, (err, res) => {
+    if (!err) {
+      result(null, { success: true, message: "Ajout reussi !" });
+    } else {
+      result(err, null);
+    }
+  });
 };
 
 Utilisateur.loginUtilisateur = (values, result) => {
@@ -73,7 +73,7 @@ Utilisateur.getLastIdUtilisateurs = (result) => {
   );
 };
 
-Utilisateur.getLastNumeroCompteUtilisateur= (result) => {
+Utilisateur.getLastNumeroCompteUtilisateur = (result) => {
   dbConn.query(
     `SELECT numeroCompte FROM compte ` + ORDER_BY + `LIMIT 1`,
     (err, res) => {
@@ -88,29 +88,35 @@ Utilisateur.getLastNumeroCompteUtilisateur= (result) => {
           id = Object.values(tmpID[0]);
           id = id[0] + 1;
         }
-        result(null, {numeroCompte: id});
+        result(null, { numeroCompte: id });
       }
     }
   );
 };
 
 Utilisateur.getIdUtilisateur = (numeroCompte, result) => {
-  dbConn.query(REQUETE_ADVANCER + ` AND numeroCompte = ?`, numeroCompte, (err, res) => {
-    if (err) {
-      result(err, null);
-    } else {
-      if (res.length !== 0) {
-        result(null, res);
+  dbConn.query(
+    REQUETE_ADVANCER + ` AND numeroCompte = ?`,
+    numeroCompte,
+    (err, res) => {
+      if (err) {
+        result(err, null);
       } else {
-        result(null, res);
+        if (res.length !== 0) {
+          result(null, res);
+        } else {
+          result(null, res);
+        }
       }
     }
-  });
+  );
 };
 
 Utilisateur.searchUtilisateurByParams = (valeur, result) => {
   dbConn.query(
-    REQUETE_ADVANCER + `AND (identification LIKE '%${valeur}%' OR nom LIKE '%${valeur}%' OR prenom LIKE '%${valeur}%')` + ORDER_BY,
+    REQUETE_ADVANCER +
+      `AND (identification LIKE '%${valeur}%' OR nom LIKE '%${valeur}%' OR prenom LIKE '%${valeur}%')` +
+      ORDER_BY,
     (err, res) => {
       if (err) {
         result({ err, message: "erreur !", success: false }, null);
@@ -131,9 +137,11 @@ Utilisateur.updateUtilisateur = (newUtilisateur, numeroCompte, result) => {
     newUtilisateur,
     function (err, res) {
       if (err) {
+        console.log(err);
         result(err, null);
       } else {
-        result(null, {success: true, message:"Reussi"});
+        console.log(res);
+        result(null, { success: true, message: "Reussi" });
       }
     }
   );
@@ -141,21 +149,24 @@ Utilisateur.updateUtilisateur = (newUtilisateur, numeroCompte, result) => {
 
 Utilisateur.deleteUtilisateur = (numeroCompte, result) => {
   Utilisateur.getIdUtilisateur(numeroCompte, (err, resAttribut) => {
-    if (resAttribut && (resAttribut[0].attribut === "client" || resAttribut[0].attribut === "utilisateur")) {
+    if (
+      resAttribut &&
+      (resAttribut[0].attribut === "client" ||
+        resAttribut[0].attribut === "utilisateur")
+    ) {
       dbConn.query(
         `DELETE FROM compte WHERE numeroCompte = ${numeroCompte}`,
         function (err, res) {
           if (err) {
             result(err, null);
           } else {
-            result(null, {
-              message: `suppresion success, numeroCompte : ${numeroCompte}`,
-            });
+            result(null, { success: true });
           }
         }
       );
-    }else {
+    } else {
       result(null, {
+        success: false,
         message: `Echec Suppression! attribut du compte: ${resAttribut[0].attribut}`,
       });
     }

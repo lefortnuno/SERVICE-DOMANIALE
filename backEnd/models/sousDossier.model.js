@@ -47,6 +47,11 @@ SELECT
         0,
         'de_DE'
     ) as FCD,
+    FORMAT(
+        ((prixAttribue * mesureAttribuable) + (((prixAttribue * mesureAttribuable) * 5) / 100)),
+        0,
+        'de_DE'
+    ) as PT_TTL,
 
     1 as DF,
     FORMAT(
@@ -55,7 +60,7 @@ SELECT
         'de_DE'
     ) as DP,
     25000 as Acc,
-    5000 as Bordereau,
+    5000 as Bord,
 
     FORMAT(
         (
@@ -104,7 +109,7 @@ SousDossier.getAllSousDossiersOfDossier = (id, result) => {
 
 SousDossier.getIdSousDossier = (id, result) => {
   dbConn.query(
-    REQUETE_BASE + ` WHERE  numeroSousDossier = ?` + ORDER_BY + ` LIMIT 1 `,
+    REQUETE_BASE + ` WHERE numeroSousDossier = ?` + ORDER_BY + ` LIMIT 1 `,
     id,
     (err, res) => {
       if (err) {

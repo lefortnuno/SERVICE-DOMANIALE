@@ -8,7 +8,21 @@ let Requerant = function (individu) {
   this.numeroTelephone = individu.numeroTelephone;
 };
 
-const REQUETE_BASE = `SELECT numeroRequerant, etatMorale, complementInformation, p_cin, nom, prenom FROM REQUERANT, INDIVIDU WHERE REQUERANT.p_cin = INDIVIDU.cin `;
+const REQUETE_BASE = `
+SELECT
+    numeroRequerant,
+    etatMorale,
+    numeroTelephone,
+    complementInformation,
+    p_cin,
+    nom,
+    prenom
+FROM
+    REQUERANT,
+    INDIVIDU
+WHERE
+    REQUERANT.p_cin = INDIVIDU.cin `;
+
 const ORDER_BY = ` ORDER BY numeroRequerant DESC `;
 
 Requerant.addRequerant = (newRequerant, result) => {
@@ -16,7 +30,7 @@ Requerant.addRequerant = (newRequerant, result) => {
     if (err) {
       result(err, null);
     } else {
-      result(null,  {success: true});
+      result(null, { success: true });
     }
   });
 };
@@ -94,20 +108,32 @@ Requerant.updateRequerant = (updateRequerant, numeroRequerant, result) => {
 
 Requerant.apercuRequerant = (valeur, result) => {
   dbConn.query(
-    REQUETE_BASE + `AND ( p_cin LIKE '${valeur}%' )` + ORDER_BY ,
+    REQUETE_BASE + `AND ( p_cin LIKE '${valeur}%' )` + ORDER_BY,
     (err, res) => {
       if (err) {
         result({ err, message: "erreur !", success: false }, null);
       } else {
         if (res.length !== 0) {
-          result(null, {success: true, res});
+          result(null, { success: true, res });
         } else {
           result(null, {
             success: false,
-            message:
-              "Requérant non trouvé.",
+            message: "Requérant non trouvé.",
           });
         }
+      }
+    }
+  );
+};
+
+Requerant.deleteRequerant = (numeroRequerant, result) => {
+  dbConn.query(
+    `DELETE FROM Requerant WHERE numeroRequerant = ${numeroRequerant}`,
+    function (err, res) {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, { success: true});
       }
     }
   );

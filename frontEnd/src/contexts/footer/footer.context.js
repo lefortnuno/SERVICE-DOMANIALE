@@ -13,11 +13,11 @@ export default function FooterContext() {
                   Aide
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link to="/licence/" className="nav-link">
                   Licence
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </nav>
           <div className="copyright ml-auto">

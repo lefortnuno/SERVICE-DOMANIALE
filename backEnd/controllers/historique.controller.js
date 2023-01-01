@@ -172,6 +172,16 @@ module.exports.getAllHistoriques = (req, res) => {
   });
 };
 
+module.exports.getHistoriqueDossier = (req, res) => {
+  Historique.getHistoriqueDossier(req.params.id, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
 module.exports.getCahierArriver = (req, res) => {
   Historique.getCahierArriver((err, resp) => {
     if (!err) {

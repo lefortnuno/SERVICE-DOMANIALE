@@ -552,9 +552,9 @@ export default function ModalAjout(props) {
                         name="t_cin"
                         value={imInputs.t_cin}
                         onChange={handleChange}
-                        disabled={true}
                         placeholder="Numero CIN du Requerant"
                         autoComplete="off"
+                        disabled={true}
                         style={colorStyle}
                       />
                       <small className="text-danger d-block">

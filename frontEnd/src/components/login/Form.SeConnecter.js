@@ -171,7 +171,7 @@ export default function FormulaireSeConnecter() {
           <button className="login100-form-btn" onClick={validation}>
             Se connecter
           </button>
-        </div>
+        </div> <br />
 
         <div className="text-center p-t-12">
           <a className="txt2" href="#">

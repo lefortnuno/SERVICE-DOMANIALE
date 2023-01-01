@@ -39,7 +39,7 @@ router.put(
 );
 router.delete(
   "/:id",
-  chef.checkUtilisateur,
+  chefAdjoint.checkUtilisateur,
   utilisateurController.deleteUtilisateur
 );
 router.get(

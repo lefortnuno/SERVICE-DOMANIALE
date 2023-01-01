@@ -31,7 +31,7 @@ module.exports.addUtilisateur = (req, res) => {
 
   if (unite === "true") {
     unite = true;
-  } else if(unite === "false") {
+  } else if (unite === "false") {
     unite = false;
   }
 
@@ -88,6 +88,8 @@ module.exports.addPhotoPdp = (req, res) => {
       const classifiedsadd = {
         photoPDP: req.file.filename,
       };
+      
+      console.log(classifiedsadd);
 
       Utilisateur.updateUtilisateur(
         classifiedsadd,
