@@ -21,7 +21,7 @@ ChartJS.register(
   Legend
 );
 
-export default function Chart(props) {
+export default function ChartDossier(props) {
   const options = {
     responsive: true,
     plugins: {
@@ -35,21 +35,6 @@ export default function Chart(props) {
     },
   };
 
-  const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "July",
-    "July",
-    "July",
-    "July",
-    "July",
-    "July",
-  ];
 
   const data = {
     labels: props.labels,
@@ -74,21 +59,7 @@ export default function Chart(props) {
 
   return (
     <>
-    <div className="row">
-      <div className="col-md-10">
-        <div className="card">
-          <div className="card-header">
-            <h4 className="card-title">Statistique</h4>
-            <p className="card-category">
-              Stat de distribution des Etat de CIN
-            </p>
-          </div>
-          <div className="card-body"> 
-                <Bar options={options} data={data} /> 
-          </div>
-        </div>
-      </div>
-    </div>
+      <Bar options={options} data={data} />
     </>
   );
 }

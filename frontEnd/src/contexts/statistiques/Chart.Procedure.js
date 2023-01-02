@@ -9,7 +9,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Bar } from "react-chartjs-2"; 
+import { Bar } from "react-chartjs-2";
+import { Link } from "react-router-dom";
 
 ChartJS.register(
   CategoryScale,
@@ -20,7 +21,7 @@ ChartJS.register(
   Legend
 );
 
-export default function ChartDOSSIER(props) {
+export default function ChartProcedure(props) {
   const options = {
     responsive: true,
     plugins: {
@@ -38,19 +39,9 @@ export default function ChartDOSSIER(props) {
     labels: props.labels,
     datasets: [
       {
-        label: "V",
+        label: "Temps Consommer",
         data: props.data1,
-        backgroundColor: "rgb(8, 120, 239)",
-      },
-      {
-        label: "AX",
-        data: props.data2,
         backgroundColor: "rgb(250, 140, 5)",
-      },
-      {
-        label: "X",
-        data: props.data3,
-        backgroundColor: "rgba(239, 8, 8, 0.8)",
       },
     ],
   };

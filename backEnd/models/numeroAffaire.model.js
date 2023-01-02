@@ -30,7 +30,7 @@ NumeroAffaire.addNumeroAffaire_AX = () => {
   dbConn.query("INSERT INTO numero_affaire_AX  (`autoNumber`) VALUES (NULL)");
 };
 
-NumeroAffaire.getLastNumeroAffaire_ = (result) => {
+NumeroAffaire.getLastNumeroAffaire_AX = (result) => {
   dbConn.query("SELECT autoNumber FROM numero_affaire_AX ORDER BY autoNumber DESC LIMIT 1", (err, resLastNumAffaire) => {
     if (!err) {
       let id = 0;

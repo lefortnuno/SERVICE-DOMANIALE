@@ -6,7 +6,10 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { BsPencilSquare } from "react-icons/bs";
+
 import Context from "../../contexts/Context";
+import StatisiqueProcedure from "../statistiques/stat.procedure";
+
 import { AccessBureau } from "../access/accessAll";
 import { DrapeauFanjakana } from "../accueil/drapeauGov";
 
@@ -137,9 +140,10 @@ export default function Procedure() {
 
   return (
     <>
+      {libraryList.forEach((x) => AjoutLibrary(x))}
       <Context>
         <div className="row">
-          <DrapeauFanjakana/>
+          <DrapeauFanjakana />
           <AccessBureau />
         </div>
 
@@ -228,20 +232,10 @@ export default function Procedure() {
               ) : null}
             </div>
           </div>
-          <div className="col-md-4">
-            <div className="card">
-              <div className="card-header">
-                <h4 className="card-title">Users Statistics</h4>
-                <p className="card-category">Users statistics this month</p>
-              </div>
-              <div className="card-body">
-                <div id="monthlyChart" className="chart chart-pie"></div>
-              </div>
-            </div>
-          </div>
         </div>
-
-        {libraryList.forEach((x) => AjoutLibrary(x))}
+        <div className="row">
+          <StatisiqueProcedure />
+        </div>
       </Context>
     </>
   );

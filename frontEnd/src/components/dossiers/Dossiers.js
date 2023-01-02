@@ -8,7 +8,7 @@ import { NouvelleDemande } from "../access/accessAll";
 import HeaderContext from "../../contexts/header/header.context";
 import FooterContext from "../../contexts/footer/footer.context";
 import SidebarContext from "../../contexts/sidebar/sidebar.context";
-// import { StatDossier } from "../../contexts/statistiques/dossier.stat";
+import StatisiqueDossier from "../statistiques/stat.dossier";
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -143,7 +143,7 @@ export default function Dossier() {
   return (
     <>
       {libraryList.forEach((x) => AjoutLibrary(x))}
-      
+
       <div className="wrapper">
         <HeaderContext>
           <form className="navbar-left navbar-form nav-search mr-md-3">
@@ -209,7 +209,9 @@ export default function Dossier() {
                                       : null
                                   }
                                 >
-                                  <Link to={`/viewDossier/${dossier.numeroDossier}`}>
+                                  <Link
+                                    to={`/viewDossier/${dossier.numeroDossier}`}
+                                  >
                                     <div className="card-body ">
                                       <div className="row">
                                         <div className="col-3">
@@ -299,7 +301,7 @@ export default function Dossier() {
               </div>
 
               <div className="row">
-                {/* <StatDossier /> */}
+                <StatisiqueDossier />
               </div>
             </div>
           </div>

@@ -34,6 +34,8 @@ import MapsForFtsoa from "./maps/maps";
 import Terrain from "./components/terrain/Terrain";
 import PageNotFound from "./contexts/404/page404";
 
+import StatisiqueGenerale from "./components/statistiques/statistique.general";
+
 export default function App() {
   return (
     <div className="App">
@@ -43,6 +45,8 @@ export default function App() {
           <Route index element={<LogOutProtection Cmp={SeConnecter} />} />
 
           <Route path="/*" element={<SinInProtected Cmp={PageNotFound} />} />
+
+          <Route path="stats/" element={<SinInProtected Cmp={StatisiqueGenerale} />} />
 
           <Route
             path="nouveauUtilisateur/"
