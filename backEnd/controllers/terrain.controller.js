@@ -3,7 +3,13 @@ const Terrain = require("../models/terrain.model");
 const NumeroIM = require("../models/numeroIM.model");
 
 module.exports.addTerrain = (req, res) => {
-  let { immatriculationTerrain, nomPropriete, t_cin } = req.body;
+  let {
+    immatriculationTerrain,
+    nomPropriete,
+    t_cin,
+    t_numeroDossier,
+    t_numeroAffaire,
+  } = req.body;
 
   let numeroTitre;
   let newTerrain = {
@@ -13,6 +19,8 @@ module.exports.addTerrain = (req, res) => {
     // etatCiviqueTerrain,
     // prixTerrain,
     t_cin,
+    t_numeroDossier,
+    t_numeroAffaire,
   };
 
   if (immatriculationTerrain === "V") {

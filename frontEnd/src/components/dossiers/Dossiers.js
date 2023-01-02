@@ -64,7 +64,7 @@ export default function Dossier() {
 
   //#region  //----- MY PAGINATION -----
   const [currentPage, setcurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
 
   const [pageNumberLimit, setPageNumberLimit] = useState(5);
   const [maxPageNumberLimit, setmaxPageNumberLimit] = useState(5);

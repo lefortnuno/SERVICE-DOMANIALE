@@ -348,7 +348,7 @@ export default function ModalRetour(props) {
       observation: obs,
       p_numeroCompte: u_info.u_numeroCompte,
       h_numeroDossier: inputs.h_numeroDossier,
-      h_numeroAffaire: inputs.h_numeroAffaire, 
+      h_numeroAffaire: inputs.h_numeroAffaire,
     };
 
     axios
@@ -357,7 +357,7 @@ export default function ModalRetour(props) {
         if (response.status === 200) {
           autoUpDossier(etape);
           if (etape === 9) {
-            navigate(`/dossier/${inputs.h_numeroDossier}`);
+            navigate(`/viewDossier/${inputs.h_numeroDossier}`);
           }
           i = 0;
           props.onHide();
@@ -562,6 +562,9 @@ export default function ModalRetour(props) {
                     </Col>
                   </>
                 ) : null}
+              </Row>
+
+              <Row style={rowStyle}>
                 <Col>
                   <Form.Label> Observation : </Form.Label>
                   <Form.Control

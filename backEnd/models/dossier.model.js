@@ -64,7 +64,7 @@ WHERE
     AND PROCEDURES.numeroProcedure = DOSSIER.p_numeroProcedure `;
 
 const REQUETE_NOUVELLE_DEMANDE = REQUETE_BASE + ` AND p_numeroProcedure=1 `;
-const GROUP_BY = ` GROUP BY numeroAffaire `
+const GROUP_BY = ` GROUP BY numeroAffaire `;
 const ORDER_BY = ` ORDER BY numeroDossier DESC `;
 
 Dossier.addDossier = (newDossier, result) => {
@@ -78,7 +78,7 @@ Dossier.addDossier = (newDossier, result) => {
 };
 
 Dossier.getAllDossiers = (result) => {
-  dbConn.query(REQUETE_BASE +GROUP_BY + ORDER_BY, (err, res) => {
+  dbConn.query(REQUETE_BASE + GROUP_BY + ORDER_BY, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -88,7 +88,7 @@ Dossier.getAllDossiers = (result) => {
 };
 
 Dossier.getDossiersNouvelleDemande = (result) => {
-  dbConn.query(REQUETE_NOUVELLE_DEMANDE+GROUP_BY + ORDER_BY, (err, res) => {
+  dbConn.query(REQUETE_NOUVELLE_DEMANDE + GROUP_BY + ORDER_BY, (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -144,17 +144,21 @@ Dossier.getIdDossier = (id, result) => {
 };
 
 Dossier.getHistoDossier = (id, result) => {
-  dbConn.query(REQUETE_BASE + " AND numeroDossier = ?"+GROUP_BY, id, (err, res) => {
-    if (err) {
-      result(err, null);
-    } else {
-      if (res.length !== 0) {
-        result(null, res);
+  dbConn.query(
+    REQUETE_BASE + " AND numeroDossier = ?" + GROUP_BY,
+    id,
+    (err, res) => {
+      if (err) {
+        result(err, null);
       } else {
-        result(null, null);
+        if (res.length !== 0) {
+          result(null, res);
+        } else {
+          result(null, null);
+        }
       }
     }
-  });
+  );
 };
 
 Dossier.getDossierRequerant = (id, result) => {
@@ -221,6 +225,7 @@ Dossier.searchDossier = (valeur, result) => {
   dbConn.query(
     REQUETE_BASE +
       ` AND ( numeroAffaire LIKE '%${valeur}%' OR p_cin LIKE '%${valeur}%' OR nom LIKE '%${valeur}%')` +
+      GROUP_BY +
       ORDER_BY,
     valeur,
     (err, res) => {

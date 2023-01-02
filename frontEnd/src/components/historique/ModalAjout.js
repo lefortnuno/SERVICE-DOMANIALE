@@ -26,6 +26,7 @@ export default function ModalAjout(props) {
 
   const mesInputs = {
     h_numeroAffaire: "",
+    h_numeroDossier: "",
     approbation: false,
     prixTerrain: false,
     nomPropriete: "",
@@ -185,6 +186,7 @@ export default function ModalAjout(props) {
     setInputs((values) => ({ ...values, [name]: value }));
     setNextInputs((values) => ({ ...values, [name]: value }));
     setErreurs((values) => ({ ...values, [name]: false }));
+    isValidate = true
 
     if (name === "observation" || name === "nomPropriete") {
       if (value.length === 0) {
@@ -336,6 +338,8 @@ export default function ModalAjout(props) {
       immatriculationTerrain: inputs.immatriculationTerrain,
       nomPropriete: inputs.nomPropriete,
       t_cin: imInputs.t_cin,
+      t_numeroDossier: inputs.h_numeroDossier,
+      t_numeroAffaire: inputs.h_numeroAffaire,
     };
 
     axios

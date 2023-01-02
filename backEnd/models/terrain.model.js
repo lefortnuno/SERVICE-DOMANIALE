@@ -7,7 +7,9 @@ let Terrain = function (terrain) {
   this.nomPropriete = terrain.nomPropriete;
   this.etatCiviqueTerrain = terrain.etatCiviqueTerrain;
   this.prixTerrain = terrain.prixTerrain;
-  this.cin = terrain.cin;
+  this.t_cin = terrain.t_cin;
+  this.t_numeroDossier = terrain.t_numeroDossier;
+  this.t_numeroAffaire = terrain.t_numeroAffaire;
 };
 
 const REQUETE_EXTRA = `
@@ -55,7 +57,9 @@ FROM
 WHERE
     TERRAIN.t_cin = INDIVIDU.cin  
     AND DOSSIER.p_numeroRequerant = REQUERANT.numeroRequerant  
-    AND INDIVIDU.cin = REQUERANT.p_cin `;
+    AND INDIVIDU.cin = REQUERANT.p_cin
+    AND DOSSIER.numeroDossier = TERRAIN.t_numeroDossier
+    AND DOSSIER.numeroAffaire = TERRAIN.t_numeroAffaire `;
 
 Terrain.addTerrain = (newTerrain, result) => {
   dbConn.query("INSERT INTO Terrain SET ?", newTerrain, (err, res) => {
@@ -112,7 +116,7 @@ Terrain.searchTerrain = (valeur, result) => {
 
 Terrain.rechercher_le_Terrain = (valeur, result) => {
   console.log(valeur);
-  const TRIPLE_CONDITION = ` AND cin = ${valeur.cin} AND numeroRequerant = ${valeur.numeroRequerant} AND numeroDossier = ${valeur.numeroDossier} `;
+  const TRIPLE_CONDITION = ` AND cin = ${valeur.cin} AND numeroRequerant = ${valeur.numeroRequerant} AND t_numeroDossier = ${valeur.numeroDossier} `;
 
   dbConn.query(
     REQUETE_EXTRA + TRIPLE_CONDITION + ` GROUP BY numeroDossier `,

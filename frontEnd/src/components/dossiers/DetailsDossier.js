@@ -32,15 +32,13 @@ export default function DetailsDossier() {
     prixTerrain: "",
   };
 
-  //#region // RECUPERER LES DONNEER DU DOSSIER
-
+  //#region // IMPRIMER UN DOC
   const compRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => compRef.current,
     documentTitle: "Decompte Prix du Terrain",
     onAfterPrint: () => toast.success("Impression du document Reussi"),
   });
-
   //#endregion
 
   //#region // RECUPERER LES DONNEER DU DOSSIER
