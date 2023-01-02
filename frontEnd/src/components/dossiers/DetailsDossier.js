@@ -8,6 +8,7 @@ import FooterContext from "../../contexts/footer/footer.context";
 import SidebarContext from "../../contexts/sidebar/sidebar.context";
 import GoogleMapsPartiel from "../../maps/gMaps";
 import ModalAjout from "../historique/ModalAjout";
+import { LogoAppE_TK } from "../access/accessAll";
 
 import { useEffect, useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -534,6 +535,10 @@ export default function DetailsDossier() {
                             <label> somme à payer : Ar </label>
                             <span> {inputsDecompte.prixTerrainAroundi},00</span>
                           </div>
+                        </div>
+
+                        <div className="row">
+                          <LogoAppE_TK />
                         </div>
                       </div>
                     </div>

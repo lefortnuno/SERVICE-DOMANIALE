@@ -6,7 +6,14 @@ export default function LogoHeader() {
   return (
     <>
       <div className="logo-header">
-        <p className="logo">e -Tokotany</p>
+        <p className="logo">
+          <img
+            src={process.env.PUBLIC_URL + `/picture/logo/e-TK.png`}
+            alt="pdp"
+            style={{ width: "100%", height: "100%", borderRadius: "0%" }}
+          />
+          {/* e -Tokotany */}
+        </p>
 
         {u_info.u_token ? (
           <>

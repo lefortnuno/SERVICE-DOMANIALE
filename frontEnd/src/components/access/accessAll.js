@@ -111,3 +111,24 @@ export function AccessAccueil() {
     </>
   );
 }
+export function LogoAppE_TK() {
+  return (
+    <>
+      <div className="col-md-1">
+        <Link to="/accueil/">
+          <div>
+            <img
+              src={process.env.PUBLIC_URL + `/picture/logo/e-T.png`}
+              alt="pdp"
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: "0%",
+              }}
+            />
+          </div>
+        </Link>
+      </div>
+    </>
+  );
+}
