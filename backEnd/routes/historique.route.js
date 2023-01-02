@@ -14,6 +14,7 @@ router.post(
   HistoriqueController.addAutoHistorique
 );
 
+router.get("/stats/", agent.checkUtilisateur, HistoriqueController.getAllStats);
 router.get("/", agent.checkUtilisateur, HistoriqueController.getAllHistoriques);
 router.get(
   "/C_ND/",

@@ -33,6 +33,7 @@ import MapsForFtsoa from "./maps/maps";
 
 import Terrain from "./components/terrain/Terrain";
 import PageNotFound from "./contexts/404/page404";
+import Statisique from "./contexts/statistiques/stats";
 
 export default function App() {
   return (
@@ -42,7 +43,7 @@ export default function App() {
         <Routes>
           <Route index element={<LogOutProtection Cmp={SeConnecter} />} />
 
-          <Route path='/*' element={<SinInProtected Cmp={PageNotFound} />} />
+          <Route path="/*" element={<SinInProtected Cmp={PageNotFound} />} />
 
           <Route
             path="nouveauUtilisateur/"
@@ -64,8 +65,14 @@ export default function App() {
           />
           <Route path="bureau/" element={<SinInProtected Cmp={Bureau} />} />
           <Route path="dossier/" element={<SinInProtected Cmp={Dossier} />} />
-          <Route path="mesDossiers/" element={<SinInProtected Cmp={DossierAgent} />} />
-          <Route path="viewDossier/:numeroDossier" element={<SinInProtected Cmp={DetailsDossier} />} />
+          <Route
+            path="mesDossiers/"
+            element={<SinInProtected Cmp={DossierAgent} />}
+          />
+          <Route
+            path="viewDossier/:numeroDossier"
+            element={<SinInProtected Cmp={DetailsDossier} />}
+          />
           <Route
             path="nouvelleDemande/"
             element={<SinInProtected Cmp={NouvelleDemande} />}
@@ -91,14 +98,10 @@ export default function App() {
           <Route path="C_D/" element={<SinInProtected Cmp={CahierDepart} />} />
           <Route path="C_I/" element={<SinInProtected Cmp={CahierInterne} />} />
 
-          <Route
-            path="maps/"
-            element={<SinInProtected Cmp={MapsForFtsoa} />}
-          />
-          <Route
-            path="terrain/"
-            element={<SinInProtected Cmp={Terrain} />}
-          />
+          <Route path="maps/" element={<SinInProtected Cmp={MapsForFtsoa} />} />
+          <Route path="terrain/" element={<SinInProtected Cmp={Terrain} />} />
+
+          <Route path="stats/" element={<SinInProtected Cmp={Statisique} />} />
         </Routes>
       </BrowserRouter>
     </div>

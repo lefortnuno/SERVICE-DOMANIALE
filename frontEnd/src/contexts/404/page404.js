@@ -22,7 +22,7 @@ export default function PageNotFound() {
                 Nous ne trouvons la page que vous demandez.
               </h1>
 
-              <button className="go-home btn" onClick={goHome}>
+              <button className="go-home btn button_404" onClick={goHome}>
                 <i className="fa fa-home"></i> Retour à l'accueil
               </button>
             </div>
