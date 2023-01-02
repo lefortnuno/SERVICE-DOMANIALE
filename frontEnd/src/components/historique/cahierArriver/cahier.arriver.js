@@ -25,7 +25,8 @@ import {
   BsEye,
   BsFileEarmarkArrowUp,
   BsLayerForward,
-  BsCapslock,BsCapslockFill
+  BsCapslock,
+  BsCapslockFill,
 } from "react-icons/bs";
 
 const base = `Cahier d'Arriver`;
@@ -245,7 +246,6 @@ export default function CahierArriver() {
                                       </p>
                                     )}
                                   </td>
-
                                 </tr>
                               ))
                             ) : (
@@ -291,22 +291,6 @@ export default function CahierArriver() {
                         <br />
                       </>
                     ) : null}
-                  </div>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-md-4">
-                  <div className="card">
-                    <div className="card-header">
-                      <h4 className="card-title">Users Statistics</h4>
-                      <p className="card-category">
-                        Users statistics this month
-                      </p>
-                    </div>
-                    <div className="card-body">
-                      <div id="monthlyChart" className="chart chart-pie"></div>
-                    </div>
                   </div>
                 </div>
               </div>

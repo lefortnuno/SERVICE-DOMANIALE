@@ -9,7 +9,7 @@ import FooterContext from "../footer/footer.context";
 
 import { BsHouseFill } from "react-icons/bs";
 
-import Chart from "../Chart";
+import Chart from "./Chart";
 const URL_DE_BASE = `procedure_cin/stats/`;
 
 export default function Statisique() {

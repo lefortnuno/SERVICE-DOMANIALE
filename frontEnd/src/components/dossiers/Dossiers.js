@@ -8,6 +8,7 @@ import { NouvelleDemande } from "../access/accessAll";
 import HeaderContext from "../../contexts/header/header.context";
 import FooterContext from "../../contexts/footer/footer.context";
 import SidebarContext from "../../contexts/sidebar/sidebar.context";
+import { StatDossier } from "../../contexts/statistiques/dossier.stat";
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -298,19 +299,7 @@ export default function Dossier() {
               </div>
 
               <div className="row">
-                <div className="col-md-4">
-                  <div className="card">
-                    <div className="card-header">
-                      <h4 className="card-title">Users Statistics</h4>
-                      <p className="card-category">
-                        Users statistics this month
-                      </p>
-                    </div>
-                    <div className="card-body">
-                      <div id="monthlyChart" className="chart chart-pie"></div>
-                    </div>
-                  </div>
-                </div>
+                <StatDossier />
               </div>
             </div>
           </div>

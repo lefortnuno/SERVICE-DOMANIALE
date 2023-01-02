@@ -35,37 +35,21 @@ export default function Chart(props) {
     },
   };
 
-  const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "July",
-    "July",
-    "July",
-    "July",
-    "July",
-    "July",
-  ];
-
   const data = {
     labels: props.labels,
     datasets: [
       {
-        label: "PRIMA",
+        label: "V",
         data: props.data1,
         backgroundColor: "rgb(8, 120, 239)",
       },
       {
-        label: "USURE",
+        label: "AX",
         data: props.data2,
         backgroundColor: "rgb(250, 140, 5)",
       },
       {
-        label: "PERTE",
+        label: "X",
         data: props.data3,
         backgroundColor: "rgba(239, 8, 8, 0.8)",
       },

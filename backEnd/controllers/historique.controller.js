@@ -172,16 +172,6 @@ module.exports.getAllHistoriques = (req, res) => {
   });
 };
 
-module.exports.getAllStats = (req, res) => {
-  Historique.getAllStats((err, resp) => {
-    if (!err) {
-      res.send(resp);
-    } else {
-      res.send(err);
-    }
-  });
-};
-
 module.exports.getHistoriqueDossier = (req, res) => {
   Historique.getHistoriqueDossier(req.params.id, (err, resp) => {
     if (!err) {

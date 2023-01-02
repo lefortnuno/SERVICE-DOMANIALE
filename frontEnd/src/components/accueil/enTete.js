@@ -18,7 +18,7 @@ export default function EnTete() {
           </div>
         </div>
 
-        <div className="col-md-3">
+        {/* <div className="col-md-3">
           <div className="card card-stats">
             <div className="card-body">
               <p className="fw-bold mt-1">Actualiser Stat </p>
@@ -127,7 +127,7 @@ export default function EnTete() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
