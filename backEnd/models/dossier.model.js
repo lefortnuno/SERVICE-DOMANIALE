@@ -19,9 +19,7 @@ let Dossier = function (dossier) {
   this.planMere = dossier.planMere;
   this.certificatSituationJuridique = dossier.certificatSituationJuridique;
 };
-
-const REQUETE_BASE = ` 
-SELECT
+const ATTRIBUTS = `
     max(numeroSousDossier) as numeroSousDossier,
     numeroDossier,
     numeroAffaire,
@@ -50,7 +48,12 @@ SELECT
     cin,
     nom,
     prenom,
-    numeroTelephone
+    numeroTelephone `;
+
+const REQUETE_BASE =
+  ` SELECT ` +
+  ATTRIBUTS +
+  `
 FROM
     DOSSIER,
     SOUS_DOSSIER,
@@ -62,6 +65,33 @@ WHERE
     AND INDIVIDU.cin = REQUERANT.p_cin
     AND REQUERANT.numeroRequerant = DOSSIER.p_numeroRequerant
     AND PROCEDURES.numeroProcedure = DOSSIER.p_numeroProcedure `;
+
+const REQUETE_MES_DOSSIERS =
+  `SELECT
+    max(numeroHisto) as numeroHisto, 
+    numeroCompte,
+    identification,
+    ` +
+  ATTRIBUTS +
+  `
+FROM
+    DOSSIER,
+    SOUS_DOSSIER,
+    INDIVIDU,
+    REQUERANT,
+    PROCEDURES,
+    COMPTE,
+    HISTORIQUE
+WHERE
+    DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire
+    AND INDIVIDU.cin = REQUERANT.p_cin
+    AND REQUERANT.numeroRequerant = DOSSIER.p_numeroRequerant
+    AND PROCEDURES.numeroProcedure = DOSSIER.p_numeroProcedure
+    AND HISTORIQUE.h_numeroAffaire = DOSSIER.numeroAffaire
+    AND HISTORIQUE.h_numeroDossier = DOSSIER.numeroDossier
+    AND HISTORIQUE.h_numeroProcedure = PROCEDURES.numeroProcedure
+    AND HISTORIQUE.p_numeroCompte = COMPTE.numeroCompte
+    AND (numeroCompte = ? AND identification = ?) `;
 
 const REQUETE_NOUVELLE_DEMANDE = REQUETE_BASE + ` AND p_numeroProcedure=1 `;
 const GROUP_BY = ` GROUP BY numeroAffaire `;
@@ -85,6 +115,20 @@ Dossier.getAllDossiers = (result) => {
       result(null, res);
     }
   });
+};
+
+Dossier.getMesDossiers = (valeur, result) => {
+  dbConn.query(
+    REQUETE_MES_DOSSIERS + GROUP_BY + ORDER_BY,
+    [valeur.numeroCompte, valeur.identification],
+    (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
+      }
+    }
+  );
 };
 
 Dossier.getDossiersNouvelleDemande = (result) => {
@@ -228,6 +272,28 @@ Dossier.searchDossier = (valeur, result) => {
       GROUP_BY +
       ORDER_BY,
     valeur,
+    (err, res) => {
+      if (err) {
+        result({ err, message: "erreur !", success: false }, null);
+      } else {
+        if (res.length !== 0) {
+          result(null, { res, message: "trouvable !", success: true });
+        } else {
+          result(null, { res, message: "Introuvable !", success: false });
+        }
+      }
+    }
+  );
+};
+
+Dossier.searchMonDossier = (valeur, result) => {
+  dbConn.query(
+    REQUETE_MES_DOSSIERS +
+      ` AND ( numeroAffaire LIKE '%${valeur.value}%' OR p_cin LIKE '%${valeur.value}%' OR nom LIKE '%${valeur.value}%')` +
+      GROUP_BY +
+      ORDER_BY,
+    
+      [valeur.numeroCompte, valeur.identification],
     (err, res) => {
       if (err) {
         result({ err, message: "erreur !", success: false }, null);

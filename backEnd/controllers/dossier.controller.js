@@ -248,6 +248,19 @@ module.exports.getAllDossiers = (req, res) => {
   });
 };
 
+module.exports.getMesDossiers = (req, res) => {
+  let { numeroCompte, identification } = req.body;
+  const valeur = { numeroCompte, identification };
+
+  Dossier.getMesDossiers(valeur, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
 module.exports.getDossiersNouvelleDemande = (req, res) => {
   Dossier.getDossiersNouvelleDemande((err, resp) => {
     if (!err) {
@@ -358,6 +371,23 @@ module.exports.avortementDossier = (req, res) => {
 
 module.exports.searchDossier = (req, res) => {
   Dossier.searchDossier(req.params.valeur, (err, resp) => {
+    if (!err) {
+      if (resp) {
+        res.send(resp);
+      } else {
+        res.send(err);
+      }
+    } else {
+      res.send(err);
+    }
+  });
+};
+
+module.exports.searchMonDossier = (req, res) => {
+  let { numeroCompte, identification, value } = req.body;
+  const valeur = { numeroCompte, identification, value };
+
+  Dossier.searchMonDossier(valeur, (err, resp) => {
     if (!err) {
       if (resp) {
         res.send(resp);

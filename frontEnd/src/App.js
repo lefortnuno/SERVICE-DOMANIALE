@@ -11,14 +11,19 @@ import SEnregistrer from "./components/login/SEnregistrer";
 import Utilisateur from "./components/personnes/utilisateurs/Utilisateur";
 import Individu from "./components/personnes/individu/Individu";
 import Requerant from "./components/personnes/requerant/Requerant";
+
 import Accueil from "./components/accueil/accueil";
 import Bureau from "./components/bureau/bureau";
 import Procedure from "./components/procedures/procedure";
+
 import Dossier from "./components/dossiers/Dossiers";
+import DossierAgent from "./components/dossiers/mesDossier";
 import DetailsDossier from "./components/dossiers/DetailsDossier";
 import NouvelleDemande from "./components/dossiers/NouvelleDemande";
+
 import AjoutIndividu from "./components/personnes/individu/AjoutIndividu";
 import AjoutRequerant from "./components/personnes/requerant/AjoutRequerant";
+
 import CahierNouvelleDemande from "./components/historique/cahierNouvelleDemande/cahier.nouvelle.demande";
 import CahierArriver from "./components/historique/cahierArriver/cahier.arriver";
 import CahierInterne from "./components/historique/cahierInterne/cahier.interne";
@@ -53,6 +58,7 @@ export default function App() {
           />
           <Route path="bureau/" element={<SinInProtected Cmp={Bureau} />} />
           <Route path="dossier/" element={<SinInProtected Cmp={Dossier} />} />
+          <Route path="mesDossiers/" element={<SinInProtected Cmp={DossierAgent} />} />
           <Route path="viewDossier/:numeroDossier" element={<SinInProtected Cmp={DetailsDossier} />} />
           <Route
             path="nouvelleDemande/"
