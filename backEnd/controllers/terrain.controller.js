@@ -111,7 +111,8 @@ module.exports.getIdTerrain = (req, res) => {
 };
 
 module.exports.searchTerrain = (req, res) => {
-  const valeur = req.body;
+  let { value } = req.body;
+  const valeur = { value };
   Terrain.searchTerrain(valeur, (err, resp) => {
     if (!err) {
       res.send(resp);

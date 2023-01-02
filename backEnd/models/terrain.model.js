@@ -96,22 +96,22 @@ Terrain.getIdTerrain = (id, result) => {
 };
 
 Terrain.searchTerrain = (valeur, result) => {
-  let req;
-  console.log(valeur.nomPropriete);
-  if (valeur.imTerrain && valeur.cin && valeur.nomPropriete) {
-    req = `select * from Terrain where imTerrain LIKE '%${valeur.imTerrain}%' AND cin LIKE '%${valeur.cin}%'  AND nomPropriete LIKE '%${valeur.nomPropriete}%' `;
-  }
-  /**
-   * BEAUCOUP DE ELSE IF HERE !!!
-   */
-
-  dbConn.query(req, (err, res) => {
-    if (err) {
-      result(err, null);
-    } else {
-      result(null, res);
+  dbConn.query(
+    REQUETE_EXTRA +
+      ` AND ( immatriculationTerrain LIKE '%${valeur.value}%' OR nomPropriete LIKE '%${valeur.value}%') `,
+    (err, res) => {
+      if (err) {
+        console.log(err);
+        result({ err, message: "erreur !", success: false }, null);
+      } else {
+        if (res.length !== 0) {
+          result(null, { res, success: true });
+        } else {
+          result(null, { res, message: "Introuvable !", success: false });
+        }
+      }
     }
-  });
+  );
 };
 
 Terrain.rechercher_le_Terrain = (valeur, result) => {

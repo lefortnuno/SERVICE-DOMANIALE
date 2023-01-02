@@ -9,6 +9,7 @@ router.put("/:id", TerrainController.updateTerrain);
 
 router.post("/le_Terrain/", TerrainController.le_Terrain);
 router.post("/", TerrainController.addTerrain);
-router.post("/search", TerrainController.searchTerrain);
+router.post("/recherche", TerrainController.searchTerrain);
+
 
 module.exports = router;

@@ -34,6 +34,13 @@ export default function NavbarContext() {
         </li>
         <br />
         <li className="nav-item">
+          <Link to="/terrain/">
+            <i className="la la-font"></i>
+            <p>Terrain</p>
+            <span className="badge badge-success">3</span>
+          </Link>
+        </li>
+        <li className="nav-item">
           <Link to="/maps/">
             <i className="la la-font"></i>
             <p>Géographie</p>

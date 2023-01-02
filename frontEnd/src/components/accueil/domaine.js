@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-
+import GoogleMap from "../GoogleMapIntegration/GoogleMap";
 
 export default function Domaine() {
   return (
@@ -21,7 +21,7 @@ export default function Domaine() {
             </p>
           </div>
           {/* <div className="card-body"> */}
-          <img
+          {/* <img
             src={process.env.PUBLIC_URL + `/picture/Prefecture.jpg`}
             alt="pdp"
             style={{
@@ -29,8 +29,10 @@ export default function Domaine() {
               height: "100%",
               borderRadius: "0%",
             }}
-          />
+          /> */}
+          < GoogleMap />
           {/* </div> */}
+
         </div>
       </div>
     </div>

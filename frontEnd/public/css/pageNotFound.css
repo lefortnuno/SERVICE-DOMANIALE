@@ -1,0 +1,98 @@
+/* * {
+    padding: 0;
+    margin: 0;
+    outline: 0;
+    color: #444;
+    box-sizing: border-box;
+    font-family: 'IBM Plex Sans', sans-serif;
+  } */
+.wrapper_404 {
+  /* display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden; */
+  /* background-image: url("page-not-found.svg"); */
+  background-image: url("/picture/pageNotFound/page-not-found.svg");
+
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+h1 {
+  font-size: 50px;
+  line-height: 60px;
+  color: #fff;
+  font-weight: bold;
+}
+span {
+  display: block;
+  font-size: 18px;
+  line-height: 30px;
+  color: #fff;
+}
+.container_404 {
+  width: 80%;
+  max-width: 1600px;
+  margin: auto;
+}
+.grid-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  place-items: center;
+  grid-gap: 50px;
+}
+.colmun-left {
+  text-align: left;
+}
+.colmun-right {
+  text-align: right;
+}
+.px-spc-b-20 {
+  padding-bottom: 20px;
+}
+button.go-home {
+  padding: 5px 20px;
+  background: #ffa000;
+  border: transparent;
+  border-radius: 2px;
+  box-shadow: 0 0 2px rgb(0 0 0 / 30%);
+  cursor: pointer;
+  margin: 20px 0;
+  color: #fff;
+}
+button.go-home i {
+  color: #fff;
+}
+
+button:hover{
+    background: #00ff2f;
+    color: rgb(66, 66, 66);
+  }
+img {
+  display: block;
+  width: 100%;
+}
+
+@media screen and (max-width: 500px) {
+  .wrapper_404 {
+    background-position: center;
+  }
+  h1 {
+    font-size: 50px;
+    line-height: 60px;
+    color: rgb(255, 0, 0);
+  }
+}
+
+@media screen and (max-width: 275px) {
+  .wrapper_404 {
+    background-position: bottom;
+  }
+  h1 {
+    font-size: 25px;
+    line-height: 30px;
+  }
+  button.go-home {
+    padding: 2px;
+  }
+}

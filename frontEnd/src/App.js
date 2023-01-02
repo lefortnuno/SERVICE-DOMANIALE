@@ -29,7 +29,10 @@ import CahierArriver from "./components/historique/cahierArriver/cahier.arriver"
 import CahierInterne from "./components/historique/cahierInterne/cahier.interne";
 import CahierDepart from "./components/historique/cahierDepart/cahier.depart";
 import CahierRendezVous from "./components/historique/cahierRendezVous/cahier.rendez.vous";
-import MapsTany from "./maps/maps";
+import MapsForFtsoa from "./maps/maps";
+
+import Terrain from "./components/terrain/Terrain";
+import PageNotFound from "./contexts/404/page404";
 
 export default function App() {
   return (
@@ -38,6 +41,9 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<LogOutProtection Cmp={SeConnecter} />} />
+
+          <Route path='/*' element={<SinInProtected Cmp={PageNotFound} />} />
+
           <Route
             path="nouveauUtilisateur/"
             element={<SinInProtected Cmp={SEnregistrer} />}
@@ -87,7 +93,11 @@ export default function App() {
 
           <Route
             path="maps/"
-            element={<SinInProtected Cmp={MapsTany} />}
+            element={<SinInProtected Cmp={MapsForFtsoa} />}
+          />
+          <Route
+            path="terrain/"
+            element={<SinInProtected Cmp={Terrain} />}
           />
         </Routes>
       </BrowserRouter>
