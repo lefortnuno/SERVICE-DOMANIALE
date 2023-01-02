@@ -3,14 +3,14 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { AjoutLibrary, libraryList } from "../../api/file.js";
 
-import HeaderContext from "../header/header.context"; 
+import HeaderContext from "../header/header.context";
 import SidebarContext from "../sidebar/sidebar.context";
 import FooterContext from "../footer/footer.context";
 
 import { BsHouseFill } from "react-icons/bs";
 
 import Chart from "./Chart";
-const URL_DE_BASE = `procedure_cin/stats/`;
+const URL_DE_BASE = `stat/stats_sigle/`;
 
 export default function Statisique() {
   const [data, setData] = useState([]);
@@ -22,6 +22,7 @@ export default function Statisique() {
 
   const getUsers = async () => {
     const result = await axios.get(URL_DE_BASE).then(function (response) {
+      console.log(response.data);
       setData(response.data);
     });
   };
@@ -36,7 +37,7 @@ export default function Statisique() {
     <>
       {libraryList.forEach((x) => AjoutLibrary(x))}
 
-      <div className="wrapper">
+      {/* <div className="wrapper">
         <HeaderContext>
           <form className="navbar-left navbar-form nav-search mr-md-3">
             <div className="input-group">
@@ -87,7 +88,10 @@ export default function Statisique() {
 
           <FooterContext />
         </div>
-      </div>
+      </div> */}
+      <h1> OK </h1>
+      <Chart />
+
     </>
   );
 }
