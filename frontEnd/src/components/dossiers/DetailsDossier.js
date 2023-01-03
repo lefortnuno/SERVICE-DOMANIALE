@@ -487,8 +487,8 @@ export default function DetailsDossier() {
 														process.env.PUBLIC_URL + `/picture/logo/e-T.png`
 													})`,
 													backgroundRepeat: "no-repeat",
-													backgroundPosition: "center",
-													backgroundSize: "contain",
+													backgroundPosition: "70% 65%",
+													backgroundSize: "40%",
 												}}
 												ref={compRef}
 											>
@@ -556,7 +556,7 @@ export default function DetailsDossier() {
 												<div className="form-row">
 													<div className="form-group col-2"></div>
 													<div className="form-group col-6">
-														<label> DF : XXX</label>
+														<label> DF : </label>
 													</div>
 													<div className="form-group col-4 text-right">
 														<span> {inputsDecompte.DF} </span>
