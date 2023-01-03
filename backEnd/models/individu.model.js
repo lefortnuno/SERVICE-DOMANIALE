@@ -69,7 +69,7 @@ Individu.searchIndividu = (valeur, result) => {
 
 Individu.apercuIndividu = (valeur, result) => {
   dbConn.query(
-    REQUETE_BASE + `AND ( cin LIKE '${valeur}%' )` + ORDER_BY + ` LIMIT 1 `,
+    REQUETE_BASE + `AND ( cin LIKE '${valeur}%' )` + ORDER_BY + ` LIMIT 10 `,
     (err, res) => {
       if (err) {
         result({ err, message: "erreur !", success: false }, null);

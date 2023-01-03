@@ -75,7 +75,8 @@ module.exports.addDossier = (req, res) => {
   }
   if (!dateRDV) {
     let addRdvDays = 15;
-    dateRDV = dateAujourdHui.addDays(addRdvDays);
+    // dateRDV = dateAujourdHui.addDays(addRdvDays);
+    dateRDV = fomatDateAujourdHui;
   }
 
   let numeroDossier;

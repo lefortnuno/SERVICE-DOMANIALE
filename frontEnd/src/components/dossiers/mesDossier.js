@@ -159,7 +159,8 @@ export default function DossierAgent() {
           <form className="navbar-left navbar-form nav-search mr-md-3">
             <div className="input-group">
               <input
-                type="text"
+                type="number_format"
+                maxLength="20"
                 name="searchValue"
                 placeholder="Rechercher ...."
                 className="form-control"

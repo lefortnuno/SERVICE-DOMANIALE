@@ -292,8 +292,8 @@ Dossier.searchMonDossier = (valeur, result) => {
       ` AND ( numeroAffaire LIKE '%${valeur.value}%' OR p_cin LIKE '%${valeur.value}%' OR nom LIKE '%${valeur.value}%')` +
       GROUP_BY +
       ORDER_BY,
-    
-      [valeur.numeroCompte, valeur.identification],
+
+    [valeur.numeroCompte, valeur.identification],
     (err, res) => {
       if (err) {
         result({ err, message: "erreur !", success: false }, null);

@@ -17,347 +17,392 @@ let existanceIndividu = false;
 let isValidate = false;
 
 export default function FormulaireNouveauRequerant() {
-  //#region // MES VARIABLES
-  const u_info = getDataUtilisateur();
-  const navigate = useNavigate();
-  const dateAujourdHui = new Date();
-  const mesInputs = {
-    etatMorale: "",
-    cin: "",
-    numeroTelephone: "",
-    complementInformation: "",
-  };
+	//#region // MES VARIABLES
+	const u_info = getDataUtilisateur();
+	const navigate = useNavigate();
+	const dateAujourdHui = new Date();
+  
+	const cinRecherche = {
+		cin: "",
+		nom: "",
+	};
 
-  const [inputs, setInputs] = useState(mesInputs);
-  const [donnee, setDonnee] = useState({
-    hisData: "",
-  });
-  const [erreurs, setErreurs] = useState([]);
-  const [messages, setMessages] = useState(mesInputs);
-  //#endregion
+	const mesInputs = {
+		etatMorale: "",
+		cin: "",
+		numeroTelephone: "",
+		complementInformation: "",
+	};
 
-  //#region // HANDLE CHANGE FONCTION
-  const handleChange = (event) => {
-    isValidate = true;
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
-    setInputs((values) => ({ ...values, [name]: value }));
-    setErreurs((values) => ({ ...values, messageErreur: false }));
-    setErreurs((values) => ({ ...values, [name]: false }));
+	const [inputs, setInputs] = useState(mesInputs);
+	const [donnee, setDonnee] = useState([cinRecherche]);
+	const [erreurs, setErreurs] = useState([]);
+	const [messages, setMessages] = useState(mesInputs);
+	//#endregion
 
-    if (name === "cin") {
-      rechercheIndividu(value);
-      if (value.length === 0) {
-        isValidate = false;
-        setErreurs((values) => ({ ...values, [name]: true }));
-        setMessages((values) => ({
-          ...values,
-          [name]: "Numéro de CIN obligatoire",
-        }));
-      } else if (value.length < 12) {
-        isValidate = false;
-        setErreurs((values) => ({ ...values, [name]: true }));
-        setMessages((values) => ({
-          ...values,
-          [name]: "Numéro de CIN trop court",
-        }));
-      } else if (value.length > 12) {
-        isValidate = false;
-        setErreurs((values) => ({ ...values, [name]: true }));
-        setMessages((values) => ({
-          ...values,
-          [name]: "Numéro de CIN trop long",
-        }));
-      } else {
-        isValidate = true;
-        setErreurs((values) => ({ ...values, [name]: false }));
-        setMessages((values) => ({ ...values, [name]: "" }));
-      }
-    }
+	//#region // HANDLE CHANGE FONCTION
+	const handleChange = (event) => {
+		const target = event.target;
+		const value = target.type === "checkbox" ? target.checked : target.value;
+		const name = target.name;
+		setInputs((values) => ({ ...values, [name]: value }));
+		setErreurs((values) => ({ ...values, messageErreur: false }));
+		setErreurs((values) => ({ ...values, [name]: false }));
+
+		if (name === "x_cin") {
+			rechercheIndividu(value);
+			if (value.length === 0) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: "Numéro de CIN obligatoire",
+				}));
+			} else if (value.length < 12) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: "Numéro de CIN trop court",
+				}));
+			} else if (value.length > 12) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: "Numéro de CIN trop long",
+				}));
+			} else {
+				isValidate = true;
+				setErreurs((values) => ({ ...values, [name]: false }));
+				setMessages((values) => ({ ...values, [name]: "" }));
+			}
+		}
+
+		if (name === "numeroTelephone") {
+			if (value.length === 0) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: [name] + " obligatoire",
+				}));
+			} else if (value.length < 9) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: [name] + " trop court",
+				}));
+			} else if (value.length > 9) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: [name] + " trop long",
+				}));
+			} else {
+				isValidate = true;
+				setErreurs((values) => ({ ...values, [name]: false }));
+				setMessages((values) => ({ ...values, [name]: "" }));
+			}
+		}
+
+		if (name === "complementInformation") {
+			if (value.length === 0) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: [name] + " obligatoire",
+				}));
+			} else if (value.length < 6) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: [name] + " trop court",
+				}));
+			} else if (value.length > 100) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: [name] + " trop long",
+				}));
+			} else {
+				isValidate = true;
+				setErreurs((values) => ({ ...values, [name]: false }));
+				setMessages((values) => ({ ...values, [name]: "" }));
+			}
+		}
+	};
+	//#endregion
+
+	//#region //VALIDATION FORMULAIRE
+	const validation = (event) => {
+		event.preventDefault();
+
+		const inputsObligatoire = [
+			"cin",
+			"numeroTelephone",
+			"complementInformation",
+		];
+
+		if (!inputs.etatMorale) {
+			inputs.etatMorale = "false";
+		}
+
+		if (!inputs.cin) {
+			if (existanceIndividu) {
+				inputs.cin = donnee[0].cin;
+				setErreurs((values) => ({ ...values, cin: false }));
+				setMessages((values) => ({
+					...values,
+					cin: "",
+				}));
+				isValidate = true;
+			} else {
+				setErreurs((values) => ({ ...values, cin: true }));
+				setMessages((values) => ({
+					...values,
+					cin: "Numéro de CIN obligatoire",
+				}));
+				isValidate = false;
+			}
+		}
     
-    if (name === "numeroTelephone") {
-        if (value.length === 0) {
-          isValidate = false;
-          setErreurs((values) => ({ ...values, [name]: true }));
-          setMessages((values) => ({
-            ...values,
-            [name]: [name] + " obligatoire",
-          }));
-        } else if (value.length < 9) {
-          isValidate = false;
-          setErreurs((values) => ({ ...values, [name]: true }));
-          setMessages((values) => ({
-            ...values,
-            [name]: [name] + " trop court",
-          }));
-        } else if (value.length > 9) {
-          isValidate = false;
-          setErreurs((values) => ({ ...values, [name]: true }));
-          setMessages((values) => ({
-            ...values,
-            [name]: [name] + " trop long",
-          }));
-        } else {
-          isValidate = true;
-          setErreurs((values) => ({ ...values, [name]: false }));
-          setMessages((values) => ({ ...values, [name]: "" }));
-        }
-      }
-      
-    if (name === "complementInformation") {
-        if (value.length === 0) {
-          isValidate = false;
-          setErreurs((values) => ({ ...values, [name]: true }));
-          setMessages((values) => ({
-            ...values,
-            [name]: [name] + " obligatoire",
-          }));
-        } else if (value.length < 6) {
-          isValidate = false;
-          setErreurs((values) => ({ ...values, [name]: true }));
-          setMessages((values) => ({
-            ...values,
-            [name]: [name] + " trop court",
-          }));
-        } else if (value.length > 100) {
-          isValidate = false;
-          setErreurs((values) => ({ ...values, [name]: true }));
-          setMessages((values) => ({
-            ...values,
-            [name]: [name] + " trop long",
-          }));
-        } else {
-          isValidate = true;
-          setErreurs((values) => ({ ...values, [name]: false }));
-          setMessages((values) => ({ ...values, [name]: "" }));
-        }
-      }
-  };
-  //#endregion
+		inputsObligatoire.forEach((element) => {
+			if (element === "cin" && inputs[element]) {
+				if (inputs[element].length !== 12) {
+					setErreurs((values) => ({ ...values, [element]: true }));
+					setMessages((values) => ({
+						...values,
+						[element]: "champ " + [element] + "  anormale",
+					}));
+					isValidate = false;
+				}
+			}
+			if (element === "numeroTelephone" && inputs[element]) {
+				if (inputs[element].length !== 9) {
+					setErreurs((values) => ({ ...values, [element]: true }));
+					setMessages((values) => ({
+						...values,
+						[element]: "champ " + [element] + "  anormale",
+					}));
+					isValidate = false;
+				}
+			}
+			if (!inputs[element]) {
+				setErreurs((values) => ({ ...values, [element]: true }));
+				setMessages((values) => ({
+					...values,
+					[element]: "champ " + [element] + "  obligatoire",
+				}));
+				isValidate = false;
+			}
+		});
 
-  //#region //VALIDATION FORMULAIRE
-  const validation = (event) => {
-    event.preventDefault();
+		console.log(" --------- ", isValidate, " --------------");
+		if (isValidate) {
+			onSubmit();
+		} else {
+			toast.warn("Verifier les champs!");
+		}
+	};
+	//#endregion
 
-    const inputsObligatoire = [
-      "cin",
-      "numeroTelephone",
-      "complementInformation",
-    ];
+	//#region // FONCTION DU BOUTTON ENREGISTRER
+	const onSubmit = () => {
+		const dataInputs = Object.assign(inputs, {
+			roleU: u_info.u_attribut,
+			numeroCompte: u_info.u_numeroCompte,
+		});
 
-    if (!inputs.etatMorale) {
-      inputs.etatMorale = "false";
-    }
+		console.log(dataInputs);
+		axios.post(URL_DE_BASE, dataInputs, u_info.opts).then(function (response) {
+			if (response.status === 200) {
+				if (response.data.success) {
+					toast.success("Ajout Reussi.");
 
-    inputsObligatoire.forEach((element) => {
-      if (!inputs[element]) {
-        setErreurs((values) => ({ ...values, [element]: true }));
-        setMessages((values) => ({
-          ...values,
-          [element]: "champ " + [element] + "  obligatoire",
-        }));
-        isValidate = false;
-      }
-    });
+					onClose();
+				} else {
+					toast.error("Echec de l'Ajout!");
+				}
+			} else {
+				toast.error("Echec de l'Ajout!");
+			}
+		});
+	};
+	//#endregion
 
-    console.log(" --------- ", isValidate, " --------------");
-    if (isValidate) {
-      onSubmit();
-    } else {
-      toast.warn("Verifier les champs!");
-    }
-  };
-  //#endregion
+	//#region // QUAND JE FERMER MON MODAL, CETTE FONCTIO EST APPELLER
+	function onClose() {
+		const inputsArray = Object.keys(inputs);
 
-  //#region // FONCTION DU BOUTTON ENREGISTRER
-  const onSubmit = () => {
-    const dataInputs = Object.assign(inputs, {
-      roleU: u_info.u_attribut,
-      numeroCompte: u_info.u_numeroCompte,
-    });
+		inputsArray.forEach((element) => {
+			inputs[element] = "";
+			isValidate = false;
+			setErreurs((values) => ({ ...values, [element]: false }));
+		});
 
-    console.log(dataInputs);
-    axios.post(URL_DE_BASE, dataInputs, u_info.opts).then(function (response) {
-      if (response.status === 200) {
-        if (response.data.success) {
-          toast.success("Ajout Reussi.");
+		navigate("/requerant/");
+	}
+	//#endregion
 
-          onClose();
-        } else {
-          toast.error("Echec de l'Ajout!");
-        }
-      } else {
-        toast.error("Echec de l'Ajout!");
-      }
-    });
-  };
-  //#endregion
+	//#region // ----- MA RECHERCHE -----
+	function rechercheIndividu(valeur) {
+		if (!valeur) {
+			// getIndividu();
+			contenuTab = false;
+		} else {
+			
+			axios.get(URL_CIN + `apercu/${valeur}`, u_info.opts).then((response) => {
+				if (response.status === 200) {
+					const ux = response.data;
+					console.log(ux);
+					if (ux.success) {
+						const u = ux.res;
 
-  //#region // QUAND JE FERMER MON MODAL, CETTE FONCTIO EST APPELLER
-  function onClose() {
-    const inputsArray = Object.keys(inputs);
+						setDonnee(u);
+						setErreurs((values) => ({ ...values, p_cin: false }));
+						setMessages((values) => ({
+							...values,
+							p_cin: "",
+						}));
 
-    inputsArray.forEach((element) => {
-      inputs[element] = "";
-      isValidate = false;
-      setErreurs((values) => ({ ...values, [element]: false }));
-    });
+						contenuTab = true;
+						existanceIndividu = true;
+					} else {
+						setDonnee([{ message: ux.message }]);
+						setErreurs((values) => ({ ...values, p_cin: true }));
+						setMessages((values) => ({
+							...values,
+							p_cin: ux.message,
+						}));
 
-    navigate("/requerant/");
-  }
-  //#endregion
+						contenuTab = true;
+						existanceIndividu = false;
+					}
+				} else {
+					setDonnee([cinRecherche]);
+					contenuTab = false;
+					existanceIndividu = false;
+				}
+			});
+		}
+	}
+	//#endregion
 
-  //#region // ----- MA RECHERCHE -----
-  function rechercheIndividu(valeur) {
-    if (!valeur) {
-      // getIndividu();
-      contenuTab = false;
-    } else {
-      axios.get(URL_CIN + `apercu/${valeur}`, u_info.opts).then((response) => {
-        if (response.status === 200) {
-          const ux = response.data;
-          if (ux.success) {
-            const u = ux.res[0];
-            const concatDonnee = u.cin + " - " + u.nom;
-            const hisData = Object.assign({}, { hisData: concatDonnee });
-            setDonnee(hisData);
-            setErreurs((values) => ({ ...values, p_cin: false }));
-            setMessages((values) => ({
-              ...values,
-              p_cin: "",
-            }));
+	//#region // RENDU HTML ----
+	return (
+		<>
+			<form>
+				<div className="form first">
+					<div className="details personal">
+						<div className="fields">
+							<div className="input-field">
+								<label>Etat Morale : </label>
+								<select
+									name="etatMorale"
+									onChange={handleChange}
+									autoComplete="off"
+								>
+									<option value={false}>- Individu Normale</option>
+									<option value={true}> - Personne Morale </option>
+								</select>
+							</div>
 
-            contenuTab = true;
-            existanceIndividu = true;
-          } else {
-            const hisData = Object.assign({}, { hisData: ux.message });
-            setDonnee(hisData);
-            setErreurs((values) => ({ ...values, p_cin: true }));
-            setMessages((values) => ({
-              ...values,
-              p_cin: ux.message,
-            }));
+							<div className="input-field">
+								<label>
+									Numéro de CIN :
+									<small className="text-danger d-block">
+										{erreurs.p_cin ? messages.p_cin : null}
+									</small>
+								</label>
+								<input
+									type="number"
+									min="1"
+									name="x_cin"
+									onChange={handleChange}
+									autoComplete="off"
+									placeholder="Entrez le numéro de CIN"
+								/>
+								<small className="text-danger d-block">
+									{erreurs.cin ? messages.cin : null}
+								</small>
+							</div>
 
-            contenuTab = true;
-            existanceIndividu = false;
-          }
-        } else {
-          const hisData = Object.assign({}, { hisData: "" });
-          setDonnee(hisData);
-          contenuTab = false;
-          existanceIndividu = false;
-        }
-      });
-    }
-  }
-  //#endregion
+							{contenuTab && donnee.length !== 0 ? (
+								<>
+									<div className="input-field">
+										<label> Sélectionner un Numéro de CIN: </label>
+										<select
+											name="cin"
+											value={donnee.cin}
+											onChange={handleChange}
+											autoComplete="off"
+											style={{
+												backgroundColor: "rgb(226, 226, 226)",
+												color: "#000",
+											}}
+										>
+											{donnee.map((d, index) => (
+												<option value={d.cin} key={index}>
+													If°{d.cin} - {d.nom}
+												</option>
+											))}
+										</select>
+									</div>
+								</>
+							) : null}
 
-  //#region // RENDU HTML ----
-  return (
-    <>
-      <form>
-        <div className="form first">
-          <div className="details personal">
-            <div className="fields">
-              <div className="input-field">
-                <label>Etat Morale : </label>
-                <select
-                  name="etatMorale"
-                  onChange={handleChange}
-                  autoComplete="off"
-                >
-                  <option value={false}>- Individu Normale</option>
-                  <option value={true}> - Personne Morale </option>
-                </select>
-              </div>
+							<div className="input-field">
+								<label>Numéro de téléphone :</label>
+								<input
+									type="number"
+									min="1"
+									name="numeroTelephone"
+									onChange={handleChange}
+									autoComplete="off"
+									placeholder="+261"
+								/>
+								<small className="text-danger d-block">
+									{erreurs.numeroTelephone ? messages.numeroTelephone : null}
+								</small>
+							</div>
 
-              <div className="input-field">
-                <label>
-                  Numéro de CIN :
-                  <small className="text-danger d-block">
-                    {erreurs.p_cin ? messages.p_cin : null}
-                  </small>
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  name="cin"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  placeholder="Entrez le numéro de CIN"
-                />
-                <small className="text-danger d-block">
-                  {erreurs.cin ? messages.cin : null}
-                </small>
-              </div>
+							<div className="input-field">
+								<label>Observation :</label>
+								<textarea
+									as="text"
+									name="complementInformation"
+									onChange={handleChange}
+									autoComplete="off"
+									placeholder="Une observation à ajouter ? exemple : ''individu tres menacant et insistant, ....'' "
+								/>
+								<small className="text-danger d-block">
+									{erreurs.complementInformation
+										? messages.complementInformation
+										: null}
+								</small>
+							</div>
+						</div>
 
-              {contenuTab && donnee.hisData ? (
-                <>
-                  <div className="input-field">
-                    <label> Pré-visualisation : </label>
-                    <input
-                      type="text"
-                      name="hisData"
-                      value={donnee.hisData}
-                      autoComplete="off"
-                      placeholder="...."
-                      disabled={true}
-                      style={{
-                        backgroundColor: "rgb(226, 226, 226)",
-                        color: "#000",
-                      }}
-                    />
-                  </div>
-                </>
-              ) : null}
+						<div className="buttons">
+							<div className="backBtn btn btn-danger" onClick={onClose}>
+								<BsReplyFill />
+								<span className="btnText"> Annuler</span>
+							</div>
 
-              <div className="input-field">
-                <label>Numéro de téléphone :</label>
-                <input
-                  type="number"
-                  min="1"
-                  name="numeroTelephone"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  placeholder="+261"
-                />
-                <small className="text-danger d-block">
-                  {erreurs.numeroTelephone ? messages.numeroTelephone : null}
-                </small>
-              </div>
-
-              <div className="input-field">
-                <label>Observation :</label>
-                <textarea
-                  as="text"
-                  name="complementInformation"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  placeholder="Une observation à ajouter ? exemple : ''individu tres menacant et insistant, ....'' "
-                />
-                <small className="text-danger d-block">
-                  {erreurs.complementInformation
-                    ? messages.complementInformation
-                    : null}
-                </small>
-              </div>
-            </div>
-
-            <div className="buttons">
-              <div className="backBtn btn btn-danger" onClick={onClose}>
-                <BsReplyFill />
-                <span className="btnText"> Annuler</span>
-              </div>
-
-              <button className="btn btn-success" onClick={validation}>
-                <span className="btnText"> Enregistrer</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </>
-  );
-  //#endregion
+							<button className="btn btn-success" onClick={validation}>
+								<span className="btnText"> Enregistrer</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</>
+	);
+	//#endregion
 }

@@ -13,453 +13,487 @@ let existanceIndividu = false;
 let contenuTab = false;
 
 export default function FormulaireEnregistrement() {
-  //#region // MES VARIABLES
-  const u_info = getDataUtilisateur();
-  const navigate = useNavigate();
-  const [picPhotoPDP, setPicPhotoPDP] = useState({
-    file: [],
-    filepreview: null,
-  });
-  const [latNumeroCompte, setLatNumeroCompte] = useState({
-    numeroCompte: "",
-  });
+	//#region // MES VARIABLES
+	const u_info = getDataUtilisateur();
+	const navigate = useNavigate();
 
-  const [inputs, setInputs] = useState({
-    identification: "",
-    photoPDP: "",
-    mdp: "",
-    confirmationMdp: "",
-    unite: "",
-    u_cin: "",
-  });
-  const [donnee, setDonnee] = useState({
-    hisData: "",
-  });
-  const [erreurs, setErreurs] = useState([]);
-  const [messages, setMessages] = useState({
-    messageErreur: "",
-    identification: "",
-    photoPDP: "",
-    mdp: "",
-    confirmationMdp: "",
-    unite: "",
-    u_cin: "",
-    p_cin: "",
-  });
-  //#endregion
+	const cinRecherche = {
+		cin: "",
+		nom: "",
+	};
 
-  //#region // DERNIERE NUMERO COMPTE UTILISATEUR FUNC
+	const mesInputs = {
+		identification: "",
+		photoPDP: "",
+		mdp: "",
+		confirmationMdp: "",
+		unite: "",
+		u_cin: "",
+	};
 
-  useEffect(() => {
-    getlastUtilisateur();
-  }, []);
+	const [picPhotoPDP, setPicPhotoPDP] = useState({
+		file: [],
+		filepreview: null,
+	});
 
-  function getlastUtilisateur() {
-    axios
-      .get(URL_DE_BASE + `numeroCompte/`, u_info.opts)
-      .then(function (response) {
-        if (response.status === 200) {
-          setLatNumeroCompte(response.data);
-        } else {
-          toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
-        }
-      });
-  }
+	const [latNumeroCompte, setLatNumeroCompte] = useState({
+		numeroCompte: "",
+	});
+	const [inputs, setInputs] = useState([mesInputs]);
+	const [donnee, setDonnee] = useState([cinRecherche]);
 
-  //#endregion
+	const [erreurs, setErreurs] = useState([]);
+	const [messages, setMessages] = useState({
+		messageErreur: "",
+		identification: "",
+		photoPDP: "",
+		mdp: "",
+		confirmationMdp: "",
+		unite: "",
+		u_cin: "",
+		p_cin: "",
+	});
+	//#endregion
 
-  //#region // HANDLE CHANGE IMAGE FUNC
-  const handlePicturePhotoPDP = (event) => {
-    setPicPhotoPDP({
-      ...picPhotoPDP,
-      file: event.target.files[0],
-      filepreview: URL.createObjectURL(event.target.files[0]),
-    });
-  };
-  //#endregion
+	//#region // DERNIERE NUMERO COMPTE UTILISATEUR FUNC
+	useEffect(() => {
+		getlastUtilisateur();
+	}, []);
 
-  //#region // HANDLE CHANGE FONCTION
-  const handleChange = (event) => {
-    isValidate = true;
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
-    setInputs((values) => ({ ...values, [name]: value }));
-    setErreurs((values) => ({ ...values, messageErreur: false }));
+	function getlastUtilisateur() {
+		axios
+			.get(URL_DE_BASE + `numeroCompte/`, u_info.opts)
+			.then(function (response) {
+				if (response.status === 200) {
+					setLatNumeroCompte(response.data);
+				} else {
+					toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
+				}
+			});
+	}
 
-    if (
-      name === "identification" ||
-      name === "mdp" ||
-      name === "confirmationMdp"
-    ) {
-      if (value.length === 0) {
-        isValidate = false;
-        setErreurs((values) => ({ ...values, [name]: true }));
-        setMessages((values) => ({
-          ...values,
-          [name]: name + " obligatoire",
-        }));
-      } else if (value.length < 4) {
-        isValidate = false;
-        setErreurs((values) => ({ ...values, [name]: true }));
-        setMessages((values) => ({
-          ...values,
-          [name]: name + " trop court",
-        }));
-      } else if (value.length > 8) {
-        isValidate = false;
-        setErreurs((values) => ({ ...values, [name]: true }));
-        setMessages((values) => ({
-          ...values,
-          [name]: name + " trop long",
-        }));
-      } else {
-        isValidate = true;
-        setErreurs((values) => ({ ...values, [name]: false }));
-        setMessages((values) => ({ ...values, [name]: "" }));
-      }
-    }
+	//#endregion
 
-    if (name === "unite") {
-      setErreurs((values) => ({ ...values, [name]: false }));
-    }
+	//#region // HANDLE CHANGE IMAGE FUNC
+	const handlePicturePhotoPDP = (event) => {
+		setPicPhotoPDP({
+			...picPhotoPDP,
+			file: event.target.files[0],
+			filepreview: URL.createObjectURL(event.target.files[0]),
+		});
+	};
+	//#endregion
 
-    if (name === "u_cin") {
-      rechercheIndividu(value);
-      if (value.length === 0) {
-        isValidate = false;
-        setErreurs((values) => ({ ...values, [name]: true }));
-        setMessages((values) => ({
-          ...values,
-          [name]: "Numéro de CIN obligatoire",
-        }));
-      } else if (value.length < 12) {
-        isValidate = false;
-        setErreurs((values) => ({ ...values, [name]: true }));
-        setMessages((values) => ({
-          ...values,
-          [name]: "Numéro de CIN trop court",
-        }));
-      } else if (value.length > 12) {
-        isValidate = false;
-        setErreurs((values) => ({ ...values, [name]: true }));
-        setMessages((values) => ({
-          ...values,
-          [name]: "Numéro de CIN trop long",
-        }));
-      } else {
-        isValidate = true;
-        setErreurs((values) => ({ ...values, [name]: false }));
-        setMessages((values) => ({ ...values, [name]: "" }));
-      }
-    }
+	//#region // HANDLE CHANGE FONCTION
+	const handleChange = (event) => {
+		isValidate = true;
+		const target = event.target;
+		const value = target.type === "checkbox" ? target.checked : target.value;
+		const name = target.name;
+		setInputs((values) => ({ ...values, [name]: value }));
+		setErreurs((values) => ({ ...values, messageErreur: false }));
 
-    if (name === "confirmationMdp") {
-      if (value !== inputs.mdp) {
-        isValidate = false;
-        setErreurs((values) => ({ ...values, [name]: true }));
-        setMessages((values) => ({
-          ...values,
-          [name]: " Les mot de pass ne correspondent pas",
-        }));
-      } else {
-        isValidate = true;
-        setErreurs((values) => ({ ...values, [name]: false }));
-        setMessages((values) => ({ ...values, [name]: "" }));
-      }
-    }
-    if (name === "mdp") {
-      setErreurs((values) => ({ ...values, confirmationMdp: false }));
-      setMessages((values) => ({ ...values, confirmationMdp: "" }));
-    }
-  };
-  //#endregion
+		if (
+			name === "identification" ||
+			name === "mdp" ||
+			name === "confirmationMdp"
+		) {
+			if (value.length === 0) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: name + " obligatoire",
+				}));
+			} else if (value.length < 4) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: name + " trop court",
+				}));
+			} else if (value.length > 8) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: name + " trop long",
+				}));
+			} else {
+				isValidate = true;
+				setErreurs((values) => ({ ...values, [name]: false }));
+				setMessages((values) => ({ ...values, [name]: "" }));
+			}
+		}
 
-  //#region //VALIDATION FORMULAIRE
-  const validation = (event) => {
-    event.preventDefault();
+		if (name === "unite") {
+			setErreurs((values) => ({ ...values, [name]: false }));
+		}
 
-    if (!inputs.unite) {
-      setErreurs((values) => ({ ...values, unite: true }));
-      setMessages((values) => ({
-        ...values,
-        unite: "Selectionner votre domaine",
-      }));
-      isValidate = false;
-    }
+		if (name === "x_u_cin") {
+			rechercheIndividu(value);
+			if (value.length === 0) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: "Numéro de CIN obligatoire",
+				}));
+			} else if (value.length < 12) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: "Numéro de CIN trop court",
+				}));
+			} else if (value.length > 12) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: "Numéro de CIN trop long",
+				}));
+			} else {
+				isValidate = true;
+				setErreurs((values) => ({ ...values, [name]: false }));
+				setMessages((values) => ({ ...values, [name]: "" }));
+			}
+		}
 
-    const inputsArray = Object.keys(inputs);
-    inputsArray.forEach((element) => {
-      if (element !== "unite" && element !== "photoPDP") {
-        const value = Object.values(inputs[element]);
-        if (value.length === 0) {
-          setErreurs((values) => ({ ...values, [element]: true }));
-          setMessages((values) => ({
-            ...values,
-            [element]: " champ obligatoire",
-          }));
-          isValidate = false;
-        }
-      }
-    });
+		if (name === "confirmationMdp") {
+			if (value !== inputs.mdp) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: " Les mot de pass ne correspondent pas",
+				}));
+			} else {
+				isValidate = true;
+				setErreurs((values) => ({ ...values, [name]: false }));
+				setMessages((values) => ({ ...values, [name]: "" }));
+			}
+		}
 
-    if (isValidate && existanceIndividu) {
-      onSubmit();
-    }
-  };
-  //#endregion
+		if (name === "mdp") {
+			setErreurs((values) => ({ ...values, confirmationMdp: false }));
+			setMessages((values) => ({ ...values, confirmationMdp: "" }));
+		}
+	};
+	//#endregion
 
-  //#region // FONCTION DU BOUTTON ENREGISTRER
-  const onSubmit = () => {
-    const dataInputs = Object.assign(inputs, { roleU: u_info.u_attribut });
+	//#region //VALIDATION FORMULAIRE
+	const validation = (event) => {
+		event.preventDefault();
 
-    axios.post(URL_DE_BASE, dataInputs, u_info.opts).then(function (response) {
-      console.log(response);
-      if (response.status === 200) {
-        if (response.data.success) {
-          toast.success("Ajout Reussi.");
+		if (!inputs.unite) {
+			setErreurs((values) => ({ ...values, unite: true }));
+			setMessages((values) => ({
+				...values,
+				unite: "Selectionner votre domaine",
+			}));
+			isValidate = false;
+		}
 
-          console.log(picPhotoPDP.file.length);
-          if (picPhotoPDP.file.length !== 0) {
-            ajoutPhotoPDP();
-          }
-          onClose();
-        } else {
-          toast.error("Echec de l'Ajout!");
-        }
-      } else {
-        toast.error("Echec de l'Ajout!");
-      }
-    });
-  };
-  //#endregion
+		if (!inputs.u_cin) {
+			if (existanceIndividu) {
+				inputs.u_cin = donnee[0].cin;
+				setErreurs((values) => ({ ...values, u_cin: false }));
+				setMessages((values) => ({
+					...values,
+					u_cin: "",
+				}));
+				isValidate = true;
+			} else {
+				setErreurs((values) => ({ ...values, u_cin: true }));
+				setMessages((values) => ({
+					...values,
+					u_cin: "Numéro de CIN obligatoire",
+				}));
+				isValidate = false;
+			}
+		}
 
-  //#region // IMAGE PHOTO DE FICHE MERE --FACE-- DE L'INDIVIDU
-  const ajoutPhotoPDP = async () => {
-    const formdata = new FormData();
-    formdata.append("photoPDP", picPhotoPDP.file);
-    const numeroCompteAnticiper = latNumeroCompte.numeroCompte;
-    axios
-      .put(
-        URL_DE_BASE + `photoPDP/` + `${numeroCompteAnticiper}`,
-        formdata,
-        u_info.opts,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      )
-      .then((res) => {
-        if (res.data.success) {
-          toast.success("Compte creer avec success.");
-        }
-      });
-  };
-  //#endregion
+		const inputsObligatoire = [
+			"mdp",
+			"identification",
+			"u_cin",
+			"mdp",
+			"confirmationMdp",
+		];
 
-  //#region // QUAND JE FERMER MON MODAL, CETTE FONCTIO EST APPELLER
-  function onClose() {
-    const inputsArray = Object.keys(inputs);
+		inputsObligatoire.forEach((element) => {
+			if (!inputs[element]) {
+				setErreurs((values) => ({ ...values, [element]: true }));
+				setMessages((values) => ({
+					...values,
+					[element]: "champ " + [element] + "  obligatoire",
+				}));
+				isValidate = false;
+			}
+		});
 
-    inputsArray.forEach((element) => {
-      inputs[element] = "";
-      isValidate = false;
-      setErreurs((values) => ({ ...values, [element]: false }));
-    });
+		console.log("---------", isValidate, "---------");
+		if (isValidate && existanceIndividu) {
+			onSubmit();
+		}
+	};
+	//#endregion
 
-    navigate("/utilisateur/");
-  }
-  //#endregion
+	//#region // FONCTION DU BOUTTON ENREGISTRER
+	const onSubmit = () => {
+		const dataInputs = Object.assign(inputs, { roleU: u_info.u_attribut });
 
-  //#region // ----- MA RECHERCHE -----
-  function rechercheIndividu(valeur) {
-    if (!valeur) {
-      // getIndividu();
-      contenuTab = false;
-    } else {
-      axios.get(URL_CIN + `apercu/${valeur}`, u_info.opts).then((response) => {
-        if (response.status === 200) {
-          const ux = response.data;
-          if (ux.success) {
-            const u = ux.res[0];
-            const concatDonnee = u.cin + " - " + u.nom;
-            const hisData = Object.assign({}, { hisData: concatDonnee });
-            setDonnee(hisData);
-            setErreurs((values) => ({ ...values, p_cin: false }));
-            setMessages((values) => ({
-              ...values,
-              p_cin: "",
-            }));
+		axios.post(URL_DE_BASE, dataInputs, u_info.opts).then(function (response) {
+			console.log(response);
+			if (response.status === 200) {
+				if (response.data.success) {
+					toast.success("Ajout Reussi.");
 
-            contenuTab = true;
-            existanceIndividu = true;
-          } else {
-            const hisData = Object.assign({}, { hisData: ux.message });
-            setDonnee(hisData);
-            setErreurs((values) => ({ ...values, p_cin: true }));
-            setMessages((values) => ({
-              ...values,
-              p_cin: ux.message,
-            }));
+					console.log(picPhotoPDP.file.length);
+					if (picPhotoPDP.file.length !== 0) {
+						ajoutPhotoPDP();
+					}
+					onClose();
+				} else {
+					toast.error("Echec de l'Ajout!");
+				}
+			} else {
+				toast.error("Echec de l'Ajout!");
+			}
+		});
+	};
+	//#endregion
 
-            contenuTab = true;
-            existanceIndividu = false;
-          }
-        } else {
-          const hisData = Object.assign({}, { hisData: "" });
-          setDonnee(hisData);
-          contenuTab = false;
-          existanceIndividu = false;
-        }
-      });
-    }
-  }
-  //#endregion
+	//#region // IMAGE PHOTO DE FICHE MERE --FACE-- DE L'INDIVIDU
+	const ajoutPhotoPDP = async () => {
+		const formdata = new FormData();
+		formdata.append("photoPDP", picPhotoPDP.file);
+		const numeroCompteAnticiper = latNumeroCompte.numeroCompte;
+		axios
+			.put(
+				URL_DE_BASE + `photoPDP/` + `${numeroCompteAnticiper}`,
+				formdata,
+				u_info.opts,
+				{
+					headers: { "Content-Type": "multipart/form-data" },
+				}
+			)
+			.then((res) => {
+				if (res.data.success) {
+					toast.success("Compte creer avec success.");
+				}
+			});
+	};
+	//#endregion
 
-  return (
-    <>
-      <form>
-        <div className="form first">
-          <div className="details personal">
-            <div className="fields">
-              <div
-                className="input-field monPhotoPDP login100-pic js-tilt "
-                data-tilt
-              >
-                {!picPhotoPDP.filepreview ? (
-                  <img
-                    src={process.env.PUBLIC_URL + `/logins/images/img-01.png`}
-                    alt="image"
-                  />
-                ) : (
-                  <img
-                    src={picPhotoPDP.filepreview}
-                    alt="image"
-                    style={{
-                      width: "150px",
-                      height: "150px",
-                      borderRadius: "50%",
-                    }}
-                  />
-                )}
-              </div>
-              <div className="input-field">
-                <label>Photo de profile</label>
-                <input
-                  type="file"
-                  name="photoPDP"
-                  onChange={handlePicturePhotoPDP}
-                  autoComplete="off"
-                  placeholder="Photo"
-                />
-              </div>
+	//#region // QUAND JE FERMER MON MODAL, CETTE FONCTIO EST APPELLER
+	function onClose() {
+		const inputsArray = Object.keys(inputs);
 
-              <div className="input-field">
-                <label>Identifiant :</label>
-                <input
-                  type="text"
-                  name="identification"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  placeholder="Entrez votre identifiant"
-                />
-                <small className="text-danger d-block">
-                  {erreurs.identification ? messages.identification : null}
-                </small>
-              </div>
+		inputsArray.forEach((element) => {
+			inputs[element] = "";
+			isValidate = false;
+			setErreurs((values) => ({ ...values, [element]: false }));
+		});
 
-              <div className="input-field">
-                <label>
-                  Numéro de CIN :
-                  <small className="text-danger d-block">
-                    {erreurs.p_cin ? messages.p_cin : null}
-                  </small>
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  name="u_cin"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  placeholder="Entrez votre numéro de CIN"
-                />
-                <small className="text-danger d-block">
-                  {erreurs.u_cin ? messages.u_cin : null}
-                </small>
-              </div>
+		navigate("/utilisateur/");
+	}
+	//#endregion
 
-              {contenuTab && donnee.hisData ? (
-                <>
-                  <div className="input-field">
-                    <label> Pré-visualisation : </label>
-                    <input
-                      type="text"
-                      name="hisData"
-                      value={donnee.hisData}
-                      autoComplete="off"
-                      placeholder="...."
-                      disabled={true}
-                      style={{
-                        backgroundColor: "rgb(226, 226, 226)",
-                        color: "#000",
-                      }}
-                    />
-                  </div>
-                </>
-              ) : null}
-              <div className="input-field">
-                <label>Occupation : </label>
-                <select name="unite" onChange={handleChange} autoComplete="off">
-                  <option> </option>
-                  <option value={true}>Circonscription</option>
-                  <option value={false}>Foncier</option>
-                </select>
-                <small className="text-danger d-block">
-                  {erreurs.unite ? messages.unite : null}
-                </small>
-              </div>
+	//#region // ----- MA RECHERCHE -----
+	function rechercheIndividu(valeur) {
+		if (!valeur) {
+			// getIndividu();
+			contenuTab = false;
+		} else {
+			axios.get(URL_CIN + `apercu/${valeur}`, u_info.opts).then((response) => {
+				if (response.status === 200) {
+					const ux = response.data;
+					console.log(ux);
+					if (ux.success) {
+						const u = ux.res;
 
-              <div className="input-field">
-                <label>Mot de pass : </label>
-                <input
-                  type="password"
-                  name="mdp"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  placeholder="Entrez votre mot de pass"
-                />
-                <small className="text-danger d-block">
-                  {erreurs.mdp ? messages.mdp : null}
-                </small>
-              </div>
+						setDonnee(u);
+						setErreurs((values) => ({ ...values, p_cin: false }));
+						setMessages((values) => ({
+							...values,
+							p_cin: "",
+						}));
 
-              <div className="input-field">
-                <label>Confirmez mot de pass : </label>
-                <input
-                  type="password"
-                  name="confirmationMdp"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  placeholder="Confirmez votre mot de pass"
-                />
-                <small className="text-danger d-block">
-                  {erreurs.confirmationMdp ? messages.confirmationMdp : null}
-                </small>
-              </div>
-            </div>
-            <div className="buttons">
-              {/* <div className="backBtn btn btn-danger" onClick={onClose}> */}
-              <div className="backBtn btn btn-danger" onClick={onClose}>
-                <BsReplyFill />
-                <span className="btnText"> Annuler</span>
-              </div>
+						contenuTab = true;
+						existanceIndividu = true;
+					} else {
+						setDonnee([{ message: ux.message }]);
+						setErreurs((values) => ({ ...values, p_cin: true }));
+						setMessages((values) => ({
+							...values,
+							p_cin: ux.message,
+						}));
 
-              <button className="btn btn-success" onClick={validation}>
-                <span className="btnText"> Enregistrer</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </>
-  );
+						contenuTab = true;
+						existanceIndividu = false;
+					}
+				} else {
+					setDonnee([cinRecherche]);
+					contenuTab = false;
+					existanceIndividu = false;
+				}
+			});
+		}
+	}
+	//#endregion
+
+	return (
+		<>
+			<form>
+				<div className="form first">
+					<div className="details personal">
+						<div className="fields">
+							<div
+								className="input-field monPhotoPDP login100-pic js-tilt "
+								data-tilt
+							>
+								{!picPhotoPDP.filepreview ? (
+									<img
+										src={process.env.PUBLIC_URL + `/logins/images/img-01.png`}
+										alt="image"
+									/>
+								) : (
+									<img
+										src={picPhotoPDP.filepreview}
+										alt="image"
+										style={{
+											width: "150px",
+											height: "150px",
+											borderRadius: "50%",
+										}}
+									/>
+								)}
+							</div>
+							<div className="input-field">
+								<label>Photo de profile</label>
+								<input
+									type="file"
+									name="photoPDP"
+									onChange={handlePicturePhotoPDP}
+									autoComplete="off"
+									placeholder="Photo"
+								/>
+							</div>
+
+							<div className="input-field">
+								<label>Identifiant :</label>
+								<input
+									type="text"
+									name="identification"
+									onChange={handleChange}
+									autoComplete="off"
+									placeholder="Entrez votre identifiant"
+								/>
+								<small className="text-danger d-block">
+									{erreurs.identification ? messages.identification : null}
+								</small>
+							</div>
+
+							<div className="input-field">
+								<label>
+									Numéro de CIN :
+									<small className="text-danger d-block">
+										{erreurs.p_cin ? messages.p_cin : null}
+									</small>
+								</label>
+								<input
+									type="number"
+									min="1"
+									name="x_u_cin"
+									onChange={handleChange}
+									autoComplete="off"
+									placeholder="Entrez votre numéro de CIN"
+								/>
+								<small className="text-danger d-block">
+									{erreurs.u_cin ? messages.u_cin : null}
+								</small>
+							</div>
+
+							{contenuTab && donnee.length !== 0 ? (
+								<>
+									<div className="input-field">
+										<label> Sélectionner un Numéro de CIN: </label>
+										<select
+											name="u_cin"
+											value={donnee.cin}
+											onChange={handleChange}
+											autoComplete="off"
+											style={{
+												backgroundColor: "rgb(226, 226, 226)",
+												color: "#000",
+											}}
+										>
+											{donnee.map((d, index) => (
+												<option value={d.cin} key={index}>
+													If°{d.cin} - {d.nom}
+												</option>
+											))}
+										</select>
+									</div>
+								</>
+							) : null}
+
+							<div className="input-field">
+								<label>Occupation : </label>
+								<select name="unite" onChange={handleChange} autoComplete="off">
+									<option> </option>
+									<option value={true}>CIRCONSCRIPTION</option>
+									<option value={false}>CONSERVATEUR</option>
+								</select>
+								<small className="text-danger d-block">
+									{erreurs.unite ? messages.unite : null}
+								</small>
+							</div>
+
+							<div className="input-field">
+								<label>Mot de pass : </label>
+								<input
+									type="password"
+									name="mdp"
+									onChange={handleChange}
+									autoComplete="off"
+									placeholder="Entrez votre mot de pass"
+								/>
+								<small className="text-danger d-block">
+									{erreurs.mdp ? messages.mdp : null}
+								</small>
+							</div>
+
+							<div className="input-field">
+								<label>Confirmez mot de pass : </label>
+								<input
+									type="password"
+									name="confirmationMdp"
+									onChange={handleChange}
+									autoComplete="off"
+									placeholder="Confirmez votre mot de pass"
+								/>
+								<small className="text-danger d-block">
+									{erreurs.confirmationMdp ? messages.confirmationMdp : null}
+								</small>
+							</div>
+						</div>
+						<div className="buttons">
+							{/* <div className="backBtn btn btn-danger" onClick={onClose}> */}
+							<div className="backBtn btn btn-danger" onClick={onClose}>
+								<BsReplyFill />
+								<span className="btnText"> Annuler</span>
+							</div>
+
+							<button className="btn btn-success" onClick={validation}>
+								<span className="btnText"> Enregistrer</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</>
+	);
 }

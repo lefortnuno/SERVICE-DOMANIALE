@@ -272,7 +272,7 @@ export default function Utilisateur() {
                                     {user.unite === 1 ? (
                                       <>Circonscription</>
                                     ) : (
-                                      <>Foncier</>
+                                      <>Conservateur</>
                                     )}
                                   </td>
                                   <td>
@@ -281,9 +281,9 @@ export default function Utilisateur() {
                                       className="btn btn-outline-success btn-sm m-1 waves-effect"
                                       variant="default"
                                       name="numCompteEdit"
-                                      onClick={() =>
-                                        showEditModal(user.numeroCompte)
-                                      }
+                                      // onClick={() =>
+                                      //   showEditModal(user.numeroCompte)
+                                      // }
                                     >
                                       <BsEye />
                                     </button>
@@ -293,9 +293,9 @@ export default function Utilisateur() {
                                       className="btn btn-outline-primary btn-sm m-1 waves-effect"
                                       variant="default"
                                       name="numCompteEdit"
-                                      onClick={() =>
-                                        showEditModal(user.numeroCompte)
-                                      }
+                                      // onClick={() =>
+                                      //   showEditModal(user.numeroCompte)
+                                      // }
                                     >
                                       <BsPencilSquare />
                                     </button>
