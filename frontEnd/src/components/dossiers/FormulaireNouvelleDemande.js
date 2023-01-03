@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { BsReplyFill } from "react-icons/bs";
 
 const URL_DE_BASE = `dossier/`;
+const URL_DE_BASE_Tmp = `dossiertemporaire/`;
 const URL_CIN = `requerant/`;
 let isValidate = false;
 let existanceIndividu = false;
@@ -320,20 +321,32 @@ export default function FormulaireNouvelleDemande() {
 			roleU: u_info.u_attribut,
 			numeroCompte: u_info.u_numeroCompte,
 		});
+		let URL_REQUEST;
+		if (u_info.u_attribut === "Agent") {
+			URL_REQUEST = URL_DE_BASE_Tmp;
+		}
+		if (
+			u_info.u_attribut === "Chef" ||
+			u_info.u_attribut === "Chef Adjoint" ||
+			u_info.u_attribut === "Administrateur"
+		) {
+			URL_REQUEST = URL_DE_BASE;
+		}
+console.log(inputs);
+console.log("dataInputs : ",dataInputs);
+		// axios.post(URL_REQUEST, dataInputs, u_info.opts).then(function (response) {
+		// 	if (response.status === 200) {
+		// 		if (response.data.success) {
+		// 			toast.success("Ajout Reussi.");
 
-		axios.post(URL_DE_BASE, dataInputs, u_info.opts).then(function (response) {
-			if (response.status === 200) {
-				if (response.data.success) {
-					toast.success("Ajout Reussi.");
-
-					onClose();
-				} else {
-					toast.error("Echec de l'Ajout!");
-				}
-			} else {
-				toast.error("Echec de l'Ajout!");
-			}
-		});
+		// 			onClose();
+		// 		} else {
+		// 			toast.error("Echec de l'Ajout!");
+		// 		}
+		// 	} else {
+		// 		toast.error("Echec de l'Ajout!");
+		// 	}
+		// });
 	};
 	//#endregion
 
