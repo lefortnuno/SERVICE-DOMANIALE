@@ -8,7 +8,10 @@ import FooterContext from "../../contexts/footer/footer.context";
 import SidebarContext from "../../contexts/sidebar/sidebar.context";
 import GoogleMap from "../GoogleMapIntegration/GoogleMap";
 import ModalAjout from "../historique/ModalAjout";
-import { LogoAppE_TK } from "../access/accessAll";
+import {
+	AccessLogoE_TokotanyImage,
+	AccessDrapeauFanjakanaImage,
+} from "../access/accessAll";
 
 import { useEffect, useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -263,7 +266,7 @@ export default function DetailsDossier() {
 											</h4>
 										</div>
 										<div className="card-body">
-											<div class="form-row">
+											<div className="form-row">
 												<div className="form-group">
 													<label> Numéro de CIN : </label>
 													<span> {users.cin} </span>
@@ -306,7 +309,7 @@ export default function DetailsDossier() {
 										<div className="card-body">
 											<div className="row">
 												<div className="col-md-7">
-													<div class="form-row">
+													<div className="form-row">
 														<div className="form-group">
 															<label>
 																Demande d'
@@ -476,84 +479,152 @@ export default function DetailsDossier() {
 													/>
 												</h4>
 											</div>
-											<div className="card-body" ref={compRef}>
+											<div
+												className="card-body"
+												style={{
+													maxWidth: "450px",
+													backgroundImage: `url(${
+														process.env.PUBLIC_URL + `/picture/logo/e-T.png`
+													})`,
+													backgroundRepeat: "no-repeat",
+													backgroundPosition: "center",
+													backgroundSize: "contain",
+												}}
+												ref={compRef}
+											>
+												<div className="form-row"></div>
+
 												<div className="form-row">
-													<div className="form-group">
-														<label> " {inputsTerrain.nomPropriete} " : </label>
+													<div className="form-group col-4">
+														<div className="text-left">
+															<AccessDrapeauFanjakanaImage />
+														</div>
+													</div>
+													<div className="form-group col-8 mt-3">
+														<label> "{inputsTerrain.nomPropriete}" : </label>
 														<span>
 															{" "}
-															TN ° {inputsTerrain.immatriculationTerrain}
+															TN°{inputsTerrain.immatriculationTerrain}
 														</span>
 													</div>
 												</div>
 
-												<div className="form-row">
-													<label> I - PROVISION DOMANIALE </label>
-													<div className="form-row">
-														<div className="form-group col-2"></div>
-														<div className="form-group col-10">
-															<label>
-																{" "}
-																PT : {inputsDecompte.prixAttribue} x{" "}
-																{inputsDecompte.mesureAttribuable} ={" "}
-															</label>
-															<span> {inputsDecompte.PT} </span>
-														</div>
-													</div>
+												{/* <!--PROVISION DOMANIALE--> */}
+												<label>
+													<b>I - PROVISION DOMANIALE</b>
+												</label>
 
-													<div className="form-group">
-														<label> FCD : 5% x PT = </label>
+												<div className="form-row">
+													<div className="form-group col-2"></div>
+													<div className="form-group col-6">
+														<label>
+															PT : {inputsDecompte.prixAttribue} x{" "}
+															{inputsDecompte.mesureAttribuable} ={" "}
+														</label>
+													</div>
+													<div className="form-group col-4 text-right">
+														<span> {inputsDecompte.PT} </span>
+													</div>
+												</div>
+
+												<div className="form-row">
+													<div className="form-group col-2"></div>
+													<div className="form-group col-6">
+														<label> FCD : 5% . PT = </label>
+													</div>
+													<div className="form-group col-4 text-right">
 														<span> {inputsDecompte.FCD} </span>
 													</div>
+												</div>
 
-													<div className="form-group">
-														<label> === </label>
-														<span> {inputsDecompte.PT_TTL} </span>
+												<div className="form-row">
+													<div className="form-group col-2"></div>
+													<div className="form-group col-6"></div>
+													<div className="form-group col-4 text-right">
+														<hr />
+														<span>
+															<b>{inputsDecompte.PT_TTL}</b>
+														</span>
 													</div>
 												</div>
 
-												<div class="form-row">
-													<label> II - FRAIS de CONSERVATION </label>
-													<div className="form-group">
+												{/* <!--FRAIS de CONSERVATION--> */}
+												<label>
+													<b>II - FRAIS de CONSERVATION</b>
+												</label>
+
+												<div className="form-row">
+													<div className="form-group col-2"></div>
+													<div className="form-group col-6">
 														<label> DF : XXX</label>
+													</div>
+													<div className="form-group col-4 text-right">
 														<span> {inputsDecompte.DF} </span>
 													</div>
+												</div>
 
-													<div className="form-group">
+												<div className="form-row">
+													<div className="form-group col-2"></div>
+													<div className="form-group col-6">
 														<label> DP : </label>
+													</div>
+													<div className="form-group col-4 text-right">
 														<span> {inputsDecompte.DP} </span>
-													</div>
-
-													<div className="form-group">
-														<label> Acc : </label>
-														<span> {inputsDecompte.Acc} </span>
-													</div>
-
-													<div className="form-group">
-														<label> Bord : </label>
-														<span> {inputsDecompte.Bord} </span>
-													</div>
-
-													<div className="form-group">
-														<label> === </label>
-														<span> 75.000 </span>
 													</div>
 												</div>
 
-												<div class="form-row">
-													<label> III - TOTAL A PAYER </label>
-													<div className="form-group">
+												<div className="form-row">
+													<div className="form-group col-2"></div>
+													<div className="form-group col-6">
+														<label> Acc : </label>
+													</div>
+													<div className="form-group col-4 text-right">
+														<span> {inputsDecompte.Acc} </span>
+													</div>
+												</div>
+
+												<div className="form-row">
+													<div className="form-group col-2"></div>
+													<div className="form-group col-6">
+														<label> Bord : </label>
+													</div>
+													<div className="form-group col-4 text-right">
+														<span> {inputsDecompte.Bord} </span>
+													</div>
+												</div>
+
+												<div className="form-row">
+													<div className="form-group col-2"></div>
+													<div className="form-group col-6"></div>
+													<div className="form-group col-4 text-right">
+														<hr />
+														<span>
+															<b>75.000</b>
+														</span>
+													</div>
+												</div>
+
+												{/* <!--TOTAL A PAYER--> */}
+												<label>
+													<b>III - TOTAL A PAYER</b>
+												</label>
+
+												<div className="form-row">
+													<div className="form-group col-12 text-right">
 														<label> TOTAL = </label>
 														<span> {inputsDecompte.prixTerrain} </span>
 													</div>
-													<div className="form-group">
-														<label> somme à payer : Ar </label>
-														<span> {inputsDecompte.prixTerrainAroundi},00</span>
-													</div>
 												</div>
 
-												<div className="row">
-													<LogoAppE_TK />
+												<div className="form-row">
+													<div className="form-group col-12 text-right">
+														<label>
+															<b>Somme à payer : Ar </b>
+														</label>
+														<span>
+															<b> {inputsDecompte.prixTerrainAroundi},00 </b>
+														</span>
+													</div>
 												</div>
 											</div>
 										</div>

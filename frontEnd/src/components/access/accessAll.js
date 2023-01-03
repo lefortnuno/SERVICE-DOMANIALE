@@ -1,10 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { 
-	BsFolderPlus, 
-	BsReceiptCutoff,
-	BsHouseFill,
-} from "react-icons/bs";
+import { BsFolderPlus, BsReceiptCutoff, BsHouseFill } from "react-icons/bs";
 
 export function AccessBureau() {
 	return (
@@ -127,7 +123,7 @@ export function AccessAccueil() {
 export function LogoAppE_TK() {
 	return (
 		<>
-			<div className="col-md-1">
+			<div className="col-md-3">
 				<Link to="/accueil/">
 					<div>
 						<img
@@ -142,6 +138,38 @@ export function LogoAppE_TK() {
 					</div>
 				</Link>
 			</div>
+		</>
+	);
+}
+
+export function AccessDrapeauFanjakanaImage() {
+	return (
+		<>
+			<img
+				src={process.env.PUBLIC_URL + `/picture/logo/fanjakana.jpg`}
+				alt="pdp"
+				style={{
+					width: "100%",
+					height: "100%",
+					borderRadius: "0%",
+				}}
+			/>
+		</>
+	);
+}
+
+export function AccessLogoE_TokotanyImage() {
+	return (
+		<>
+			<img
+				src={process.env.PUBLIC_URL + `/picture/logo/e-TK.png`}
+				alt="pdp"
+				style={{
+					width: "100%",
+					height: "100%",
+					borderRadius: "0%",
+				}}
+			/>
 		</>
 	);
 }
