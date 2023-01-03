@@ -29,7 +29,7 @@ import CahierArriver from "./components/historique/cahierArriver/cahier.arriver"
 import CahierInterne from "./components/historique/cahierInterne/cahier.interne";
 import CahierDepart from "./components/historique/cahierDepart/cahier.depart";
 import CahierRendezVous from "./components/historique/cahierRendezVous/cahier.rendez.vous";
-import MapsForFtsoa from "./maps/maps";
+import MapsForFtsoa from "./contexts/maps/maps";
 
 import Terrain from "./components/terrain/Terrain";
 import PageNotFound from "./contexts/404/page404";

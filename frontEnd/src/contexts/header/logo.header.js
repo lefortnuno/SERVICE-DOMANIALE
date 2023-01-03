@@ -10,7 +10,7 @@ export default function LogoHeader() {
           <img
             src={process.env.PUBLIC_URL + `/picture/logo/e-TK.png`}
             alt="pdp"
-            style={{ width: "100%", height: "100%", borderRadius: "0%" }}
+            style={{ width: "auto", height: "100%", borderRadius: "0%" }}
           />
           {/* e -Tokotany */}
         </p>

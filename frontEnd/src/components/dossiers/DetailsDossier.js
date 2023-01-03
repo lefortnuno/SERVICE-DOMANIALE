@@ -6,7 +6,7 @@ import { libraryList, AjoutLibrary } from "../../api/file.js";
 import HeaderContext from "../../contexts/header/header.context";
 import FooterContext from "../../contexts/footer/footer.context";
 import SidebarContext from "../../contexts/sidebar/sidebar.context";
-import GoogleMapsPartiel from "../../maps/gMaps";
+import GoogleMap from "../GoogleMapIntegration/GoogleMap";
 import ModalAjout from "../historique/ModalAjout";
 import { LogoAppE_TK } from "../access/accessAll";
 
@@ -23,15 +23,21 @@ const URL_SOUS_DOSSIER = `sousDossier/`;
 const URL_IM_TERRAIN = `terrain/`;
 
 export default function DetailsDossier() {
+	//#region // MES VARIABLE
 	const navigate = useNavigate();
-	const { numeroDossier } = useParams();
 	const u_info = getDataUtilisateur();
+	const { numeroDossier } = useParams();
+
+	const terrainLatitude = -21.456005;
+	const terrainLongitude = 47.111411;
+
 	const mesInputsDecompte = {
 		prixTerrain: "",
 	};
 	const mesInputsTerrain = {
 		prixTerrain: "",
 	};
+	//#endregion
 
 	//#region // IMPRIMER UN DOC
 	const compRef = useRef();
@@ -242,6 +248,7 @@ export default function DetailsDossier() {
 						</div>
 					</form>
 				</HeaderContext>
+
 				<SidebarContext />
 
 				<div className="main-panel">
@@ -345,7 +352,10 @@ export default function DetailsDossier() {
 
 												<div className="col-md-5">
 													<p> google maps du terrain</p>
-													<GoogleMapsPartiel />
+													<GoogleMap
+														latitude={terrainLatitude}
+														longitude={terrainLongitude}
+													/>
 												</div>
 											</div>
 										</div>
