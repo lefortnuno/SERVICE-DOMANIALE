@@ -8,10 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import Context from "../../contexts/Context";
 import FormulaireNouvelleDemande from "./FormulaireNouvelleDemande";
-import Form from "react-bootstrap/Form";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { NouveauPersoIndividu } from "../personnes/perso";
 
 const BASE = `Nouvelle Demande`;
 const URL_DE_BASE = `dossier/`;
@@ -139,6 +136,7 @@ export default function NouvelleDemande() {
     <>
     <Context>
       <div className="monContainer">
+      <NouveauPersoIndividu/>
         <header>Ajout nouvelle demande</header>
 
         <FormulaireNouvelleDemande />

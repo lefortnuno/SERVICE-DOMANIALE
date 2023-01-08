@@ -59,8 +59,7 @@ export default function DossierAgent() {
     } else {
       axios
         .post(URL_DE_BASE + `recherche/`, idCompte, u_info.opts)
-        .then((response) => {
-          console.log(response);
+        .then((response) => { 
           if (response.data.success) {
             setUsers(response.data.res);
             setContenuTab(true);

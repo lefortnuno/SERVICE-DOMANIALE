@@ -332,21 +332,21 @@ export default function FormulaireNouvelleDemande() {
 		) {
 			URL_REQUEST = URL_DE_BASE;
 		}
-console.log(inputs);
-console.log("dataInputs : ",dataInputs);
-		// axios.post(URL_REQUEST, dataInputs, u_info.opts).then(function (response) {
-		// 	if (response.status === 200) {
-		// 		if (response.data.success) {
-		// 			toast.success("Ajout Reussi.");
+		console.log(inputs);
+		console.log("dataInputs : ", dataInputs);
+		axios.post(URL_REQUEST, dataInputs, u_info.opts).then(function (response) {
+			if (response.status === 200) {
+				if (response.data.success) {
+					toast.success("Ajout Reussi.");
 
-		// 			onClose();
-		// 		} else {
-		// 			toast.error("Echec de l'Ajout!");
-		// 		}
-		// 	} else {
-		// 		toast.error("Echec de l'Ajout!");
-		// 	}
-		// });
+					onClose();
+				} else {
+					toast.error("Echec de l'Ajout!");
+				}
+			} else {
+				toast.error("Echec de l'Ajout!");
+			}
+		});
 	};
 	//#endregion
 
