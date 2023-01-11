@@ -48,12 +48,12 @@ export default function StatisiqueProcedure() {
             <p className="card-category">Temps consommer par chaque procedure en nombre de jour</p>
           </div>
           <div className="card-body">
-            <ChartProcedure
+            {/* <ChartProcedure
               labels={data.length == 0 ? ["pink"] : data[0].labels}
               data1={
                 data.length === 0 ? [0, 0, 0, 0, 0, 0] : data[0].data[0].values
               }
-            />
+            /> */}
           </div>
         </div>
       </div>

@@ -39,7 +39,7 @@ export default function StatisiqueDossier() {
             <p className="card-category">Statistique des dossier par SIGLE</p>
           </div>
           <div className="card-body">
-            <ChartDossier
+            {/* <ChartDossier
               labels={data.length == 0 ? ["pink"] : data[0].labels}
               data1={
                 data.length === 0 ? [0, 0, 0, 0, 0, 0] : data[0].data[0].values
@@ -50,7 +50,7 @@ export default function StatisiqueDossier() {
               data3={
                 data.length === 0 ? [0, 0, 0, 0, 0, 0] : data[0].data[2].values
               }
-            />
+            /> */}
           </div>
         </div>
       </div>

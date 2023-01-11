@@ -87,7 +87,7 @@ export default function StatisiqueGenerale() {
                     </div>
 
                     <div className="card-body">
-                      <ChartGenerale
+                      {/* <ChartGenerale
                         labels={data.length == 0 ? ["pink"] : data[0].labels}
                         data1={
                           data.length === 0
@@ -144,7 +144,7 @@ export default function StatisiqueGenerale() {
                             ? [0, 0, 0, 0, 0, 0]
                             : data[0].data[10].values
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
