@@ -1,16 +1,8 @@
 import { Link } from "react-router-dom";
 
-import {
-	BsFolder2Open,
-	BsGlobe2,
-	BsGeoAlt,
-	BsHouse,
-	BsInfoLg,
-	BsGoogle,
+import { 
 	BsPeople,
-	BsPersonPlus,
-	BsStickies,
-	BsReception4,
+	BsPersonPlus, 
 	BsPersonCircle,
 	BsPersonSquare,
 	BsPersonPlusFill,

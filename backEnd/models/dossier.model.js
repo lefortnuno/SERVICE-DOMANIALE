@@ -18,11 +18,15 @@ let Dossier = function (dossier) {
 	this.lettreDesistement = dossier.lettreDesistement;
 	this.planMere = dossier.planMere;
 	this.certificatSituationJuridique = dossier.certificatSituationJuridique;
+	this.labordeLat = dossier.labordeLat;
+	this.labordeLong = dossier.labordeLong;
 };
 const ATTRIBUTS = `
     max(numeroSousDossier) as numeroSousDossier,
     numeroDossier,
     numeroAffaire,
+	labordeLat,
+	labordeLong,
     dependance,
     empietement,
     natureAffectation,

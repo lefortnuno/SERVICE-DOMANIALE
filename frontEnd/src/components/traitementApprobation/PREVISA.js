@@ -1,30 +1,22 @@
-import axios from "../../../api/axios";
-import getDataUtilisateur from "../../../api/udata";
-import { AjoutLibrary, libraryList } from "../../../api/file.js";
+import axios from "../../api/axios";
+import getDataUtilisateur from "../../api/udata";
+import { AjoutLibrary, libraryList } from "../../api/file.js";
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-import HeaderContext from "../../../contexts/header/header.context";
-import SidebarContext from "../../../contexts/sidebar/sidebar.context";
-import FooterContext from "../../../contexts/footer/footer.context";
-import ModalAjout from "../ModalAjout";
+import HeaderContext from "../../contexts/header/header.context";
+import SidebarContext from "../../contexts/sidebar/sidebar.context";
+import FooterContext from "../../contexts/footer/footer.context";
+import ModalApprobation from "./ModalApprobation";
 
-import {
-	AccessCahierArriver,
-	AccessCahierInterne,
-	AccessCahierRDV,
-	AccessCahierDepart,
-} from "../../access/accessCahier";
-import { NouvelleDemande } from "../../access/accessAll";
+import { BsVectorPen } from "react-icons/bs";
 
-import { BsCapslockFill } from "react-icons/bs";
+const base = `Traitement d'approbation`;
+const URL_DE_BASE = `sousDossier/attentePREVISA/`;
 
-const base = `Cahier de Nouvelle Demande`;
-const URL_DE_BASE = `historique/C_ND/`;
-
-export default function CahierNouvelleDemande() {
+export default function PREVISA() {
 	const navigate = useNavigate();
 	const u_info = getDataUtilisateur();
 
@@ -151,9 +143,9 @@ export default function CahierNouvelleDemande() {
 		<>
 			{libraryList.forEach((x) => AjoutLibrary(x))}
 			<div className="wrapper">
-				<ModalAjout show={show} onHide={closeAddModal}>
+				<ModalApprobation show={show} onHide={closeAddModal}>
 					{numCompteAjout}
-				</ModalAjout>
+				</ModalApprobation>
 
 				<HeaderContext>
 					<form className="navbar-left navbar-form nav-search mr-md-3">
@@ -181,14 +173,6 @@ export default function CahierNouvelleDemande() {
 					<div className="content">
 						<div className="container-fluid">
 							<div className="row">
-								<AccessCahierArriver />
-								<AccessCahierDepart />
-								<AccessCahierInterne />
-								<AccessCahierRDV />
-								<NouvelleDemande />
-							</div>
-
-							<div className="row">
 								<div className="col-md-12">
 									<div className="card">
 										<div className="card-header ">
@@ -200,34 +184,24 @@ export default function CahierNouvelleDemande() {
 													<thead>
 														<tr>
 															<th scope="col">Réf</th>
-															<th scope="col">Numéro Affaire</th>
-															<th scope="col">Requerant</th>
-															<th scope="col">Date du Mouvement</th>
-															<th scope="col">Date Rendez-vous</th>
-															<th scope="col">Phase du dossier</th>
+															<th scope="col">Numéro d'Affaire</th> 
+															<th scope="col">Date de depot</th> 
 															<th scope="col">Observation</th>
-															<th scope="col">Agent</th>
+															<th scope="col"> Pre-VISA </th>
 															<th scope="col"> </th>
-															{/* <th scope="col"> Actions </th> */}
 														</tr>
 													</thead>
 													<tbody>
 														{contenuTab || users.length !== 0 ? (
 															currentItems.map((user, key) => (
 																<tr key={key}>
-																	<th scope="row">{user.numeroHisto} </th>
-																	<td>{user.h_numeroAffaire}</td>
-																	<td>
-																		{user.nom} {user.prenom}
-																	</td>
+																	<th scope="row">{user.numeroSousDossier} </th>
+																	<td>{user.p_numeroAffaire}</td>
 																	<td>{user.dateDepotSD}</td>
-																	<td>{user.dateRDV}</td>
-																	<td>{user.nomProcedure}</td>
 																	<td>{user.observationSD}</td>
-																	<td>{user.identification}</td> 
+																	<td>{user.preVISA === 1 ? "accordé"  : "En attente"}</td>
 																	<td>
-																		{user.accomplissement &&
-																		user.preVISA === 1 ? (
+																		{user.preVISA === 0 ? (
 																			<p
 																				// type="button"
 																				className="btn btn-outline-success btn-sm m-1 waves-effect"
@@ -237,7 +211,7 @@ export default function CahierNouvelleDemande() {
 																					showAddModal(user.numeroHisto)
 																				}
 																			>
-																				<BsCapslockFill />
+																				<BsVectorPen />
 																			</p>
 																		) : null}
 																	</td>

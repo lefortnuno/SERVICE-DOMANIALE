@@ -172,19 +172,41 @@ export default function FormulaireNouvelleDemande() {
 		}
 
 		if (name === "superficieTerrain") {
-			if (value < 50) {
+			if (value < 25) {
 				isValidate = false;
 				setErreurs((values) => ({ ...values, [name]: true }));
 				setMessages((values) => ({
 					...values,
 					[name]: [name] + " trop petite",
 				}));
-			} else if (value > 9999) {
+			} else if (value > 1000) {
 				isValidate = false;
 				setErreurs((values) => ({ ...values, [name]: true }));
 				setMessages((values) => ({
 					...values,
 					[name]: [name] + " trop grande",
+				}));
+			} else {
+				isValidate = true;
+				setErreurs((values) => ({ ...values, [name]: false }));
+				setMessages((values) => ({ ...values, [name]: "" }));
+			}
+		}
+
+		if (name === "labordeLat" || name === "labordeLong") {
+			if (value < -100) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: [name] + " anormallement petite",
+				}));
+			} else if (value > 100) {
+				isValidate = false;
+				setErreurs((values) => ({ ...values, [name]: true }));
+				setMessages((values) => ({
+					...values,
+					[name]: [name] + " anormallement grand",
 				}));
 			} else {
 				isValidate = true;
@@ -317,10 +339,20 @@ export default function FormulaireNouvelleDemande() {
 
 	//#region // FONCTION DU BOUTTON ENREGISTRER
 	const onSubmit = () => {
+		let VISA = false;
+		let preVISA = false;
+
+		if (u_info.u_attribut === "Chef Adjoint"){
+			preVISA = true
+		}
+
 		const dataInputs = Object.assign(inputs, {
 			roleU: u_info.u_attribut,
 			numeroCompte: u_info.u_numeroCompte,
+			VISA: VISA,
+			preVISA: preVISA,
 		});
+
 		let URL_REQUEST;
 		if (u_info.u_attribut === "Agent") {
 			URL_REQUEST = URL_DE_BASE_Tmp;
@@ -332,7 +364,7 @@ export default function FormulaireNouvelleDemande() {
 		) {
 			URL_REQUEST = URL_DE_BASE;
 		}
-		console.log(inputs);
+
 		console.log("dataInputs : ", dataInputs);
 		axios.post(URL_REQUEST, dataInputs, u_info.opts).then(function (response) {
 			if (response.status === 200) {
@@ -350,7 +382,7 @@ export default function FormulaireNouvelleDemande() {
 	};
 	//#endregion
 
-	//#region // QUAND JE FERMER MON MODAL, CETTE FONCTIO EST APPELLER
+	//#region // QUAND JE FERMER MON MODAL, CETTE FONCTION EST APPELLER
 	const resetDonnee = async () => {
 		donnee.splice(0, donnee.length);
 		contenuTab = false;
@@ -688,6 +720,36 @@ export default function FormulaireNouvelleDemande() {
                   {erreurs.dateRDV ? messages.dateRDV : null}
                 </small>
               </div> */}
+
+							<div className="input-field">
+								<label>Coordonnées de latitude : </label>
+								<input
+									type="number"
+									min="1"
+									name="labordeLat"
+									onChange={handleChange}
+									autoComplete="off"
+									placeholder="Entrez le coordonnées de latitude du terrain"
+								/>
+								<small className="text-danger d-block">
+									{erreurs.labordeLat ? messages.labordeLat : null}
+								</small>
+							</div>
+
+							<div className="input-field">
+								<label>Coordonnées de longitude :</label>
+								<input
+									type="number"
+									min="1"
+									name="labordeLong"
+									onChange={handleChange}
+									autoComplete="off"
+									placeholder="Entrez le coordonnées de langitude du terrain"
+								/>
+								<small className="text-danger d-block">
+									{erreurs.labordeLong ? messages.labordeLong : null}
+								</small>
+							</div>
 
 							<div className="input-field">
 								<label>Observation :</label>

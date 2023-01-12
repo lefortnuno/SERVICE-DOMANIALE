@@ -60,6 +60,26 @@ module.exports.getAllSousDossiersOfDossier = (req, res) => {
   });
 };
 
+module.exports.getAllAttenteVISA = (req, res) => {
+  SousDossier.getAllAttenteVISA((err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
+module.exports.getAllAttentePREVISA = (req, res) => {
+  SousDossier.getAllAttentePREVISA((err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
 module.exports.getIdSousDossier = (req, res) => {
   SousDossier.getIdSousDossier(req.params.id, (err, resp) => {
     if (!err) {

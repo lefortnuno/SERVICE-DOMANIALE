@@ -35,6 +35,8 @@ import Terrain from "./components/terrain/Terrain";
 import PageNotFound from "./contexts/404/page404";
 
 import StatisiqueGenerale from "./components/statistiques/statistique.general";
+import PREVISA from "./components/traitementApprobation/PREVISA";
+ 
 
 export default function App() {
   return (
@@ -103,6 +105,9 @@ export default function App() {
 
           <Route path="maps/" element={<SinInProtected Cmp={MapsForFtsoa} />} />
           <Route path="terrain/" element={<SinInProtected Cmp={Terrain} />} />
+
+
+          <Route path="PREVISA/" element={<SinInProtected Cmp={PREVISA} />} />
 
         </Routes>
       </BrowserRouter>

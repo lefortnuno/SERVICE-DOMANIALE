@@ -5,10 +5,12 @@ import { libraryList, AjoutLibrary } from "../../api/file.js";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { 
+	BsPersonPlusFill, 
+} from "react-icons/bs";
 
 import Context from "../../contexts/Context";
-import FormulaireNouvelleDemande from "./FormulaireNouvelleDemande";
-import { NouveauPersoIndividu } from "../personnes/perso";
+import FormulaireNouvelleDemande from "./FormulaireNouvelleDemande"; 
 
 const BASE = `Nouvelle Demande`;
 const URL_DE_BASE = `dossier/`;
@@ -132,12 +134,18 @@ export default function NouvelleDemande() {
     });
   };
   //#endregion
+  
+  const formNewIndividu = () => {
+    navigate('/nouveauIndividu/')
+  }
+
   return (
     <>
     <Context>
-      <div className="monContainer">
-      <NouveauPersoIndividu/>
-        <header>Ajout nouvelle demande</header>
+      <div className="monContainer"> 
+        <header>Ajout nouvelle demande :- <BsPersonPlusFill className="text-primary" 
+									style={{ cursor: "pointer" }}
+                  onClick={formNewIndividu}/> -: </header>
 
         <FormulaireNouvelleDemande />
       </div>

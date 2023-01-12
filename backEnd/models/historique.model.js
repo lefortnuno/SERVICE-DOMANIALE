@@ -37,6 +37,8 @@ SELECT
     dispoDossier,
     approbation,
     observation,
+    VISA,
+    preVISA,
     accomplissement,
     h_numeroAffaire,
     h_numeroDossier,
