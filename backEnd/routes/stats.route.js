@@ -18,8 +18,8 @@ router.get(
   StatsController.getStatsBySigle
 );
 
-router.post(
-  "/stats_temps_perdu_dossier_procedure/",
+router.get(
+  "/stats_temps_perdu_dossier_procedure/:id",
   // agent.checkUtilisateur,
   StatsController.getTempsPerduOfDossierByProcedure
 );

@@ -32,7 +32,7 @@ const URL_HISTO = `historique/`;
 const URL_SOUS_DOSSIER = `sousDossier/`;
 const URL_IM_TERRAIN = `terrain/`;
 
-export default function DetailsDossier() {
+export default function DetailsTerrain() {
 	//#region // MES VARIABLE
 	const navigate = useNavigate();
 	const u_info = getDataUtilisateur();
@@ -332,14 +332,10 @@ export default function DetailsDossier() {
 																		{users.natureAffectation === 1
 																			? "AFFECTER"
 																			: "ACQUIS"}{" "}
-																		<Link
-																			to={`/viewTerrain/${users.numeroTitre}`}
-																		>
-																			<BsBook
-																				className="mt-3"
-																				style={{ cursor: "pointer" }}
-																			/>
-																		</Link>
+																		<BsBook
+																			className="mt-3"
+																			style={{ cursor: "pointer" }}
+																		/>
 																	</span>
 																) : (
 																	<span className="text-danger">
@@ -683,16 +679,16 @@ export default function DetailsDossier() {
 									</div>
 								</div>
 
-								{users.p_numeroProcedure === 11 ? (
-									<div className="col-md-4">
+								{/* {users.p_numeroProcedure === 11 ? (
+									<div className="col-md-8">
 										<div className="card">
 											<div className="card-header">
 												<h4 className="card-title">LIVRE DU TERRAIN </h4>
 											</div>
-											<div className="card-body">LIVRE DU TERRAIN A CLIQUER</div>
+											<div className="card-body">LIVRE DU TERRAIN</div>
 										</div>
 									</div>
-								) : null}
+								) : null} */}
 							</div>
 						</div>
 					</div>

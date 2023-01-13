@@ -38,6 +38,7 @@ import StatisiqueGenerale from "./components/statistiques/statistique.general";
 import PREVISA from "./components/traitementApprobation/PREVISA";
 import VISA from "./components/traitementApprobation/VISA";
  
+import DetailsTerrain from "./components/terrain/DetailsTerrain";
 
 export default function App() {
   return (
@@ -111,6 +112,10 @@ export default function App() {
           <Route path="PREVISA/" element={<SinInProtected Cmp={PREVISA} />} />
           <Route path="VISA/" element={<SinInProtected Cmp={VISA} />} />
 
+          <Route
+            path="viewTerrain/:numeroTitre"
+            element={<SinInProtected Cmp={DetailsTerrain} />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
