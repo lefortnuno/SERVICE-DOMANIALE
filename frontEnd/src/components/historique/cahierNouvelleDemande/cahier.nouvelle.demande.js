@@ -226,7 +226,7 @@ export default function CahierNouvelleDemande() {
 																	<td>{user.observationSD}</td>
 																	<td>{user.identification}</td> 
 																	<td>
-																		{user.accomplissement &&
+																		{user.accomplissement === 0 &&
 																		user.preVISA === 1 ? (
 																			<p
 																				// type="button"

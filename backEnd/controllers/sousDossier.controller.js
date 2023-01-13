@@ -117,19 +117,22 @@ module.exports.updateSousDossier = (req, res) => {
     mesureAttribuable,
     prixAttribue,
     lettreDesistement,
+    VISA,
+    preVISA,
     planMere,
-    certificatSituationJuridique,
+    certificatSituationJuridique, 
   } = req.body;
 
-  const dateDepotSD = new Date();
-  observationSD = observationSD + "(r*)";
+  // const dateDepotSD = new Date();
+  // observationSD = observationSD + "(r*)";
 
   const updateSousDossier = {
-    observationSD,
-    dateDepotSD,
+    observationSD, 
     mesureAttribuable,
     prixAttribue,
     lettreDesistement,
+    VISA,
+    preVISA,
     planMere,
     certificatSituationJuridique,
   };

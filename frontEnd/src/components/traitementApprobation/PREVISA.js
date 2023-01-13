@@ -11,9 +11,16 @@ import SidebarContext from "../../contexts/sidebar/sidebar.context";
 import FooterContext from "../../contexts/footer/footer.context";
 import ModalApprobation from "./ModalApprobation";
 
+import {
+	AccessCahierND,
+	AccessCahierInterne,
+	AccessCahierRDV,
+	AccessCahierDepart,
+} from "../access/accessCahier";
+
 import { BsVectorPen } from "react-icons/bs";
 
-const base = `Traitement d'approbation`;
+const base = `Traitement d'approbation des pré-VISA`;
 const URL_DE_BASE = `sousDossier/attentePREVISA/`;
 
 export default function PREVISA() {
@@ -173,6 +180,10 @@ export default function PREVISA() {
 					<div className="content">
 						<div className="container-fluid">
 							<div className="row">
+								<AccessCahierND />
+							</div>
+
+							<div className="row">
 								<div className="col-md-12">
 									<div className="card">
 										<div className="card-header ">
@@ -184,8 +195,8 @@ export default function PREVISA() {
 													<thead>
 														<tr>
 															<th scope="col">Réf</th>
-															<th scope="col">Numéro d'Affaire</th> 
-															<th scope="col">Date de depot</th> 
+															<th scope="col">Numéro d'Affaire</th>
+															<th scope="col">Date de depot</th>
 															<th scope="col">Observation</th>
 															<th scope="col"> Pre-VISA </th>
 															<th scope="col"> </th>
@@ -199,16 +210,18 @@ export default function PREVISA() {
 																	<td>{user.p_numeroAffaire}</td>
 																	<td>{user.dateDepotSD}</td>
 																	<td>{user.observationSD}</td>
-																	<td>{user.preVISA === 1 ? "accordé"  : "En attente"}</td>
+																	<td>
+																		{user.preVISA === 1
+																			? "accordé"
+																			: "En attente"}
+																	</td>
 																	<td>
 																		{user.preVISA === 0 ? (
 																			<p
-																				// type="button"
 																				className="btn btn-outline-success btn-sm m-1 waves-effect"
-																				// variant="default"
 																				name="numCompteEdit"
 																				onClick={() =>
-																					showAddModal(user.numeroHisto)
+																					showAddModal(user.numeroSousDossier)
 																				}
 																			>
 																				<BsVectorPen />
