@@ -88,14 +88,9 @@ LIMIT
 
 const ORDER_BY = ` ORDER BY numeroSousDossier DESC `;
 
-const REQUETE_PREVISA = `
-SELECT
-    count(p_numeroDossier) as attentePreVISA,
-    max(p_numeroDossier) as p_numeroDossier, 
+const ATTRIBUES = `
     numeroSousDossier,
     observationSD,
-    SUM(DATEDIFF(NOW(), dateDepotSD)) as nombreJour,
-    DATE_FORMAT(dateDepotSD, '%d-%m-%Y') as dateDepotSD,
     mesureAttribuable,
     lettreDesistement,
     planMere,
@@ -103,35 +98,46 @@ SELECT
     VISA,
     preVISA,
     p_numeroAffaire,
-    prixAttribue
-FROM
-    SOUS_DOSSIER 
-WHERE 
-    preVisa = 0
-GROUP BY p_numeroDossier  ORDER BY p_numeroDossier ASC `
+    prixAttribue `;
 
-const REQUETE_VISA = `
+const REQUETE_PREVISA =
+	`
+SELECT
+    count(p_numeroDossier) as attentePreVISA,
+    max(p_numeroDossier) as p_numeroDossier,
+    SUM(DATEDIFF(NOW(), dateDepotSD)) as nombreJour,
+    DATE_FORMAT(dateDepotSD, '%d-%m-%Y') as dateDepotSD, ` +
+	ATTRIBUES +
+	`
+FROM
+    SOUS_DOSSIER,
+    DOSSIER
+WHERE
+    DOSSIER.numeroDossier = SOUS_DOSSIER.p_numeroDossier
+    AND DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire
+    AND (preVisa = 0 AND p_numeroProcedure = 1)
+GROUP BY
+    p_numeroDossier
+ORDER BY
+    p_numeroDossier ASC `;
+
+const REQUETE_VISA =
+	`
 SELECT
     count(p_numeroDossier) as attenteVISA,
     max(p_numeroDossier) as p_numeroDossier, 
-    numeroSousDossier,
-    observationSD,
     SUM(DATEDIFF(NOW(), dateDepotSD)) as nombreJour,
-    DATE_FORMAT(dateDepotSD, '%d-%m-%Y') as dateDepotSD,
-    mesureAttribuable,
-    lettreDesistement,
-    planMere,
-    certificatSituationJuridique,
-    VISA,
-    preVISA,
-    p_numeroAffaire,
-    prixAttribue
+    DATE_FORMAT(dateDepotSD, '%d-%m-%Y') as dateDepotSD, ` +
+	ATTRIBUES +
+	`
 FROM
-    SOUS_DOSSIER 
-WHERE 
-    Visa = 0
-GROUP BY p_numeroDossier ORDER BY p_numeroDossier ASC `
-
+    SOUS_DOSSIER,
+    DOSSIER
+WHERE
+    DOSSIER.numeroDossier = SOUS_DOSSIER.p_numeroDossier
+    AND DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire
+    AND (Visa = 0 AND p_numeroProcedure = 10)
+GROUP BY p_numeroDossier ORDER BY p_numeroDossier ASC `;
 
 SousDossier.addSousDossier = (newSousDossier, result) => {
 	dbConn.query("INSERT INTO SOUS_DOSSIER SET ?", newSousDossier, (err, res) => {
@@ -161,7 +167,7 @@ SousDossier.getAllAttentePREVISA = (id, result) => {
 	dbConn.query(REQUETE_PREVISA, id, (err, res) => {
 		if (err) {
 			result(err, null);
-		} else { 
+		} else {
 			result(null, res);
 		}
 	});
@@ -235,7 +241,7 @@ SousDossier.updateSousDossier = (updateSousDossier, id, result) => {
 			if (err) {
 				result(err, null);
 			} else {
-				result(null, {success: true});
+				result(null, { success: true });
 			}
 		}
 	);

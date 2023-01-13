@@ -18,4 +18,10 @@ router.get(
   StatsController.getStatsBySigle
 );
 
+router.post(
+  "/stats_temps_perdu_dossier_procedure/",
+  // agent.checkUtilisateur,
+  StatsController.getTempsPerduOfDossierByProcedure
+);
+
 module.exports = router;

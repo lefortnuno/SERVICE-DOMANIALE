@@ -67,11 +67,19 @@ export default function NotificationHeader() {
 					>
 						<i className="la la-bell"></i>
 						{u_info.u_attribut === "Chef Adjoint" ? (
-							<span className="notification"> {previsa.length}</span>
+							<>
+								{previsa.length === 0 ? null : (
+									<span className="notification"> {previsa.length}</span>
+								)}
+							</>
 						) : null}
 
 						{u_info.u_attribut === "Chef" ? (
-							<span className="notification"> {visa.length}</span>
+							<>
+								{visa.length === 0 ? null : (
+									<span className="notification"> {visa.length}</span>
+								)}
+							</>
 						) : null}
 					</a>
 					<ul
@@ -94,35 +102,45 @@ export default function NotificationHeader() {
 						<li>
 							<div className="notif-center">
 								{u_info.u_attribut === "Chef Adjoint" ? (
-									<Link to="/preVISA/">
-										<div className="notif-icon notif-primary">
-											<i className="la la-comment"></i>
-										</div>
-										<div className="notif-content">
-											<span className="block">
-												{" "}
-												{previsa.length} Validation Nouvelle Demande{" "}
-											</span>
-											<span className="time">
-												il y a {previsaDepuis} jours{" "}
-											</span>
-										</div>
-									</Link>
+									<>
+										{previsa.length === 0 ? null : (
+											<Link to="/preVISA/">
+												<div className="notif-icon notif-primary">
+													<i className="la la-comment"></i>
+												</div>
+												<div className="notif-content">
+													<span className="block">
+														{" "}
+														{previsa.length} Validation Nouvelle Demande
+													</span>
+													<span className="time">
+														il y a {previsaDepuis} jours
+													</span>
+												</div>
+											</Link>
+										)}
+									</>
 								) : null}
 
 								{u_info.u_attribut === "Chef" ? (
-									<Link to="/VISA/">
-										<div className="notif-icon notif-primary">
-											<i className="la la-comment"></i>
-										</div>
-										<div className="notif-content">
-											<span className="block">
-												{" "}
-												{visa.length} Validation P.A.V{" "}
-											</span>
-											<span className="time">il y a {visaDepuis} jours </span>
-										</div>
-									</Link>
+									<>
+										{visa.length === 0 ? null : (
+											<Link to="/VISA/">
+												<div className="notif-icon notif-primary">
+													<i className="la la-comment"></i>
+												</div>
+												<div className="notif-content">
+													<span className="block">
+														{" "}
+														{visa.length} Validation P.A.V{" "}
+													</span>
+													<span className="time">
+														il y a {visaDepuis} jours{" "}
+													</span>
+												</div>
+											</Link>
+										)}
+									</>
 								) : null}
 
 								{u_info.u_attribut === "Chef" ||
@@ -160,8 +178,8 @@ export default function NotificationHeader() {
 						aria-haspopup="true"
 						aria-expanded="false"
 					>
-						<i className="la la-bell"></i>  
-					</a> 
+						<i className="la la-bell"></i>
+					</a>
 				</li>
 			)}
 		</>

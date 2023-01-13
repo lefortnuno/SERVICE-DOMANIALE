@@ -69,7 +69,6 @@ export default function DetailsDossier() {
 				if (response.status === 200) {
 					const u = response.data[0];
 					setUsers(u);
-					console.log(u);
 
 					if (u.p_numeroProcedure >= 9) {
 						getDecompte(u.numeroDossier);
@@ -102,8 +101,7 @@ export default function DetailsDossier() {
 			cin,
 			numeroDossier,
 			numeroRequerant,
-		};
-		console.log(valeur_de_recherche);
+		}; 
 		axios
 			.post(URL_IM_TERRAIN + `le_Terrain/`, valeur_de_recherche, u_info.opts)
 			.then(function (response) {
@@ -162,7 +160,7 @@ export default function DetailsDossier() {
 
 	//#region  //----- MY PAGINATION -----
 	const [currentPage, setcurrentPage] = useState(1);
-	const [itemsPerPage, setItemsPerPage] = useState(5);
+	const [itemsPerPage, setItemsPerPage] = useState(12);
 
 	const [pageNumberLimit, setPageNumberLimit] = useState(5);
 	const [maxPageNumberLimit, setmaxPageNumberLimit] = useState(5);
@@ -339,6 +337,7 @@ export default function DetailsDossier() {
 														<div className="form-group">
 															<label> Numéro d'affaire : </label>
 															<span> {users.numeroAffaire} </span>
+															<span> {users.numeroDossier} </span>
 														</div>
 
 														<div className="form-group">
@@ -350,14 +349,28 @@ export default function DetailsDossier() {
 																	: "Non dependant"}
 															</span>
 														</div>
+
+														{users.p_numeroProcedure >= 8 ? (
+															<div className="form-group">
+																<label>Superficie du Terrain : </label>
+																<span> {inputsDecompte.mesureAttribuable} H.a</span>
+															</div>
+														) : null}
+														
+														{users.p_numeroProcedure >= 9 ? (
+															<div className="form-group">
+																<label>Prix du Terrain : </label>
+																<span> Ar  {inputsDecompte.prixTerrainAroundi},00 </span>
+															</div>
+														) : null}
 													</div>
 												</div>
 
 												<div className="col-md-5">
 													<p> google maps du terrain</p>
 													<GoogleMap
-														latitude={terrainLatitude}
-														longitude={terrainLongitude}
+														latitude={users.labordeLat}
+														longitude={users.labordeLong}
 													/>
 												</div>
 											</div>
@@ -631,7 +644,7 @@ export default function DetailsDossier() {
 									</div>
 								) : null}
 
-								<div className="col-md-4">
+								<div className="col-md-8">
 									<div className="card">
 										<div className="card-header ">
 											<h4 className="card-title">STATS du DOSSIER</h4>
@@ -642,16 +655,16 @@ export default function DetailsDossier() {
 									</div>
 								</div>
 
-								{users.p_numeroProcedure === 11 ? (
+								{/* {users.p_numeroProcedure === 11 ? (
 									<div className="col-md-8">
 										<div className="card">
 											<div className="card-header">
 												<h4 className="card-title">LIVRE DU TERRAIN </h4>
 											</div>
-											<div className="card-body">{/* LIVRE DU TERRAIN */}</div>
+											<div className="card-body">LIVRE DU TERRAIN</div>
 										</div>
 									</div>
-								) : null}
+								) : null} */}
 							</div>
 						</div>
 					</div>

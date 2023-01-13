@@ -10,18 +10,16 @@ import HeaderContext from "../../contexts/header/header.context";
 import SidebarContext from "../../contexts/sidebar/sidebar.context";
 import FooterContext from "../../contexts/footer/footer.context";
 
-import ModalPreVISA from "./ModalPreVISA";
+import ModalVISA from "./ModalVISA";
 
-import {
-	AccessCahierND,
-} from "../access/accessCahier";
+import { AccessCahierND } from "../access/accessCahier";
 
 import { BsVectorPen } from "react-icons/bs";
 
-const base = `Traitement d'approbation des pré-VISA`;
-const URL_DE_BASE = `sousDossier/attentePREVISA/`;
+const base = `Traitement d'approbation de VISA`;
+const URL_DE_BASE = `sousDossier/attenteVISA/`;
 
-export default function PREVISA() {
+export default function VISA() {
 	const navigate = useNavigate();
 	const u_info = getDataUtilisateur();
 
@@ -148,9 +146,9 @@ export default function PREVISA() {
 		<>
 			{libraryList.forEach((x) => AjoutLibrary(x))}
 			<div className="wrapper">
-				<ModalPreVISA show={show} onHide={closeAddModal}>
+				<ModalVISA show={show} onHide={closeAddModal}>
 					{numCompteAjout}
-				</ModalPreVISA>
+				</ModalVISA>
 
 				<HeaderContext>
 					<form className="navbar-left navbar-form nav-search mr-md-3">
@@ -209,12 +207,10 @@ export default function PREVISA() {
 																	<td>{user.dateDepotSD}</td>
 																	<td>{user.observationSD}</td>
 																	<td>
-																		{user.preVISA === 1
-																			? "accordé"
-																			: "En attente"}
+																		{user.VISA === 1 ? "accordé" : "En attente"}
 																	</td>
 																	<td>
-																		{user.preVISA === 0 ? (
+																		{user.VISA === 0 ? (
 																			<p
 																				className="btn btn-outline-success btn-sm m-1 waves-effect"
 																				name="numCompteEdit"

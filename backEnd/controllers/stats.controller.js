@@ -11,6 +11,18 @@ module.exports.getAllStatsProcedureByMonth = (req, res) => {
     });
   };
   
+module.exports.getTempsPerduOfDossierByProcedure = (req, res) => {
+  const {numeroDossier} = req.body;
+
+  Stat.getTempsPerduOfDossierByProcedure(numeroDossier, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
 module.exports.getTempsPerduByProcedure = (req, res) => {
     Stat.getTempsPerduByProcedure((err, resp) => {
       if (!err) {
