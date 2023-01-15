@@ -1,0 +1,74 @@
+
+.main_view
+{
+    background-color: pink;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 50px;
+}
+
+.header_book
+{
+    font-family: 'Times New Roman';
+    font-weight: 600;
+}
+
+.nom_domaine
+{
+    font-weight: 600;
+    font-size: 25px;
+    margin: 20px 0;
+}
+
+.region_de_conservation
+{
+    margin: 30px 0;
+    font-size: 20px;
+}
+
+.region
+{
+    font-weight: 600;
+}
+
+.name_book
+{
+    font-size: 35px;
+    font-weight: 600;
+}
+
+.big_font
+{
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.marge
+{
+    width: 100%;
+    height: 143px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

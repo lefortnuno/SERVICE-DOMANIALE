@@ -14,6 +14,7 @@ import {
 } from "../access/accessAll";
 
 import StatisiqueProcedureUneDossier from "../statistiques/stat.one.dossier";
+import ModalAVC from "./AVC";
 
 import { useEffect, useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -75,6 +76,7 @@ export default function DetailsDossier() {
 			.then(function (response) {
 				if (response.status === 200) {
 					const u = response.data[0];
+					console.log(u);
 					setUsers(u);
 
 					if (u.p_numeroProcedure >= 9) {
@@ -114,7 +116,6 @@ export default function DetailsDossier() {
 			.post(URL_IM_TERRAIN + `le_Terrain/`, valeur_de_recherche, u_info.opts)
 			.then(function (response) {
 				if (response.status === 200) {
-					console.log(" REPONSE RECHERCHE TERRAIN CORRSPD", response.data[0]);
 					setInputsTerrain(response.data[0]);
 				}
 			});
@@ -164,6 +165,20 @@ export default function DetailsDossier() {
 		getHistoDossier();
 		setShow(false);
 	};
+	//#endregion
+
+	//#region //------------ MODAL AJOUT AVC ------------
+	const [numAffDossier, setNumAffDossier] = useState("");
+	// const [show, setShow] = useState(false);
+	// const showAddModal = (numCompte) => {
+	// 	setNumCompteAjout(numCompte);
+	// 	setShow(true);
+	// };
+	// const closeAddModal = () => {
+	// 	getOneUser();
+	// 	getHistoDossier();
+	// 	setShow(false);
+	// };
 	//#endregion
 
 	//#region  //----- MY PAGINATION -----
@@ -331,15 +346,7 @@ export default function DetailsDossier() {
 																		{" "}
 																		{users.natureAffectation === 1
 																			? "AFFECTER"
-																			: "ACQUIS"}{" "}
-																		<Link
-																			to={`/viewTerrain/${users.numeroTitre}`}
-																		>
-																			<BsBook
-																				className="mt-3"
-																				style={{ cursor: "pointer" }}
-																			/>
-																		</Link>
+																			: "ACQUIS"}
 																	</span>
 																) : (
 																	<span className="text-danger">
@@ -403,99 +410,117 @@ export default function DetailsDossier() {
 
 							<div className="row">
 								<div className="col-md-8">
-									<div className="card">
-										<div className="card-header">
-											<h4 className="card-title">HISTORIQUE COMPLET </h4>
-										</div>
-										<div className="card-body">
-											<div className="table-responsive text-nowrap">
-												<table className="table table-striped w-auto">
-													<thead>
-														<tr>
-															<th scope="col">Réf</th>
-															<th scope="col">Phase du dossier</th>
-															<th scope="col">Date_de_Debut </th>
-															<th scope="col">Date_de_Fin </th>
-															<th scope="col">Bureau</th>
-															<th scope="col">Observation</th>
-															<th scope="col">Agent</th>
-															<th scope="col"> </th>
-															{/* <th scope="col"> Actions </th> */}
-														</tr>
-													</thead>
-													<tbody>
-														{histo.length !== 0 ? (
-															currentItems.map((user, key) => (
-																<tr key={key}>
-																	<th scope="row">{++key} </th>
-																	<td>{user.nomProcedure}</td>
-																	<td>{user.dateDebutMouvement}</td>
-																	<td> {user.dateFinMouvement}</td>
-																	<td>{user.nomBureau}</td>
-																	<td>{user.observation}</td>
-																	<td>{user.identification}</td>
-																	{user.p_numeroProcedure >= 9 ? (
-																		<td>
-																			{user.accomplissement ? null : (
-																				<p
-																					className="btn btn-outline-success btn-sm m-1 waves-effect"
-																					name="numCompteEdit"
-																					onClick={() =>
-																						showAddModal(user.numeroHisto)
-																					}
-																				>
-																					<BsCapslockFill />
-																				</p>
-																			)}
-																		</td>
-																	) : null}
-																</tr>
-															))
-														) : (
+									<div className="row">
+										<div className="card col-12">
+											<div className="card-header">
+												<h4 className="card-title">HISTORIQUE COMPLET </h4>
+											</div>
+											<div className="card-body">
+												<div className="table-responsive text-nowrap">
+													<table className="table table-striped w-auto">
+														<thead>
 															<tr>
-																<td
-																	colSpan={10}
-																	className="text-danger text-center"
-																>
-																	La liste est vide ....
-																</td>
+																<th scope="col">Réf</th>
+																<th scope="col">Phase du dossier</th>
+																<th scope="col">Date_de_Debut </th>
+																<th scope="col">Date_de_Fin </th>
+																<th scope="col">Bureau</th>
+																<th scope="col">Observation</th>
+																<th scope="col">Agent</th>
+																<th scope="col"> </th>
+																{/* <th scope="col"> Actions </th> */}
 															</tr>
-														)}
-													</tbody>
-												</table>
+														</thead>
+														<tbody>
+															{histo.length !== 0 ? (
+																currentItems.map((user, key) => (
+																	<tr key={key}>
+																		<th scope="row">{++key} </th>
+																		<td>{user.nomProcedure}</td>
+																		<td>{user.dateDebutMouvement}</td>
+																		<td> {user.dateFinMouvement}</td>
+																		<td>{user.nomBureau}</td>
+																		<td>{user.observation}</td>
+																		<td>{user.identification}</td>
+																		{user.p_numeroProcedure >= 9 ? (
+																			<td>
+																				{user.accomplissement ? null : (
+																					<p
+																						className="btn btn-outline-success btn-sm m-1 waves-effect"
+																						name="numCompteEdit"
+																						onClick={() =>
+																							showAddModal(user.numeroHisto)
+																						}
+																					>
+																						<BsCapslockFill />
+																					</p>
+																				)}
+																			</td>
+																		) : null}
+																	</tr>
+																))
+															) : (
+																<tr>
+																	<td
+																		colSpan={10}
+																		className="text-danger text-center"
+																	>
+																		La liste est vide ....
+																	</td>
+																</tr>
+															)}
+														</tbody>
+													</table>
 
-												{nbrPage !== 1 &&
-												nbrPage !== 0 &&
-												users.length !== 0 ? (
-													<>
-														<ul className="pageNumbers">
-															<li>
-																<button
-																	disabled={
-																		currentPage == pages[0] ? true : false
-																	}
-																	onClick={handlePrevbtn}
-																>
-																	Précédent
-																</button>
-															</li>
-															{renderPageNumbers}
-															<li>
-																<button
-																	disabled={
-																		currentPage == pages[pages.length - 1]
-																			? true
-																			: false
-																	}
-																	onClick={handleNextbtn}
-																>
-																	Suivant
-																</button>
-															</li>
-														</ul>
-														<br />
-													</>
-												) : null}
+													{nbrPage !== 1 &&
+													nbrPage !== 0 &&
+													users.length !== 0 ? (
+														<>
+															<ul className="pageNumbers">
+																<li>
+																	<button
+																		disabled={
+																			currentPage == pages[0] ? true : false
+																		}
+																		onClick={handlePrevbtn}
+																	>
+																		Précédent
+																	</button>
+																</li>
+																{renderPageNumbers}
+																<li>
+																	<button
+																		disabled={
+																			currentPage == pages[pages.length - 1]
+																				? true
+																				: false
+																		}
+																		onClick={handleNextbtn}
+																	>
+																		Suivant
+																	</button>
+																</li>
+															</ul>
+															<br />
+														</>
+													) : null}
+												</div>
+											</div>
+										</div>
+										<div className="card col-12">
+											<div className="card-body">
+												<div className="card-header ">
+													<h4 className="card-title">STATISTIQUE du DOSSIER</h4>
+													<p className="card-category">
+														Temps consommer par procedure
+													</p>
+												</div>
+												<div className="card-body">
+													{/* STATISTIQUE DU DOSSIERS EN PERTE DE TEMPS */}
+													<StatisiqueProcedureUneDossier
+														numeroDossier={users.numeroDossier}
+													/>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -503,193 +528,192 @@ export default function DetailsDossier() {
 
 								{users.p_numeroProcedure >= 9 ? (
 									<div className="col-md-4">
-										<div className="card">
-											<div className="card-header ">
-												<h4 className="card-title">
-													DECOMPTE PRIX{" "}
-													<BsPrinterFill
-														style={{ cursor: "pointer" }}
-														onClick={handlePrint}
-														className="text-success"
-													/>
-												</h4>
-											</div>
-											<div
-												className="card-body"
-												style={{
-													maxWidth: "450px",
-													backgroundImage: `url(${
-														process.env.PUBLIC_URL + `/picture/logo/e-T.png`
-													})`,
-													backgroundRepeat: "no-repeat",
-													backgroundPosition: "70% 65%",
-													backgroundSize: "40%",
-												}}
-												ref={compRef}
-											>
-												<div className="form-row"></div>
+										<div className="">
+											<div className="card col-12">
+												<div className="card-header ">
+													<h4 className="card-title">
+														DECOMPTE PRIX{" "}
+														<BsPrinterFill
+															style={{ cursor: "pointer" }}
+															onClick={handlePrint}
+															className="text-success"
+														/>
+													</h4>
+												</div>
+												<div
+													className="card-body"
+													style={{
+														maxWidth: "450px",
+														backgroundImage: `url(${
+															process.env.PUBLIC_URL + `/picture/logo/e-T.png`
+														})`,
+														backgroundRepeat: "no-repeat",
+														backgroundPosition: "70% 65%",
+														backgroundSize: "40%",
+													}}
+													ref={compRef}
+												>
+													<div className="form-row"></div>
 
-												<div className="form-row">
-													<div className="form-group col-4">
-														<div className="text-left">
-															<AccessDrapeauFanjakanaImage />
+													<div className="form-row">
+														<div className="form-group col-4">
+															<div className="text-left">
+																<AccessDrapeauFanjakanaImage />
+															</div>
+														</div>
+														<div className="form-group col-8 mt-3">
+															<label> "{inputsTerrain.nomPropriete}" : </label>
+															<span>
+																{" "}
+																TN°{inputsTerrain.immatriculationTerrain}
+															</span>
 														</div>
 													</div>
-													<div className="form-group col-8 mt-3">
-														<label> "{inputsTerrain.nomPropriete}" : </label>
-														<span>
-															{" "}
-															TN°{inputsTerrain.immatriculationTerrain}
-														</span>
-													</div>
-												</div>
 
-												{/* <!--PROVISION DOMANIALE--> */}
-												<label>
-													<b>I - PROVISION DOMANIALE</b>
-												</label>
+													{/* <!--PROVISION DOMANIALE--> */}
+													<label>
+														<b>I - PROVISION DOMANIALE</b>
+													</label>
 
-												<div className="form-row">
-													<div className="form-group col-2"></div>
-													<div className="form-group col-6">
-														<label>
-															PT : {inputsDecompte.prixAttribue} x{" "}
-															{inputsDecompte.mesureAttribuable} ={" "}
-														</label>
+													<div className="form-row">
+														<div className="form-group col-2"></div>
+														<div className="form-group col-6">
+															<label>
+																PT : {inputsDecompte.prixAttribue} x{" "}
+																{inputsDecompte.mesureAttribuable} ={" "}
+															</label>
+														</div>
+														<div className="form-group col-4 text-right">
+															<span> {inputsDecompte.PT} </span>
+														</div>
 													</div>
-													<div className="form-group col-4 text-right">
-														<span> {inputsDecompte.PT} </span>
-													</div>
-												</div>
 
-												<div className="form-row">
-													<div className="form-group col-2"></div>
-													<div className="form-group col-6">
-														<label> FCD : 5% . PT = </label>
+													<div className="form-row">
+														<div className="form-group col-2"></div>
+														<div className="form-group col-6">
+															<label> FCD : 5% . PT = </label>
+														</div>
+														<div className="form-group col-4 text-right">
+															<span> {inputsDecompte.FCD} </span>
+														</div>
 													</div>
-													<div className="form-group col-4 text-right">
-														<span> {inputsDecompte.FCD} </span>
-													</div>
-												</div>
 
-												<div className="form-row">
-													<div className="form-group col-2"></div>
-													<div className="form-group col-6"></div>
-													<div className="form-group col-4 text-right">
-														<hr />
-														<span>
-															<b>{inputsDecompte.PT_TTL}</b>
-														</span>
+													<div className="form-row">
+														<div className="form-group col-2"></div>
+														<div className="form-group col-6"></div>
+														<div className="form-group col-4 text-right">
+															<hr />
+															<span>
+																<b>{inputsDecompte.PT_TTL}</b>
+															</span>
+														</div>
 													</div>
-												</div>
 
-												{/* <!--FRAIS de CONSERVATION--> */}
-												<label>
-													<b>II - FRAIS de CONSERVATION</b>
-												</label>
+													{/* <!--FRAIS de CONSERVATION--> */}
+													<label>
+														<b>II - FRAIS de CONSERVATION</b>
+													</label>
 
-												<div className="form-row">
-													<div className="form-group col-2"></div>
-													<div className="form-group col-6">
-														<label> DF : </label>
+													<div className="form-row">
+														<div className="form-group col-2"></div>
+														<div className="form-group col-6">
+															<label> DF : </label>
+														</div>
+														<div className="form-group col-4 text-right">
+															<span> {inputsDecompte.DF} </span>
+														</div>
 													</div>
-													<div className="form-group col-4 text-right">
-														<span> {inputsDecompte.DF} </span>
-													</div>
-												</div>
 
-												<div className="form-row">
-													<div className="form-group col-2"></div>
-													<div className="form-group col-6">
-														<label> DP : </label>
+													<div className="form-row">
+														<div className="form-group col-2"></div>
+														<div className="form-group col-6">
+															<label> DP : </label>
+														</div>
+														<div className="form-group col-4 text-right">
+															<span> {inputsDecompte.DP} </span>
+														</div>
 													</div>
-													<div className="form-group col-4 text-right">
-														<span> {inputsDecompte.DP} </span>
-													</div>
-												</div>
 
-												<div className="form-row">
-													<div className="form-group col-2"></div>
-													<div className="form-group col-6">
-														<label> Acc : </label>
+													<div className="form-row">
+														<div className="form-group col-2"></div>
+														<div className="form-group col-6">
+															<label> Acc : </label>
+														</div>
+														<div className="form-group col-4 text-right">
+															<span> {inputsDecompte.Acc} </span>
+														</div>
 													</div>
-													<div className="form-group col-4 text-right">
-														<span> {inputsDecompte.Acc} </span>
-													</div>
-												</div>
 
-												<div className="form-row">
-													<div className="form-group col-2"></div>
-													<div className="form-group col-6">
-														<label> Bord : </label>
+													<div className="form-row">
+														<div className="form-group col-2"></div>
+														<div className="form-group col-6">
+															<label> Bord : </label>
+														</div>
+														<div className="form-group col-4 text-right">
+															<span> {inputsDecompte.Bord} </span>
+														</div>
 													</div>
-													<div className="form-group col-4 text-right">
-														<span> {inputsDecompte.Bord} </span>
+
+													<div className="form-row">
+														<div className="form-group col-2"></div>
+														<div className="form-group col-6"></div>
+														<div className="form-group col-4 text-right">
+															<hr />
+															<span>
+																<b>75.000</b>
+															</span>
+														</div>
 													</div>
-												</div>
 
-												<div className="form-row">
-													<div className="form-group col-2"></div>
-													<div className="form-group col-6"></div>
-													<div className="form-group col-4 text-right">
-														<hr />
-														<span>
-															<b>75.000</b>
-														</span>
+													{/* <!--TOTAL A PAYER--> */}
+													<label>
+														<b>III - TOTAL A PAYER</b>
+													</label>
+
+													<div className="form-row">
+														<div className="form-group col-12 text-right">
+															<label> TOTAL = </label>
+															<span> {inputsDecompte.prixTerrain} </span>
+														</div>
 													</div>
-												</div>
 
-												{/* <!--TOTAL A PAYER--> */}
-												<label>
-													<b>III - TOTAL A PAYER</b>
-												</label>
-
-												<div className="form-row">
-													<div className="form-group col-12 text-right">
-														<label> TOTAL = </label>
-														<span> {inputsDecompte.prixTerrain} </span>
-													</div>
-												</div>
-
-												<div className="form-row">
-													<div className="form-group col-12 text-right">
-														<label>
-															<b>Somme à payer : Ar </b>
-														</label>
-														<span>
-															<b> {inputsDecompte.prixTerrainAroundi},00 </b>
-														</span>
+													<div className="form-row">
+														<div className="form-group col-12 text-right">
+															<label>
+																<b>Somme à payer : Ar </b>
+															</label>
+															<span>
+																<b> {inputsDecompte.prixTerrainAroundi},00 </b>
+															</span>
+														</div>
 													</div>
 												</div>
 											</div>
-										</div>
-									</div>
-								) : null}
-
-								<div className="col-md-8">
-									<div className="card">
-										<div className="card-header ">
-											<h4 className="card-title">STATISTIQUE du DOSSIER</h4>
-											<p className="card-category">
-												Temps consommer par procedure
-											</p>
-										</div>
-										<div className="card-body">
-											{/* STATISTIQUE DU DOSSIERS EN PERTE DE TEMPS */}
-											<StatisiqueProcedureUneDossier
-												numeroDossier={users.numeroDossier}
-											/>
-										</div>
-									</div>
-								</div>
-
-								{users.p_numeroProcedure === 11 ? (
-									<div className="col-md-4">
-										<div className="card">
-											<div className="card-header">
-												<h4 className="card-title">LIVRE DU TERRAIN </h4>
+											<div className="card col-12">
+												{users.p_numeroProcedure === 11 ? (
+													<Link
+														to={`/viewTerrain/${inputsTerrain.numeroTitre}`}
+													>
+														<div className="card-header">
+															<h4 className="card-title">LIVRE DU TERRAIN </h4>
+														</div>
+														<div className="card-body">
+															CLIQUER POUR VOIR LIVRE DU TERRAIN{" "}
+															<Link
+																to={`/viewTerrain/${inputsTerrain.numeroTitre}`}
+															>
+																<BsBook
+																	className="text-success"
+																	style={{
+																		cursor: "pointer",
+																		width: "25px",
+																	}}
+																/>
+															</Link>
+														</div>
+													</Link>
+												) : null}
 											</div>
-											<div className="card-body">LIVRE DU TERRAIN A CLIQUER</div>
 										</div>
 									</div>
 								) : null}

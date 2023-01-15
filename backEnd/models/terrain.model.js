@@ -82,7 +82,7 @@ Terrain.getAllTerrains = (result) => {
 };
 
 Terrain.getIdTerrain = (id, result) => {
-  dbConn.query("SELECT * FROM Terrain WHERE numSuivi = ?", id, (err, res) => {
+  dbConn.query(REQUETE_EXTRA+ ` and numeroTitre = ? ` , id, (err, res) => {
     if (err) {
       result(err, null);
     } else {

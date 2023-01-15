@@ -16,7 +16,7 @@ export default function NavbarContext() {
 	return (
 		<>
 			<ul className="nav">
-				<li className="nav-item active">
+				<li className="nav-item ">
 					<Link to="/accueil/">
 						<i>
 							<BsHouse />
@@ -62,7 +62,7 @@ export default function NavbarContext() {
 						<span className="badge badge-success">3</span>
 					</Link>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item active">
 					<Link to="/stats/">
 						<i>
 							<BsReception4 />
