@@ -336,8 +336,8 @@ export default function DetailsDossier() {
 															<label>
 																Demande d'
 																{users.natureAffectation === 1
-																	? "Affectation"
-																	: "Acquisition"}{" "}
+																	? "affectation"
+																	: "acquisition"}{" "}
 																:{" "}
 															</label>
 															<span>
@@ -375,7 +375,7 @@ export default function DetailsDossier() {
 
 														{users.p_numeroProcedure >= 8 ? (
 															<div className="form-group">
-																<label>Superficie du Terrain : </label>
+																<label>Superficie du terrain : </label>
 																<span>
 																	{" "}
 																	{inputsDecompte.mesureAttribuable} A
@@ -385,7 +385,7 @@ export default function DetailsDossier() {
 
 														{users.p_numeroProcedure >= 9 ? (
 															<div className="form-group">
-																<label>Prix du Terrain : </label>
+																<label>Prix du terrain : </label>
 																<span>
 																	{" "}
 																	Ar {inputsDecompte.prixTerrainAroundi},00{" "}
@@ -421,9 +421,9 @@ export default function DetailsDossier() {
 														<thead>
 															<tr>
 																<th scope="col">Réf</th>
-																<th scope="col">Phase du dossier</th>
-																<th scope="col">Date_de_Debut </th>
-																<th scope="col">Date_de_Fin </th>
+																<th scope="col">Procédure</th>
+																<th scope="col">Date_de_début </th>
+																<th scope="col">Date_d'achèvement </th>
 																<th scope="col">Bureau</th>
 																<th scope="col">Observation</th>
 																<th scope="col">Agent</th>
@@ -513,7 +513,7 @@ export default function DetailsDossier() {
 												<div className="card-header ">
 													<h4 className="card-title">STATISTIQUE du DOSSIER</h4>
 													<p className="card-category">
-														Temps consommer par procedure
+														Temps consommer par procédure (unité en jour)
 													</p>
 												</div>
 												<div className="card-body">

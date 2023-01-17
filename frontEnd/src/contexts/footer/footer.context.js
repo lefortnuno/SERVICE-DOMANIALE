@@ -22,8 +22,8 @@ export default function FooterContext() {
           </nav>
           <div className="copyright ml-auto">
             Réaliser par
-            <a href="https://www.facebook.com/tendo.lelouch.9/"> Trofel</a>, en
-            2022
+            <a href="https://www.facebook.com/tendo.lelouch.9/"> Trofel</a>, vers Janvier
+            2023
           </div>
         </div>
       </footer>

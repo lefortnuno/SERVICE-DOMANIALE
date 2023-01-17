@@ -111,7 +111,7 @@ export default function NotificationHeader() {
 												<div className="notif-content">
 													<span className="block">
 														{" "}
-														{previsa.length} Validation Nouvelle Demande
+														{previsa.length} Validation nouvelle demande
 													</span>
 													<span className="time">
 														il y a {previsaDepuis} jours
@@ -143,19 +143,15 @@ export default function NotificationHeader() {
 									</>
 								) : null}
 
-								{u_info.u_attribut === "Chef" ||
-								u_info.u_attribut === "Chef Adjoint" ||
-								u_info.u_attribut === "Administrateur" ? (
-									<Link to="/validationCompte/">
-										<div className="notif-icon notif-success">
-											<i className="la la-user-plus"></i>
-										</div>
-										<div className="notif-content">
-											<span className="block">2 Nouveau compte a approuvé</span>
-											<span className="time">il y a 12 minutes</span>
-										</div>
-									</Link>
-								) : null}
+								{/* <Link to="/validationCompte/">
+									<div className="notif-icon notif-success">
+										<i className="la la-user-plus"></i>
+									</div>
+									<div className="notif-content">
+										<span className="block">2 Nouveau compte à approuver</span>
+										<span className="time">il y a 12 jours</span>
+									</div>
+								</Link> */}
 							</div>
 						</li>
 						<li>

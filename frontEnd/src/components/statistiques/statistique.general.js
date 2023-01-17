@@ -85,7 +85,7 @@ export default function StatisiqueGenerale() {
 									<div className="card">
 										<div className="card-header">
 											<h4 className="card-title">
-												Statistique Generale{" "}
+												Statistique générale{" "}
 												<BsPrinterFill
 													style={{ cursor: "pointer" }}
 													onClick={handlePrint}
@@ -97,8 +97,8 @@ export default function StatisiqueGenerale() {
                         </button> */}
 											</h4>
 											<p className="card-category">
-												Statistique de consommation de temps par procedure et
-												par mois
+												Statistique de consommation de temps par procédure et
+												par mois (Unité en jour)
 											</p>
 										</div>
 

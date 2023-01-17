@@ -193,10 +193,10 @@ export default function PREVISA() {
 													<thead>
 														<tr>
 															<th scope="col">Réf</th>
-															<th scope="col">Numéro d'Affaire</th>
-															<th scope="col">Date de depot</th>
+															<th scope="col">Numéro d'affaire</th>
+															<th scope="col">Date de dépôt</th>
 															<th scope="col">Observation</th>
-															<th scope="col"> Pre-VISA </th>
+															<th scope="col"> Pré-VISA </th>
 															<th scope="col"> </th>
 														</tr>
 													</thead>

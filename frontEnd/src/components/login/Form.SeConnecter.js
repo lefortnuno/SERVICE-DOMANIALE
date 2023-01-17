@@ -18,7 +18,7 @@ export default function FormulaireSeConnecter() {
   const [messages, setMessages] = useState({
     identification: "Identification obligatoire",
     messageErreur: "",
-    mdp: "Mot de pass obligatoire",
+    mdp: "Mot de passe obligatoire",
   });
   ////#endregion
 
@@ -99,7 +99,7 @@ export default function FormulaireSeConnecter() {
           setErreurs((values) => ({ ...values, messageErreur: true }));
           setMessages((values) => ({
             ...values,
-            messageErreur: "Identifiant ou Mot de pass Incorrect !",
+            messageErreur: "Identifiant ou mot de passe incorrect !",
           }));
         }
       })
@@ -133,7 +133,7 @@ export default function FormulaireSeConnecter() {
             className="input100"
             type="text"
             name="identification"
-            placeholder="identifiant ...."
+            placeholder="Identifiant ...."
             onChange={handleChange}
             autoComplete="off"
           />
@@ -154,7 +154,7 @@ export default function FormulaireSeConnecter() {
             className="input100"
             type="password"
             name="mdp"
-            placeholder="Mot de Pass ...."
+            placeholder="Mot de passe ...."
             onChange={handleChange}
             autoComplete="off"
           />
@@ -175,7 +175,7 @@ export default function FormulaireSeConnecter() {
 
         <div className="text-center p-t-12">
           <a className="txt2" href="#">
-            Identifiant / Mot de pass
+            Identifiant / Mot de passe
           </a>
           <span className="txt1"> oublier ?</span>
         </div>

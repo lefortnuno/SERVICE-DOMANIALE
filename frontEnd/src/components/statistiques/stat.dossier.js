@@ -35,8 +35,8 @@ export default function StatisiqueDossier() {
       <div className="col-md-12">
         <div className="card">
           <div className="card-header">
-            <h4 className="card-title">Statistique des Dossiers</h4> 
-            <p className="card-category">Statistique des dossier par SIGLE</p>
+            <h4 className="card-title">Statistique dossiers</h4> 
+            <p className="card-category">Statistique des dossier par SIGLE. (Unité en jour)</p>
           </div>
           <div className="card-body">
             <ChartDossier

@@ -256,12 +256,12 @@ export default function DetailsTerrain() {
 																	<th colSpan={"2"}>Date de l'inscription</th>
 																	<th rowSpan={"2"}>Mode de mutation</th>
 																	<th style={{ width: "350px" }} rowSpan={"2"}>
-																		Nom et prénoms de l'ancien titulaire <br />{" "}
+																		Nom et prénom de l'ancien titulaire <br />{" "}
 																		(Ne remplir que pour les mutations parielles
 																		indivises en indiquant la fraction mutée)
 																	</th>
 																	<th style={{ width: "350px" }} rowSpan={"2"}>
-																		Nom prénoms ,nouveau titulaire
+																		Nom et prénom du nouveau titulaire
 																	</th>
 																	<th colSpan={"2"}>Prix de la mutation</th>
 																</tr>
@@ -440,12 +440,12 @@ export default function DetailsTerrain() {
 																	<th colSpan={"2"}>Date de l'inscription</th>
 																	<th rowSpan={"2"}>Mode de mutation</th>
 																	<th style={{ width: "350px" }} rowSpan={"2"}>
-																		Nom et prénoms de l'ancien titulaire <br />{" "}
+																		Nom et prénom de l'ancien titulaire <br />{" "}
 																		(Ne remplir que pour les mutations parielles
 																		indivises en indiquant la fraction mutée)
 																	</th>
 																	<th style={{ width: "350px" }} rowSpan={"2"}>
-																		Nom prénoms ,nouveau titulaire
+																		Nom et prénom du nouveau titulaire
 																	</th>
 																	<th colSpan={"2"}>Prix de la mutation</th>
 																</tr>
