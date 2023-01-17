@@ -21,7 +21,7 @@ import {
 
 import { BsArrowDownUp, BsCapslockFill } from "react-icons/bs";
 
-const base = `Cahier de Depart`;
+const base = `Cahier de départ`;
 const URL_DE_BASE = `historique/C_D/`;
 
 export default function CahierDepart() {
@@ -215,11 +215,12 @@ export default function CahierDepart() {
                           <thead>
                             <tr>
                               <th scope="col">Réf</th>
-                              <th scope="col">Numéro Affaire</th>
-                              <th scope="col">Requerant</th>
-                              <th scope="col">Date du Mouvement</th>
-                              <th scope="col">Date Rendez-vous</th>
-                              <th scope="col">Phase du dossier</th>
+                              <th scope="col">Numéro_d'affaire</th>
+                              <th scope="col">Requérant</th>
+                              <th scope="col">Date_de_départ</th>
+                              <th scope="col">Date_rendez-vous</th>
+                              <th scope="col">Procédure</th>
+                              <th scope="col">Destinataire</th>
                               <th scope="col">Observation</th>
                               <th scope="col">Agent</th>
                               <th scope="col"> </th>
@@ -237,6 +238,7 @@ export default function CahierDepart() {
                                   <td>{user.dateDepotSD}</td>
                                   <td>{user.dateRDV}</td>
                                   <td>{user.nomProcedure}</td>
+                                  <td>{user.nomBureau}</td>
                                   <td>{user.observationSD}</td>
                                   <td>{user.identification}</td>
                                   <td>

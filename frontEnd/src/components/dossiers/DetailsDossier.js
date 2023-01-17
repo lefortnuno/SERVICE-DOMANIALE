@@ -97,6 +97,7 @@ export default function DetailsDossier() {
 			.then(function (response) {
 				if (response.status === 200) {
 					setHisto(response.data);
+					console.log(response.data);
 				} else {
 					toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
 				}
@@ -359,7 +360,7 @@ export default function DetailsDossier() {
 
 														<div className="form-group">
 															<label> Numéro d'affaire : </label>
-															<span> {users.numeroAffaire} </span> 
+															<span> {users.numeroAffaire} </span>
 														</div>
 
 														<div className="form-group">
@@ -377,7 +378,7 @@ export default function DetailsDossier() {
 																<label>Superficie du Terrain : </label>
 																<span>
 																	{" "}
-																	{inputsDecompte.mesureAttribuable} H.a
+																	{inputsDecompte.mesureAttribuable} A
 																</span>
 															</div>
 														) : null}
@@ -443,7 +444,8 @@ export default function DetailsDossier() {
 																		<td>{user.identification}</td>
 																		{user.p_numeroProcedure >= 9 ? (
 																			<td>
-																				{user.accomplissement ? null : (
+																				{user.accomplissement ||
+																				user.p_numeroProcedure === 11 ? null : (
 																					<p
 																						className="btn btn-outline-success btn-sm m-1 waves-effect"
 																						name="numCompteEdit"

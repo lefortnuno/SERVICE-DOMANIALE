@@ -29,7 +29,7 @@ import {
 	BsCapslockFill,
 } from "react-icons/bs";
 
-const base = `Cahier de Rendez-Vous`;
+const base = `Cahier de rendez-vous`;
 const URL_DE_BASE = `historique/C_RDV/`;
 
 const dateAujourdHui = new Date();
@@ -208,11 +208,11 @@ export default function CahierRendezVous() {
 													<thead>
 														<tr>
 															<th scope="col">Réf</th>
-															<th scope="col">Date_Rendez-vous</th>
-															<th scope="col">Numéro Affaire</th>
-															<th scope="col">Nom Requerant</th>
-															<th scope="col">Numéro Téléphone</th>
-															<th scope="col">Procedure</th>
+															<th scope="col">Date_rendez-vous</th>
+															<th scope="col">Numéro_d'affaire</th>
+															<th scope="col">Nom du requérant</th>
+															<th scope="col">Numéro de téléphone</th>
+															<th scope="col">Procédure</th>
 															<th scope="col">Observation</th>
 															<th scope="col">Agent</th>
 															{/* <th scope="col"> </th> */}

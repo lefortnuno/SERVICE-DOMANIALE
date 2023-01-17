@@ -28,7 +28,7 @@ import {
   BsCapslockFill
 } from "react-icons/bs";
 
-const base = `Cahier d'Affaire Interne`;
+const base = `Cahier d'affaire interne`;
 const URL_DE_BASE = `historique/C_I/`;
 
 export default function CahierInterne() {
@@ -205,11 +205,11 @@ export default function CahierInterne() {
                           <thead>
                             <tr>
                               <th scope="col">Réf</th>
-                              <th scope="col">Numéro Affaire</th>
-                              <th scope="col">Requerant</th>
-                              <th scope="col">Date du Mouvement</th>
-                              <th scope="col">Date Rendez-vous</th>
-                              <th scope="col">Phase du dossier</th>
+                              <th scope="col">Numéro_d'affaire</th>
+                              <th scope="col">Requérant</th>
+                              <th scope="col">Date_de_mouvement</th>
+                              <th scope="col">Date_rendez-vous</th>
+                              <th scope="col">Procédure</th>
                               <th scope="col">Observation</th>
                               <th scope="col">Agent</th>
                               <th scope="col">   </th>
@@ -228,7 +228,7 @@ export default function CahierInterne() {
                                   <td>{user.dateRDV}</td>
                                   <td>{user.nomProcedure}</td>
                                   <td>{user.observationSD}</td>
-                                  <td>{user.identification}</td>
+                                  <td>{user.identification}</td> 
                                   <td>
                                     {user.accomplissement ? null : (
                                       <p

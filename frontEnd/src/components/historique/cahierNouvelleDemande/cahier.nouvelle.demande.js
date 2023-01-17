@@ -21,7 +21,7 @@ import { NouvelleDemande } from "../../access/accessAll";
 
 import { BsCapslockFill } from "react-icons/bs";
 
-const base = `Cahier de Nouvelle Demande`;
+const base = `Cahier de nouvelle demande`;
 const URL_DE_BASE = `historique/C_ND/`;
 
 export default function CahierNouvelleDemande() {
@@ -200,11 +200,11 @@ export default function CahierNouvelleDemande() {
 													<thead>
 														<tr>
 															<th scope="col">Réf</th>
-															<th scope="col">Numéro Affaire</th>
-															<th scope="col">Requerant</th>
-															<th scope="col">Date du Mouvement</th>
-															<th scope="col">Date Rendez-vous</th>
-															<th scope="col">Phase du dossier</th>
+															<th scope="col">Numéro_d'affaire</th>
+															<th scope="col">Requérant</th>
+															<th scope="col">Date_de_nouvelle demande</th>
+															<th scope="col">Date_rendez-vous</th>
+															<th scope="col">Procédure</th>
 															<th scope="col">Observation</th>
 															<th scope="col">Agent</th>
 															<th scope="col"> </th>

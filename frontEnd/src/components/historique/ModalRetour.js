@@ -606,7 +606,7 @@ export default function ModalRetour(props) {
 							{nextInputs.numeroProcedure === 7 ? (
 								<Row style={rowStyle}>
 									<Col col="md-6" ml="auto">
-										<Form.Label> Superficie Demander  : </Form.Label>
+										<Form.Label> Superficie Demander : (unité Are)</Form.Label>
 										<Form.Control
 											type="number"
 											min="0"
@@ -615,8 +615,8 @@ export default function ModalRetour(props) {
 											onChange={handleChange}
 											disabled={true}
 											autoComplete="off"
-                      style={colorStyle}
-										/> 
+											style={colorStyle}
+										/>
 									</Col>
 									<Col col="md-6" ml="auto">
 										<Form.Label> Mesure Attribuable : </Form.Label>

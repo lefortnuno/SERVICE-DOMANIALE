@@ -172,14 +172,14 @@ export default function FormulaireNouvelleDemande() {
 		}
 
 		if (name === "superficieTerrain") {
-			if (value < 25) {
+			if (value < 7.5) {
 				isValidate = false;
 				setErreurs((values) => ({ ...values, [name]: true }));
 				setMessages((values) => ({
 					...values,
 					[name]: [name] + " trop petite",
 				}));
-			} else if (value > 1000) {
+			} else if (value > 100) {
 				isValidate = false;
 				setErreurs((values) => ({ ...values, [name]: true }));
 				setMessages((values) => ({
@@ -661,7 +661,7 @@ export default function FormulaireNouvelleDemande() {
 							</div>
 							{inputs.pvDelimitation ? (
 								<div className="input-field">
-									<label>Superficie du terrain :</label>
+									<label>Superficie du terrain : (unité Are)</label>
 									<input
 										type="number"
 										min="1"
