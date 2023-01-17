@@ -434,7 +434,7 @@ export default function FormulaireNouveauIndividu() {
 									name="nom"
 									onChange={handleChange}
 									autoComplete="off"
-									placeholder="Nom "
+									placeholder="Nom de l'individu"
 								/>
 								<small className="text-danger d-block">
 									{erreurs.nom ? messages.nom : null}
@@ -442,13 +442,13 @@ export default function FormulaireNouveauIndividu() {
 							</div>
 
 							<div className="input-field">
-								<label>Prenom : </label>
+								<label>Prénom : </label>
 								<input
 									type="text"
 									name="prenom"
 									onChange={handleChange}
 									autoComplete="off"
-									placeholder="lieu de naissance"
+									placeholder="Prénom de l'individu"
 								/>
 								<small className="text-danger d-block">
 									{erreurs.prenom ? messages.prenom : null}
@@ -476,7 +476,7 @@ export default function FormulaireNouveauIndividu() {
 									name="lieuNaiss"
 									onChange={handleChange}
 									autoComplete="off"
-									placeholder="lieu de naissance"
+									placeholder="Lieu de naissance"
 								/>
 								<small className="text-danger d-block">
 									{erreurs.lieuNaiss ? messages.lieuNaiss : null}
@@ -499,13 +499,13 @@ export default function FormulaireNouveauIndividu() {
 							</div>
 
 							<div className="input-field">
-								<label>Adress du domicile : </label>
+								<label>Adresse du domicile : </label>
 								<input
 									type="text"
 									name="domicile"
 									onChange={handleChange}
 									autoComplete="off"
-									placeholder="Adress du domicile"
+									placeholder="Adresse du domicile"
 								/>
 								<small className="text-danger d-block">
 									{erreurs.domicile ? messages.domicile : null}
@@ -600,13 +600,13 @@ export default function FormulaireNouveauIndividu() {
 									</div>
 
 									<div className="input-field">
-										<label>Prenom du conjoint : </label>
+										<label>Prénom du conjoint : </label>
 										<input
 											type="text"
 											name="prenomConjoint"
 											onChange={handleChange}
 											autoComplete="off"
-											placeholder="Prenom du conjoint ...."
+											placeholder="Prénom du conjoint ...."
 										/>
 										<small className="text-danger d-block">
 											{erreurs.prenomConjoint ? messages.prenomConjoint : null}

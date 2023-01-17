@@ -31,8 +31,8 @@ export default function StatisiqueProcedure() {
       <div className="col-md-12">
         <div className="card">
           <div className="card-header">
-            <h4 className="card-title">Statistique des Procedures</h4>
-            <p className="card-category">Temps consommer par chaque procedure en nombre de jour</p>
+            <h4 className="card-title">Statistique des procédures</h4>
+            <p className="card-category">Temps consommer par chaque procédure en nombre de jour</p>
           </div>
           <div className="card-body">
             <ChartProcedure

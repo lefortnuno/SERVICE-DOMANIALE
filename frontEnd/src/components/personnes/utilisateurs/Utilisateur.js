@@ -241,7 +241,7 @@ export default function Utilisateur() {
                 <div className="col-md-12">
                   <div className="card">
                     <div className="card-header ">
-                      <h4 className="card-title">liste des {base}s</h4>
+                      <h4 className="card-title">Liste des {base}s</h4>
                     </div>
                     <div className="card-body">
                       <div className="table-responsive text-nowrap">
@@ -249,14 +249,14 @@ export default function Utilisateur() {
                           <thead>
                             <tr>
                               <th scope="col">#</th>
-                              <th scope="col">Identification</th>
+                              <th scope="col">Identificant</th>
                               <th scope="col">Individu</th>
-                              <th scope="col">Role</th>
+                              <th scope="col">Rôle</th>
                               <th scope="col">Unité</th>
-                              <th scope="col">Actions</th>
+                              <th scope="col" className="text-center">Actions</th>
                               {u_info.u_attribut === "Chef" ||
                               u_info.u_attribut === "Administrateur" ? (
-                                <th scope="col">Attention</th>
+                                <th scope="col" className="text-center">Attention</th>
                               ) : null}
                             </tr>
                           </thead>
@@ -275,7 +275,7 @@ export default function Utilisateur() {
                                       <>Conservateur</>
                                     )}
                                   </td>
-                                  <td>
+                                  <td className="text-center">
                                     <button
                                       type="button"
                                       className="btn btn-outline-success btn-sm m-1 waves-effect"

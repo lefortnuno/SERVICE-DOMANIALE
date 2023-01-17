@@ -477,7 +477,7 @@ export default function FormulaireNouvelleDemande() {
 							</div>
 
 							<div className="input-field">
-								<label>Nature affectation :</label>
+								<label>Nature d'affectation :</label>
 								<select
 									name="natureAffectation"
 									onChange={handleChange}
@@ -591,7 +591,7 @@ export default function FormulaireNouvelleDemande() {
 										onChange={handleChange}
 										autoComplete="off"
 									/>
-									<span className="form-check-sign">Empietement</span>
+									<span className="form-check-sign">Empiétement</span>
 								</label>
 								{inputs.empietement ? (
 									<>
@@ -625,7 +625,7 @@ export default function FormulaireNouvelleDemande() {
 										onChange={handleChange}
 										autoComplete="off"
 									/>
-									<span className="form-check-sign">Plan annexe</span>
+									<span className="form-check-sign">Plan y annexe</span>
 									<small className="text-danger d-block">
 										{erreurs.planAnnexe ? messages.planAnnexe : null}
 									</small>

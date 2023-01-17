@@ -20,7 +20,7 @@ export function AccessBureau() {
 								<div className="col-7 d-flex align-items-center">
 									<div className="numbers">
 										<p className="card-category">liste</p>
-										<h4 className="card-title">Bureau</h4>
+										<h4 className="card-title">Bureaux</h4>
 									</div>
 								</div>
 							</div>

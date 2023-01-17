@@ -213,7 +213,7 @@ export default function Individu() {
                 <div className="col-md-12">
                   <div className="card">
                     <div className="card-header ">
-                      <h4 className="card-title">liste des {base}s</h4>
+                      <h4 className="card-title">Liste des {base}s</h4>
                     </div>
                     <div className="card-body">
                       <div className="table-responsive text-nowrap">

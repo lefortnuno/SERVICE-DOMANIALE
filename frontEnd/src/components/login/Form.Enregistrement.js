@@ -441,7 +441,7 @@ export default function FormulaireEnregistrement() {
 							) : null}
 
 							<div className="input-field">
-								<label>Occupation : </label>
+								<label>Unité : </label>
 								<select name="unite" onChange={handleChange} autoComplete="off">
 									<option> </option>
 									<option value={true}>CIRCONSCRIPTION</option>
@@ -453,13 +453,13 @@ export default function FormulaireEnregistrement() {
 							</div>
 
 							<div className="input-field">
-								<label>Mot de pass : </label>
+								<label>Mot de passe : </label>
 								<input
 									type="password"
 									name="mdp"
 									onChange={handleChange}
 									autoComplete="off"
-									placeholder="Entrez votre mot de pass"
+									placeholder="Entrez votre mot de passe"
 								/>
 								<small className="text-danger d-block">
 									{erreurs.mdp ? messages.mdp : null}
@@ -467,13 +467,13 @@ export default function FormulaireEnregistrement() {
 							</div>
 
 							<div className="input-field">
-								<label>Confirmez mot de pass : </label>
+								<label>Confirmez mot de passe : </label>
 								<input
 									type="password"
 									name="confirmationMdp"
 									onChange={handleChange}
 									autoComplete="off"
-									placeholder="Confirmez votre mot de pass"
+									placeholder="Confirmez votre mot de passe"
 								/>
 								<small className="text-danger d-block">
 									{erreurs.confirmationMdp ? messages.confirmationMdp : null}

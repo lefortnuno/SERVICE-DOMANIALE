@@ -151,7 +151,7 @@ export default function Procedure() {
           <div className="col-md-12">
             <div className="card">
               <div className="card-header ">
-                <h4 className="card-title">liste des {base}s</h4>
+                <h4 className="card-title">Liste des procédures</h4>
               </div>
               <div className="card-body">
                 <div className="table-responsive text-nowrap">
@@ -159,7 +159,7 @@ export default function Procedure() {
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Procedure</th>
+                        <th scope="col">Procédure</th>
                         <th scope="col">Description</th>
                         <th scope="col">Bureau</th>
                         {u_info.u_attribut === "Chef" ||
