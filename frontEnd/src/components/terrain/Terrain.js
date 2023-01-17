@@ -177,7 +177,7 @@ export default function Terrain() {
                   <div className="card">
                     <div className="card-header ">
                       <h4 className="card-title">
-                        Liste des {base}s Titré et Borner
+                        Liste des {base}s Immatriculer, Titrer et Borner
                       </h4>
                     </div>
                     <div className="card-body">
@@ -189,8 +189,8 @@ export default function Terrain() {
                                 <div
                                   className={
                                     terrain.prixTerrain
-                                      ? "card card-stats card-info"
-                                      : "card card-stats card-success"
+                                      ? "card card-stats card-success"
+                                      : "card card-stats card-info"
                                   }
                                 >
                                   <Link

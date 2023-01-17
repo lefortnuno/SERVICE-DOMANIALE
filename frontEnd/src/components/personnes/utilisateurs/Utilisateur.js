@@ -238,7 +238,7 @@ export default function Utilisateur() {
               </div>
 
               <div className="row">
-                <div className="col-md-8">
+                <div className="col-md-12">
                   <div className="card">
                     <div className="card-header ">
                       <h4 className="card-title">liste des {base}s</h4>
@@ -316,7 +316,7 @@ export default function Utilisateur() {
                                         <BsFillTrashFill />
                                       </button>
 
-                                      {u_info.u_attribut === "Chef" ||
+                                      {/* {u_info.u_attribut === "Chef" ||
                                       u_info.u_attribut === "Administrateur" ? (
                                         <button
                                           type="button"
@@ -330,7 +330,7 @@ export default function Utilisateur() {
                                         >
                                           <BsFillTrashFill />
                                         </button>
-                                      ) : null}
+                                      ) : null} */}
                                     </td>
                                   ) : null}
                                 </tr>
@@ -379,20 +379,7 @@ export default function Utilisateur() {
                       </>
                     ) : null}
                   </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="card">
-                    <div className="card-header">
-                      <h4 className="card-title">Users Statistics</h4>
-                      <p className="card-category">
-                        Users statistics this month
-                      </p>
-                    </div>
-                    <div className="card-body">
-                      <div id="monthlyChart" className="chart chart-pie"></div>
-                    </div>
-                  </div>
-                </div>
+                </div> 
               </div>
               {/* CONTENU  */}
             </div>

@@ -359,8 +359,7 @@ export default function DetailsDossier() {
 
 														<div className="form-group">
 															<label> Numéro d'affaire : </label>
-															<span> {users.numeroAffaire} </span>
-															<span> {users.numeroDossier} </span>
+															<span> {users.numeroAffaire} </span> 
 														</div>
 
 														<div className="form-group">

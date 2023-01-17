@@ -16,7 +16,7 @@ import {
 	AccessCahierInterne,
 	AccessCahierND,
 	AccessCahierDepart,
-} from "../../access/accessCahier"; 
+} from "../../access/accessCahier";
 
 import {
 	BsFillTrashFill,
@@ -24,12 +24,15 @@ import {
 	BsEye,
 	BsFileEarmarkArrowUp,
 	BsLayerForward,
-	BsCapslock,BsFillEyeFill,
+	BsCapslock,
+	BsFillEyeFill,
 	BsCapslockFill,
 } from "react-icons/bs";
 
 const base = `Cahier de Rendez-Vous`;
 const URL_DE_BASE = `historique/C_RDV/`;
+
+const dateAujourdHui = new Date();
 
 export default function CahierRendezVous() {
 	const navigate = useNavigate();
@@ -45,7 +48,7 @@ export default function CahierRendezVous() {
 	function getUsers() {
 		axios.get(URL_DE_BASE, u_info.opts).then(function (response) {
 			if (response.status === 200) {
-				setUsers(response.data);
+				setUsers(response.data); 
 			} else {
 				toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
 			}
@@ -219,31 +222,20 @@ export default function CahierRendezVous() {
 													<tbody>
 														{contenuTab || users.length !== 0 ? (
 															currentItems.map((user, key) => (
-																<tr key={key}>
-																	<th scope="row">{user.numeroHisto} </th>
-																	<td>{user.dateRDV}</td>
-																	<td>{user.h_numeroAffaire}</td>
-																	<td>
-																		{user.nom} {user.prenom}
-																	</td>
-																	<td>0{user.numeroTelephone}</td>
-																	<td>{user.nomProcedure}</td>
-																	<td>{user.observation}</td>
-																	<td>{user.identification}</td>
-																	{/* <td>
-																		{user.accomplissement ? null : (
-																			<p
-																				className="btn btn-outline-success btn-sm m-1 waves-effect"
-																				name="numCompteEdit"
-																				onClick={() =>
-																					showAddModal(user.numeroHisto)
-																				}
-																			>
-																				<BsFillEyeFill />
-																			</p>
-																		)}
-																	</td> */}
-																</tr>
+																<>
+																	<tr key={key}>
+																		<th scope="row">{user.numeroHisto} </th>
+																		<td>{user.dateRDV}</td>
+																		<td>{user.h_numeroAffaire}</td>
+																		<td>
+																			{user.nom} {user.prenom}
+																		</td>
+																		<td>0{user.numeroTelephone}</td>
+																		<td>{user.nomProcedure}</td>
+																		<td>{user.observation}</td>
+																		<td>{user.identification}</td>
+																	</tr>
+																</>
 															))
 														) : (
 															<tr>

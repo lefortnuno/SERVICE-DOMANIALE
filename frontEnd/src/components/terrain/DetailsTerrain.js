@@ -7,24 +7,21 @@ import HeaderContext from "../../contexts/header/header.context";
 import FooterContext from "../../contexts/footer/footer.context";
 import SidebarContext from "../../contexts/sidebar/sidebar.context";
 import GoogleMap from "../GoogleMapIntegration/GoogleMap";
-import ModalAjout from "../historique/ModalAjout";
-import {
-	AccessLogoE_TokotanyImage,
-	AccessDrapeauFanjakanaImage,
-} from "../access/accessAll";
-
-import StatisiqueProcedureUneDossier from "../statistiques/stat.one.dossier";
 
 import { useEffect, useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
 import { useNavigate, Link, useParams } from "react-router-dom";
-import {
-	BsCapslockFill,
-	BsPrinterFill,
-	BsBook,
-	BsBookFill,
-} from "react-icons/bs";
+import { BsPrinterFill } from "react-icons/bs";
+
+function toMonthName(monthNumber) {
+	const date = new Date();
+	date.setMonth(monthNumber - 1); // parce que Janvier = 0, Fevrier = 1
+
+	return date.toLocaleString("fr-FR", {
+		month: "long",
+	});
+}
 
 const base = `terrain`;
 const URL_DE_BASE = base + `/`;
@@ -38,9 +35,15 @@ export default function DetailsTerrain() {
 
 	//#region // IMPRIMER UN DOC
 	const compRef = useRef();
+	const compRefActeVente = useRef();
 	const handlePrint = useReactToPrint({
 		content: () => compRef.current,
-		documentTitle: "Decompte Prix du Terrain",
+		documentTitle: "Livre du Terrain",
+		onAfterPrint: () => toast.success("Impression du document Reussi"),
+	});
+	const handlePrintActeVente = useReactToPrint({
+		content: () => compRefActeVente.current,
+		documentTitle: "Acte de vente du Terrain",
 		onAfterPrint: () => toast.success("Impression du document Reussi"),
 	});
 	//#endregion
@@ -58,8 +61,18 @@ export default function DetailsTerrain() {
 			.then(function (response) {
 				if (response.status === 200) {
 					const u = response.data[0];
-					setUsers(u);
-					console.log("UUUUU : ", u);
+
+					// RECUPPERER LA DATE en ANNEE puis en Jour - Mois
+					let tmpdate = u.dateDemande;
+
+					let arr = tmpdate.split("-");
+
+					const annee = arr[2];
+					const jourMois = arr[0] + ` ` + toMonthName(arr[1]);
+
+					const data = Object.assign(u, { annee, jourMois });
+					console.log(data);
+					setUsers(data);
 				} else {
 					toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
 				}
@@ -156,9 +169,16 @@ export default function DetailsTerrain() {
 								<div className="col-md-8">
 									<div className="card">
 										<div className="card-header ">
-											<h4 className="card-title">LIVRE DU TERRAIN</h4>
+											<h4 className="card-title">
+												LIVRE DU TERRAIN{" "}
+												<BsPrinterFill
+													style={{ cursor: "pointer" }}
+													onClick={handlePrint}
+													className="text-success"
+												/>
+											</h4>
 										</div>
-										<div className="card-body">
+										<div className="card-body" ref={compRef}>
 											<div className="main_view">
 												<div className="header_book text-center">
 													<span>REPOBLIKAN'I MADAGADIKARA</span>
@@ -206,74 +226,391 @@ export default function DetailsTerrain() {
 								</div>
 							</div>
 
-							<div className="row">
-								<div className="col-md-12">
-									<div className="card">
-										<div className="card-header ">
-											<h4 className="card-title">VENTE DEFINITIVE</h4>
-										</div>
-										<div className="card-body">
-											<div className="row">
-												<div className="col-md-12">
-													<p className="text-center title_head_table">
-														MUTATIONS TOTALES ET DE DROITS INIDIVIS
-													</p>
+							{users.prixTerrain ? (
+								<div className="row">
+									<div className="col-md-12">
+										<div className="card">
+											<div className="card-header ">
+												<h4 className="card-title">
+													VENTE DEFINITIVE{" "}
+													<BsPrinterFill
+														style={{ cursor: "pointer" }}
+														onClick={handlePrintActeVente}
+														className="text-success"
+													/>
+												</h4>
+											</div>
+											<div className="card-body">
+												<div className="row">
+													<div className="col-md-12">
+														<p className="text-center title_head_table">
+															MUTATIONS TOTALES ET DE DROITS INIDIVIS
+														</p>
 
-													<table className=" table table-bordered table_mutation">
-														<thead className="text-center">
-															<tr>
-																<th style={{ width: "80px" }} rowSpan={"2"}>
-																	Numéro de bordereau
-																</th>
-																<th colSpan={"2"}>Date de l'inscription</th>
-																<th rowSpan={"2"}>Mode de mutation</th>
-																<th style={{ width: "350px" }} rowSpan={"2"}>
-																	Nom et prénoms de l'ancien titulaire <br />{" "}
-																	(Ne remplir que pour les mutations parielles
-																	indivises en indiquant la fraction mutée)
-																</th>
-																<th style={{ width: "350px" }} rowSpan={"2"}>
-																	Nom prénoms ,nouveau titulaire
-																</th>
-																<th colSpan={"2"}>Prix de la mutation</th>
-															</tr>
-															<tr>
-																<th>Année</th>
-																<th style={{ width: "140px" }}>Quantième</th>
-																<th>F.</th>
-																<th style={{ width: "50px" }}>C.</th>
-															</tr>
-														</thead>
+														<table className=" table table-responsive text-nowrap table-bordered table_mutation">
+															<thead className="text-center">
+																<tr>
+																	<th style={{ width: "80px" }} rowSpan={"2"}>
+																		Numéro de bordereau
+																	</th>
+																	<th colSpan={"2"}>Date de l'inscription</th>
+																	<th rowSpan={"2"}>Mode de mutation</th>
+																	<th style={{ width: "350px" }} rowSpan={"2"}>
+																		Nom et prénoms de l'ancien titulaire <br />{" "}
+																		(Ne remplir que pour les mutations parielles
+																		indivises en indiquant la fraction mutée)
+																	</th>
+																	<th style={{ width: "350px" }} rowSpan={"2"}>
+																		Nom prénoms ,nouveau titulaire
+																	</th>
+																	<th colSpan={"2"}>Prix de la mutation</th>
+																</tr>
+																<tr>
+																	<th>Année</th>
+																	<th style={{ width: "140px" }}>Quantième</th>
+																	<th>F.</th>
+																	<th style={{ width: "50px" }}>C.</th>
+																</tr>
+															</thead>
 
-														<tbody>
-															<tr>
-																<td className="text-center">03</td>
-																<td className="text-center">2018</td>
-																<td className="text-center">28 Septembre</td>
-																<td className="text-center">Vente définitif</td>
-																<td></td>
-																<td>{users.nom} {users.prenom}</td> 
-																<td>Ar {users.prixTerrain}</td>
-																<td></td>
-															</tr>
-															<tr>
-																<td className="text-center">03</td>
-																<td className="text-center">2018</td>
-																<td className="text-center">28 Septembre</td>
-																<td className="text-center">Vente définitif</td>
-																<td></td>
-																<td>RASOA TEMPLATE</td>
-																<td>25.800</td>
-																<td></td>
-															</tr>
-														</tbody>
-													</table>
+															<tbody>
+																<tr>
+																	<td className="text-center">
+																		Nº{users.numeroTitre}
+																	</td>
+																	<td className="text-center">{users.annee}</td>
+																	<td className="text-center">
+																		{users.jourMois}
+																	</td>
+																	<td className="text-center">
+																		Vente définitif
+																	</td>
+																	<td></td>
+																	<td>
+																		{users.nom} {users.prenom}
+																	</td>
+																	<td>Ar {users.prixTerrain}</td>
+																	<td></td>
+																</tr>
+																{users.etatCivil === "Marié" ? (
+																	<tr>
+																		<td className="text-center">
+																			Nº{users.numeroTitre}
+																		</td>
+																		<td className="text-center">
+																			{users.annee}
+																		</td>
+																		<td className="text-center">
+																			{users.jourMois}
+																		</td>
+																		<td className="text-center">
+																			Vente définitif
+																		</td>
+																		<td></td>
+																		<td>
+																			{users.nomConjoint} {users.prenomConjoint}
+																		</td>
+																		<td>Ar {users.prixTerrain}</td>
+																		<td></td>
+																	</tr>
+																) : null}
+
+																<>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																</>
+																<br />
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+
+											<div className="card-body" hidden={true}>
+												<div className="row" ref={compRefActeVente}>
+													<div className="col-md-12">
+														<p className="text-center title_head_table">
+															MUTATIONS TOTALES ET DE DROITS INIDIVIS
+														</p>
+
+														<table className=" table table-bordered table_mutation">
+															<thead className="text-center">
+																<tr>
+																	<th style={{ width: "80px" }} rowSpan={"2"}>
+																		Numéro de bordereau
+																	</th>
+																	<th colSpan={"2"}>Date de l'inscription</th>
+																	<th rowSpan={"2"}>Mode de mutation</th>
+																	<th style={{ width: "350px" }} rowSpan={"2"}>
+																		Nom et prénoms de l'ancien titulaire <br />{" "}
+																		(Ne remplir que pour les mutations parielles
+																		indivises en indiquant la fraction mutée)
+																	</th>
+																	<th style={{ width: "350px" }} rowSpan={"2"}>
+																		Nom prénoms ,nouveau titulaire
+																	</th>
+																	<th colSpan={"2"}>Prix de la mutation</th>
+																</tr>
+																<tr>
+																	<th>Année</th>
+																	<th style={{ width: "140px" }}>Quantième</th>
+																	<th>F.</th>
+																	<th style={{ width: "50px" }}>C.</th>
+																</tr>
+															</thead>
+
+															<tbody>
+																<tr>
+																	<td className="text-center">
+																		Nº{users.numeroTitre}
+																	</td>
+																	<td className="text-center">{users.annee}</td>
+																	<td className="text-center">
+																		{users.jourMois}
+																	</td>
+																	<td className="text-center">
+																		Vente définitif
+																	</td>
+																	<td></td>
+																	<td>
+																		{users.nom} {users.prenom}
+																	</td>
+																	<td>Ar {users.prixTerrain}</td>
+																	<td></td>
+																</tr>
+																{users.etatCivil === "Marié" ? (
+																	<tr>
+																		<td className="text-center">
+																			Nº{users.numeroTitre}
+																		</td>
+																		<td className="text-center">
+																			{users.annee}
+																		</td>
+																		<td className="text-center">
+																			{users.jourMois}
+																		</td>
+																		<td className="text-center">
+																			Vente définitif
+																		</td>
+																		<td></td>
+																		<td>
+																			{users.nomConjoint} {users.prenomConjoint}
+																		</td>
+																		<td>Ar {users.prixTerrain}</td>
+																		<td></td>
+																	</tr>
+																) : null}
+
+																<>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																	<tr>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td className="text-center"> </td>
+																		<td></td>
+																		<td> </td>
+																		<td> </td>
+																		<td></td>
+																	</tr>
+																</>
+																<br />
+															</tbody>
+														</table>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
+							) : null}
 						</div>
 					</div>
 

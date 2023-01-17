@@ -46,6 +46,8 @@ SELECT
     numeroTitre,
     immatriculationTerrain,
     nomPropriete,
+    t_labordeLat,
+    t_labordeLong,
     etatCiviqueTerrain,
     prixTerrain,
     t_cin
@@ -72,7 +74,7 @@ Terrain.addTerrain = (newTerrain, result) => {
 };
 
 Terrain.getAllTerrains = (result) => {
-  dbConn.query("SELECT * FROM Terrain", (err, res) => {
+  dbConn.query("SELECT * FROM Terrain order by numeroTitre ASC", (err, res) => {
     if (err) {
       result(err, null);
     } else {
@@ -84,6 +86,7 @@ Terrain.getAllTerrains = (result) => {
 Terrain.getIdTerrain = (id, result) => {
   dbConn.query(REQUETE_EXTRA+ ` and numeroTitre = ? ` , id, (err, res) => {
     if (err) {
+      console.log(err)
       result(err, null);
     } else {
       if (res.length !== 0) {

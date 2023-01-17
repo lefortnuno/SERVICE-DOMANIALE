@@ -144,7 +144,7 @@ export default function Bureau() {
         </div>
 
         <div className="row">
-          <div className="col-md-8">
+          <div className="col-md-12">
             <div className="card">
               <div className="card-header ">
                 <h4 className="card-title">liste des {base}s</h4>
@@ -228,7 +228,7 @@ export default function Bureau() {
               ) : null}
             </div>
           </div>
-          <div className="col-md-4">
+          {/* <div className="col-md-4">
             <div className="card">
               <div className="card-header">
                 <h4 className="card-title">Users Statistics</h4>
@@ -238,7 +238,7 @@ export default function Bureau() {
                 <div id="monthlyChart" className="chart chart-pie"></div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {libraryList.forEach((x) => AjoutLibrary(x))}

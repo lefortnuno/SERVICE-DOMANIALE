@@ -62,7 +62,8 @@ export default function NavbarContext() {
 						<span className="badge badge-success">3</span>
 					</Link>
 				</li>
-				<li className="nav-item active">
+				{/* <li className="nav-item active"> */}
+				<li className="nav-item">
 					<Link to="/stats/">
 						<i>
 							<BsReception4 />
@@ -71,7 +72,7 @@ export default function NavbarContext() {
 						<span className="badge badge-info">3</span>
 					</Link>
 				</li>
-				<li className="nav-item">
+				{/* <li className="nav-item">
 					<Link to="/maps/">
 						<i>
 							<BsGoogle />
@@ -79,15 +80,15 @@ export default function NavbarContext() {
 						<p>Géographie</p>
 						<span className="badge badge-danger">25</span>
 					</Link>
-				</li>
-				<li className="nav-item" data-toggle="modal" data-target="#modalUpdate">
+				</li> */}
+				{/* <li className="nav-item" data-toggle="modal" data-target="#modalUpdate">
 					<Link to="/accueil/">
 						<i>
 							<BsInfoLg />
 						</i>
 						<p> Aide </p>
 					</Link>
-				</li>
+				</li> */}
 			</ul>
 		</>
 	);

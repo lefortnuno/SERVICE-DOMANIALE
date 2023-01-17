@@ -31,6 +31,8 @@ SELECT
     prixAttribue
 FROM SOUS_DOSSIER `;
 
+const CHIIFRE_CA = `100`
+
 const REQUETE_DECOMPTE = `
 SELECT
     numeroSousDossier,
@@ -46,21 +48,21 @@ SELECT
     p_numeroAffaire,
     prixAttribue,
 
-    FORMAT((prixAttribue * mesureAttribuable * 10000), 0, 'de_DE') as PT,
+    FORMAT((prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`), 0, 'de_DE') as PT,
     FORMAT(
-        (((prixAttribue * mesureAttribuable * 10000) * 5) / 100),
+        (((prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`) * 5) / 100),
         0,
         'de_DE'
     ) as FCD,
     FORMAT(
-        ((prixAttribue * mesureAttribuable * 10000) + (((prixAttribue * mesureAttribuable * 10000) * 5) / 100)),
+        ((prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`) + (((prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`) * 5) / 100)),
         0,
         'de_DE'
     ) as PT_TTL,
 
     15000 as DF,
     FORMAT(
-        (((prixAttribue * mesureAttribuable * 10000) * 2) / 100),
+        (((prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`) * 2) / 100),
         0,
         'de_DE'
     ) as DP,
@@ -70,7 +72,7 @@ SELECT
     FORMAT(
         (
             (
-                (prixAttribue * mesureAttribuable * 10000) + ((prixAttribue * mesureAttribuable * 100000) * 5) / 100
+                (prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`) + ((prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`) * 5) / 100
             ) + 75000
         ),
         0,

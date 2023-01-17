@@ -148,7 +148,7 @@ export default function Procedure() {
         </div>
 
         <div className="row">
-          <div className="col-md-8">
+          <div className="col-md-12">
             <div className="card">
               <div className="card-header ">
                 <h4 className="card-title">liste des {base}s</h4>

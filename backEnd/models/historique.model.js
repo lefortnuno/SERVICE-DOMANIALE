@@ -34,6 +34,7 @@ SELECT
     DATE_FORMAT(dateDebutMouvement, '%d-%m-%Y') as dateDebutMouvement,
     DATE_FORMAT(dateFinMouvement, '%d-%m-%Y') as dateFinMouvement,
     DATE_FORMAT(dateRDV, '%d-%m-%Y') as dateRDV,
+    dateRDV as dateALERTE,
     dispoDossier,
     approbation,
     observation,
@@ -102,6 +103,7 @@ const GROUP_BY = ` GROUP BY h_numeroAffaire `;
 const ORDER_BY = ` ORDER BY numeroHisto DESC `;
 const GROUP_BY_numHisto = ` GROUP BY numeroHisto `;
 
+const CONDITION_RDV_APRES = ` AND ( accomplissement=0) AND dateFinMouvement IS NULL `;
 const CONDITION_RDV = ` AND ( dateRDV > '${fomatDateAujourdHui}') AND dateFinMouvement IS NULL `;
 const ORDER_BY_ASC = ` ORDER BY numeroHisto ASC `;
 
