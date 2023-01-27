@@ -25,7 +25,7 @@ export default function NavbarContext() {
 						<span className="badge badge-count">3</span>
 					</Link>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item ">
 					<Link to="/dossier/">
 						<i className="">
 							<BsFolder2Open />
@@ -53,7 +53,7 @@ export default function NavbarContext() {
 					</Link>
 				</li>
 				<br />
-				<li className="nav-item">
+				<li className="nav-item ">
 					<Link to="/terrain/">
 						<i>
 							<BsGlobe2 />

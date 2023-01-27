@@ -21,7 +21,7 @@ import {
 import { BsFillTrashFill, BsPencilSquare, BsEye } from "react-icons/bs";
 
 const base = `requérant`;
-const URL_DE_BASE = base + `/`;
+const URL_DE_BASE = `requerant/`;
 
 export default function Requerant() {
 	const navigate = useNavigate();
@@ -38,6 +38,7 @@ export default function Requerant() {
 		axios.get(URL_DE_BASE, u_info.opts).then(function (response) {
 			if (response.status === 200) {
 				setUsers(response.data);
+				console.log(response.data);
 			} else {
 				toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
 			}

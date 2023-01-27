@@ -37,6 +37,7 @@ Requerant.addRequerant = (newRequerant, result) => {
 
 Requerant.getAllRequerants = (result) => {
   dbConn.query(REQUETE_BASE + ORDER_BY, (err, res) => {
+    console.log("err : ", err, " res : ",res);
     if (err) {
       result(err, null);
     } else {
