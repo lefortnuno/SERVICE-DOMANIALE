@@ -17,6 +17,8 @@ let Utilisateur = function (utilisateur) {
 const REQUETE_ADVANCER = `SELECT numeroCompte, identification, photoPDP, attribut, mdp, statu, unite, u_cin, nom, prenom FROM compte, individu WHERE compte.u_cin = individu.cin `;
 const ORDER_BY = ` ORDER BY numeroCompte DESC `;
 
+const NOTIFICATION_COMPTE = `SELECT count(numeroCompte) as attenteActivation FROM COMPTE WHERE statu = 0 `
+
 Utilisateur.addUtilisateur = (newUtilisateur, result) => {
   dbConn.query("INSERT INTO compte SET ?", newUtilisateur, (err, res) => {
     if (!err) {
@@ -44,6 +46,26 @@ Utilisateur.loginUtilisateur = (values, result) => {
 
 Utilisateur.getAllUtilisateurs = (result) => {
   dbConn.query(REQUETE_ADVANCER + ORDER_BY, (err, res) => {
+    if (err) {
+      result(err, null);
+    } else {
+      result(null, res);
+    }
+  });
+};
+
+Utilisateur.getAttenteActivation = (result) => {
+  dbConn.query(NOTIFICATION_COMPTE, (err, res) => {
+    if (err) {
+      result(err, null);
+    } else {
+      result(null, res);
+    }
+  });
+};
+
+Utilisateur.getAllAttenteActivation = (result) => {
+  dbConn.query(REQUETE_ADVANCER + ` AND statu = 0 ` + ORDER_BY, (err, res) => {
     if (err) {
       result(err, null);
     } else {

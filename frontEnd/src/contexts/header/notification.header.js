@@ -5,9 +5,13 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const URL_DE_VISA = `sousDossier/attenteVISA/`;
-const URL_DE_PREVISA = `sousDossier/attentePREVISA/`;
-const URL_DE_UTILISATEUR = `oks`;
+const URL_DE_NOTIF = `utilisateur/attenteActivation/`;
+const URL_DE_VISA = `sousDossier/nbAttenteVISA/`;
+const URL_DE_PREVISA = `sousDossier/nbAttentePREVISA/`;
+
+let notifAdjoint;
+let notifChef;
+let notifAdmin;
 
 export default function NotificationHeader() {
 	const navigate = useNavigate();
@@ -16,6 +20,7 @@ export default function NotificationHeader() {
 	useEffect(() => {
 		getPREVISA();
 		getVISA();
+		getNotif();
 	}, []);
 
 	//#region //------------DONNEE VISA ------------
@@ -25,10 +30,12 @@ export default function NotificationHeader() {
 	function getVISA() {
 		axios.get(URL_DE_VISA, u_info.opts).then(function (response) {
 			if (response.status === 200) {
-				setVISA(response.data);
-				setVISADepuis(response.data[0].nombreJour);
-			} else {
-				toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
+				if (response.data.length === 0) {
+					setVISA({ isaVisa: 0 });
+				} else {
+					setVISA(response.data[0]);
+					setVISADepuis(response.data[0].nombreJour);
+				}
 			}
 		});
 	}
@@ -41,13 +48,31 @@ export default function NotificationHeader() {
 	function getPREVISA() {
 		axios.get(URL_DE_PREVISA, u_info.opts).then(function (response) {
 			if (response.status === 200) {
-				setPREVISA(response.data);
-				setPREVISADepuis(response.data[0].nombreJour);
-			} else {
-				toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
+				if (response.data.length === 0) {
+					setVISA({ isaPreVisa: 0 });
+				} else {
+					setPREVISA(response.data[0]);
+					setPREVISADepuis(response.data[0].nombreJour);
+				}
 			}
 		});
 	}
+	//#endregion
+
+	//#region //------------ NOTIFICATION ------------
+	const [notif, setNotif] = useState([]);
+
+	function getNotif() {
+		axios.get(URL_DE_NOTIF, u_info.opts).then(function (response) {
+			if (response.status === 200) {
+				setNotif(response.data[0]);
+			}
+		});
+	}
+
+	notifAdjoint = previsa.isaPreVisa + notif.attenteActivation;
+	notifChef = visa.isaVisa + notif.attenteActivation;
+	notifAdmin = notif.attenteActivation;
 	//#endregion
 
 	return (
@@ -68,20 +93,29 @@ export default function NotificationHeader() {
 						<i className="la la-bell"></i>
 						{u_info.u_attribut === "Chef Adjoint" ? (
 							<>
-								{previsa.length === 0 ? null : (
-									<span className="notification"> {previsa.length}</span>
+								{notifAdjoint === 0 ? null : (
+									<span className="notification"> {notifAdjoint}</span>
 								)}
 							</>
 						) : null}
 
 						{u_info.u_attribut === "Chef" ? (
 							<>
-								{visa.length === 0 ? null : (
-									<span className="notification"> {visa.length}</span>
+								{notifChef === 0 ? null : (
+									<span className="notification"> {notifChef}</span>
+								)}
+							</>
+						) : null}
+
+						{u_info.u_attribut === "Administrateur" ? (
+							<>
+								{notifAdmin === 0 ? null : (
+									<span className="notification"> {notifAdmin}</span>
 								)}
 							</>
 						) : null}
 					</a>
+
 					<ul
 						className="dropdown-menu notif-box"
 						aria-labelledby="navbarDropdown"
@@ -89,21 +123,28 @@ export default function NotificationHeader() {
 						<li>
 							{u_info.u_attribut === "Chef Adjoint" ? (
 								<div className="dropdown-title">
-									Vous avez {previsa.length} notifications
+									Vous avez {notifAdjoint} notifications
 								</div>
 							) : null}
 
 							{u_info.u_attribut === "Chef" ? (
 								<div className="dropdown-title">
-									Vous avez {visa.length} notifications
+									Vous avez {notifChef} notifications
+								</div>
+							) : null}
+
+							{u_info.u_attribut === "Administrateur" ? (
+								<div className="dropdown-title">
+									Vous avez {notifAdmin} notifications
 								</div>
 							) : null}
 						</li>
+
 						<li>
 							<div className="notif-center">
 								{u_info.u_attribut === "Chef Adjoint" ? (
 									<>
-										{previsa.length === 0 ? null : (
+										{previsa.isaPreVisa === 0 ? null : (
 											<Link to="/preVISA/">
 												<div className="notif-icon notif-primary">
 													<i className="la la-comment"></i>
@@ -111,10 +152,10 @@ export default function NotificationHeader() {
 												<div className="notif-content">
 													<span className="block">
 														{" "}
-														{previsa.length} Validation nouvelle demande
+														{previsa.isaPreVisa} Validation nouvelle demande
 													</span>
 													<span className="time">
-														il y a {previsaDepuis} jours
+														depuis {previsaDepuis} jours
 													</span>
 												</div>
 											</Link>
@@ -124,7 +165,7 @@ export default function NotificationHeader() {
 
 								{u_info.u_attribut === "Chef" ? (
 									<>
-										{visa.length === 0 ? null : (
+										{visa.isaVisa === 0 ? null : (
 											<Link to="/VISA/">
 												<div className="notif-icon notif-primary">
 													<i className="la la-comment"></i>
@@ -132,10 +173,10 @@ export default function NotificationHeader() {
 												<div className="notif-content">
 													<span className="block">
 														{" "}
-														{visa.length} Validation P.A.V{" "}
+														{visa.isaVisa} Validation P.A.V{" "}
 													</span>
 													<span className="time">
-														il y a {visaDepuis} jours{" "}
+														depuis {visaDepuis} jours{" "}
 													</span>
 												</div>
 											</Link>
@@ -143,15 +184,19 @@ export default function NotificationHeader() {
 									</>
 								) : null}
 
-								{/* <Link to="/validationCompte/">
-									<div className="notif-icon notif-success">
-										<i className="la la-user-plus"></i>
-									</div>
-									<div className="notif-content">
-										<span className="block">2 Nouveau compte à approuver</span>
-										<span className="time">il y a 12 jours</span>
-									</div>
-								</Link> */}
+								{notifAdmin === 0 ? null : (
+									<Link to="/validationCompte/">
+										<div className="notif-icon notif-success">
+											<i className="la la-user-plus"></i>
+										</div>
+										<div className="notif-content">
+											<span className="block">
+												{notifAdmin} Nouveau compte à approuver
+											</span>
+											<span className="time">il y a quelque minutes</span>
+										</div>
+									</Link>
+								)}
 							</div>
 						</li>
 						<li>

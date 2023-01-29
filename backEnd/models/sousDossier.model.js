@@ -15,6 +15,24 @@ let SousDossier = function (sousDossier) {
 	this.certificatSituationJuridique = sousDossier.certificatSituationJuridique;
 };
 
+const CHIIFRE_CA = `100`;
+const ORDER_BY = ` ORDER BY numeroSousDossier DESC `;
+
+//#region //
+const ATTRIBUES = `
+    numeroSousDossier,
+    observationSD,
+    mesureAttribuable,
+    lettreDesistement,
+    planMere,
+    certificatSituationJuridique,
+    VISA,
+    preVISA,
+    p_numeroAffaire,
+    prixAttribue `;
+//#endregion
+
+//#region // REQUETE_BASE
 const REQUETE_BASE = `
 SELECT
     numeroSousDossier,
@@ -30,10 +48,11 @@ SELECT
     p_numeroAffaire,
     prixAttribue
 FROM SOUS_DOSSIER `;
+//#endregion
 
-const CHIIFRE_CA = `100`
-
-const REQUETE_DECOMPTE = `
+//#region //
+const REQUETE_DECOMPTE =
+	`
 SELECT
     numeroSousDossier,
     observationSD,
@@ -48,21 +67,31 @@ SELECT
     p_numeroAffaire,
     prixAttribue,
 
-    FORMAT((prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`), 0, 'de_DE') as PT,
+    FORMAT((prixAttribue * mesureAttribuable * ` +
+	CHIIFRE_CA +
+	`), 0, 'de_DE') as PT,
     FORMAT(
-        (((prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`) * 5) / 100),
+        (((prixAttribue * mesureAttribuable * ` +
+	CHIIFRE_CA +
+	`) * 5) / 100),
         0,
         'de_DE'
     ) as FCD,
     FORMAT(
-        ((prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`) + (((prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`) * 5) / 100)),
+        ((prixAttribue * mesureAttribuable * ` +
+	CHIIFRE_CA +
+	`) + (((prixAttribue * mesureAttribuable * ` +
+	CHIIFRE_CA +
+	`) * 5) / 100)),
         0,
         'de_DE'
     ) as PT_TTL,
 
     15000 as DF,
     FORMAT(
-        (((prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`) * 2) / 100),
+        (((prixAttribue * mesureAttribuable * ` +
+	CHIIFRE_CA +
+	`) * 2) / 100),
         0,
         'de_DE'
     ) as DP,
@@ -72,7 +101,11 @@ SELECT
     FORMAT(
         (
             (
-                (prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`) + ((prixAttribue * mesureAttribuable * `+CHIIFRE_CA+`) * 5) / 100
+                (prixAttribue * mesureAttribuable * ` +
+	CHIIFRE_CA +
+	`) + ((prixAttribue * mesureAttribuable * ` +
+	CHIIFRE_CA +
+	`) * 5) / 100
             ) + 75000
         ),
         0,
@@ -88,20 +121,7 @@ ORDER BY
 LIMIT
     1 `;
 
-const ORDER_BY = ` ORDER BY numeroSousDossier DESC `;
-
-const ATTRIBUES = `
-    numeroSousDossier,
-    observationSD,
-    mesureAttribuable,
-    lettreDesistement,
-    planMere,
-    certificatSituationJuridique,
-    VISA,
-    preVISA,
-    p_numeroAffaire,
-    prixAttribue `;
-
+//#region //
 const REQUETE_PREVISA =
 	`
 SELECT
@@ -123,6 +143,28 @@ GROUP BY
 ORDER BY
     p_numeroDossier ASC `;
 
+const NBR_PRE_VISA = `
+SELECT
+    count(p_numeroDossier) as isaPreVisa,
+    SUM(DATEDIFF(NOW(), dateDepotSD)) as nombreJour
+FROM
+    SOUS_DOSSIER,
+    DOSSIER
+WHERE
+    DOSSIER.numeroDossier = SOUS_DOSSIER.p_numeroDossier
+    AND DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire
+    AND (
+        preVisa = 0
+        AND p_numeroProcedure = 1
+    )
+GROUP BY
+    p_numeroDossier
+ORDER BY
+    p_numeroDossier ASC
+`;
+//#endregion
+
+//#region //
 const REQUETE_VISA =
 	`
 SELECT
@@ -140,6 +182,27 @@ WHERE
     AND DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire
     AND (Visa = 0 AND p_numeroProcedure = 10)
 GROUP BY p_numeroDossier ORDER BY p_numeroDossier ASC `;
+
+const NBR_VISA = `
+SELECT
+    count(p_numeroDossier) as isaVisa,
+    SUM(DATEDIFF(NOW(), dateDepotSD)) as nombreJour
+FROM
+    SOUS_DOSSIER,
+    DOSSIER
+WHERE
+    DOSSIER.numeroDossier = SOUS_DOSSIER.p_numeroDossier
+    AND DOSSIER.numeroAffaire = SOUS_DOSSIER.p_numeroAffaire
+    AND (
+        Visa = 0
+        AND p_numeroProcedure = 10
+    )
+GROUP BY
+    p_numeroDossier
+ORDER BY
+    p_numeroDossier ASC
+`;
+//#endregion
 
 SousDossier.addSousDossier = (newSousDossier, result) => {
 	dbConn.query("INSERT INTO SOUS_DOSSIER SET ?", newSousDossier, (err, res) => {
@@ -175,8 +238,28 @@ SousDossier.getAllAttentePREVISA = (id, result) => {
 	});
 };
 
+SousDossier.getNbAttentePREVISA = (id, result) => {
+	dbConn.query(NBR_PRE_VISA, id, (err, res) => {
+		if (err) {
+			result(err, null);
+		} else {
+			result(null, res);
+		}
+	});
+};
+
 SousDossier.getAllAttenteVISA = (id, result) => {
 	dbConn.query(REQUETE_VISA, id, (err, res) => {
+		if (err) {
+			result(err, null);
+		} else {
+			result(null, res);
+		}
+	});
+};
+
+SousDossier.getNbAttenteVISA = (id, result) => {
+	dbConn.query(NBR_VISA, id, (err, res) => {
 		if (err) {
 			result(err, null);
 		} else {

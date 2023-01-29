@@ -14,6 +14,16 @@ router.get(
 	utilisateurController.getAllUtilisateurs
 );
 router.get(
+	"/attenteActivation/",
+	chefAdjoint.checkUtilisateur,
+	utilisateurController.getAttenteActivation
+);
+router.get(
+	"/liseAttenteActivation/",
+	chefAdjoint.checkUtilisateur,
+	utilisateurController.getAllAttenteActivation
+);
+router.get(
 	"/numeroCompte/",
 	agent.checkUtilisateur,
 	utilisateurController.getLastNumeroCompteUtilisateur

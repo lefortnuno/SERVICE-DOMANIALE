@@ -36,6 +36,7 @@ import PageNotFound from "./contexts/404/page404";
 import StatisiqueGenerale from "./components/statistiques/statistique.general";
 import PREVISA from "./components/traitementApprobation/PREVISA";
 import VISA from "./components/traitementApprobation/VISA";
+import UtilisateurEnAttente from "./components/traitementApprobation/ActivationCompte";
 
 import DetailsTerrain from "./components/terrain/DetailsTerrain";
 
@@ -112,6 +113,7 @@ export default function App() {
 
 					<Route path="PREVISA/" element={<SinInProtected Cmp={PREVISA} />} />
 					<Route path="VISA/" element={<SinInProtected Cmp={VISA} />} />
+					<Route path="validationCompte/" element={<SinInProtected Cmp={UtilisateurEnAttente} />} />
 
 					<Route
 						path="viewTerrain/:numeroTitre"

@@ -10,16 +10,29 @@ router.get(
 	agent.checkUtilisateur,
 	SousDossierController.getAllSousDossiersOfDossier
 );
+
+router.get(
+	"/nbAttenteVISA/",
+	chef.checkUtilisateur,
+	SousDossierController.getNbAttenteVISA
+);
 router.get(
 	"/attenteVISA/",
 	chef.checkUtilisateur,
 	SousDossierController.getAllAttenteVISA
+);
+
+router.get(
+	"/nbAttentePREVISA/",
+	chefAdjoint.checkUtilisateur,
+	SousDossierController.getNbAttentePREVISA
 );
 router.get(
 	"/attentePREVISA/",
 	chefAdjoint.checkUtilisateur,
 	SousDossierController.getAllAttentePREVISA
 );
+
 router.get(
 	"/lastSousDossier/:id",
 	agent.checkUtilisateur,
