@@ -39,7 +39,7 @@ NumeroIM.getLastNumeroIM_AX = (result) => {
         let id = 0;
         if (resLastIM.length === 0) {
           id = 1;
-          console.log(id);
+          
         } else {
           const tmpID = Object.values(resLastIM);
           id = Object.values(tmpID[0]);

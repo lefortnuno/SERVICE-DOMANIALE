@@ -89,8 +89,7 @@ GROUP BY
 
 Stat.getAllStatsProcedureByMonth = (result) => {
   dbConn.query(ALL_STATS_PROCEDURE_MONTH, (err, res) => {
-    if (err) {
-      console.log(err);
+    if (err) { 
       result(err, null);
     } else {
       //stoquer les mois(en lettre) du stats
@@ -223,8 +222,7 @@ Stat.getAllStatsProcedureByMonth = (result) => {
         data.push(dataObj);
       }
 
-      // Je renvoie mon DATA au Front
-      console.log(data);
+      // Je renvoie mon DATA au Front 
       result(null, data);
     }
   });
@@ -232,8 +230,7 @@ Stat.getAllStatsProcedureByMonth = (result) => {
 
 Stat.getTempsPerduOfDossierByProcedure = (numeroDossier, result) => {
   dbConn.query(STATS_SINGLE_DOSSIER, numeroDossier, (err, res) => {
-    if (err) {
-      console.log(err);
+    if (err) { 
       result(err, null);
     } else {
       //stoquer les mois(en lettre) du stats
@@ -289,8 +286,7 @@ Stat.getTempsPerduOfDossierByProcedure = (numeroDossier, result) => {
         data.push(dataObj);
       }
 
-      // Je renvoie mon DATA au Front
-      console.log(data);
+      // Je renvoie mon DATA au Front 
       result(null, data);
     }
   });
@@ -298,8 +294,7 @@ Stat.getTempsPerduOfDossierByProcedure = (numeroDossier, result) => {
 
 Stat.getTempsPerduByProcedure = (result) => {
   dbConn.query(STATS_TEMPS_PERDU_PROCEDURE, (err, res) => {
-    if (err) {
-      console.log(err);
+    if (err) { 
       result(err, null);
     } else {
       //stoquer les mois(en lettre) du stats
@@ -355,8 +350,7 @@ Stat.getTempsPerduByProcedure = (result) => {
         data.push(dataObj);
       }
 
-      // Je renvoie mon DATA au Front
-      console.log(data);
+      // Je renvoie mon DATA au Front 
       result(null, data);
     }
   });
@@ -364,8 +358,7 @@ Stat.getTempsPerduByProcedure = (result) => {
 
 Stat.getStatsBySigle = (result) => {
   dbConn.query(STATS_SIGLE, (err, res) => {
-    if (err) {
-      console.log(err);
+    if (err) { 
       result(err, null);
     } else {
       //stoquer les mois(en lettre) du stats
@@ -435,8 +428,7 @@ Stat.getStatsBySigle = (result) => {
         data.push(dataObj);
       }
 
-      // Je renvoie mon DATA au Front
-      console.log(data);
+      // Je renvoie mon DATA au Front 
       result(null, data);
     }
   });

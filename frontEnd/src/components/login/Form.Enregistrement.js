@@ -238,8 +238,7 @@ export default function FormulaireEnregistrement() {
 			}));
 			isValidate = false;
 		}
-
-		console.log("---------", isValidate, "---------");
+ 
 		if (isValidate && existanceIndividu) {
 			onSubmit();
 		}

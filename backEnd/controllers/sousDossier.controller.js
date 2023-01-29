@@ -37,8 +37,7 @@ module.exports.addSousDossier = (req, res) => {
 		p_numeroDossier,
 		p_numeroAffaire,
 	};
-
-	console.log(" ADD SOUS DOSSIER : ", newSousDossier);
+ 
 	SousDossier.addSousDossier(newSousDossier, (err, resp) => {
 		if (err) {
 			res.send(err);

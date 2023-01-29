@@ -85,8 +85,7 @@ Terrain.getAllTerrains = (result) => {
 
 Terrain.getIdTerrain = (id, result) => {
   dbConn.query(REQUETE_EXTRA+ ` and numeroTitre = ? ` , id, (err, res) => {
-    if (err) {
-      console.log(err)
+    if (err) { 
       result(err, null);
     } else {
       if (res.length !== 0) {
@@ -103,8 +102,7 @@ Terrain.searchTerrain = (valeur, result) => {
     REQUETE_EXTRA +
       ` AND ( immatriculationTerrain LIKE '%${valeur.value}%' OR nomPropriete LIKE '%${valeur.value}%') `,
     (err, res) => {
-      if (err) {
-        console.log(err);
+      if (err) { 
         result({ err, message: "erreur !", success: false }, null);
       } else {
         if (res.length !== 0) {
@@ -117,8 +115,7 @@ Terrain.searchTerrain = (valeur, result) => {
   );
 };
 
-Terrain.rechercher_le_Terrain = (valeur, result) => {
-  console.log(valeur);
+Terrain.rechercher_le_Terrain = (valeur, result) => { 
   const TRIPLE_CONDITION = ` AND cin = ${valeur.cin} AND numeroRequerant = ${valeur.numeroRequerant} AND t_numeroDossier = ${valeur.numeroDossier} `;
 
   dbConn.query(

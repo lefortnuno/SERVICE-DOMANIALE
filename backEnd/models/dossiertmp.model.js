@@ -15,8 +15,7 @@ let Dossiertmp = function (dossiertmp) {
 };
 
 Dossiertmp.addDossierTemporaire = (newDossierTemporaire, result) => {
-  individu.getCinIndividu(newDossierTemporaire.cin, (err, resIndividu) => {
-    console.log(resIndividu);
+  individu.getCinIndividu(newDossierTemporaire.cin, (err, resIndividu) => { 
     if (resIndividu.length !== 0) {
       dbConn.query(
         "INSERT INTO dossier_temporaire SET ?",
