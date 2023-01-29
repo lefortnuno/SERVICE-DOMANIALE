@@ -92,11 +92,24 @@ Individu.updateIndividu = (updateIndividu, cin, result) => {
   dbConn.query(
     `update individu set ? where cin = ${cin}`,
     updateIndividu,
-    function (err, res) {
+    function (err, res) { 
       if (err) {
         result(err, null);
       } else {
         result(null, res);
+      }
+    }
+  );
+};
+
+Individu.deleteIndividu = (cin, result) => {
+  dbConn.query(
+    `DELETE FROM Individu WHERE cin = ${cin}`,
+    function (err, res) {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, { success: true});
       }
     }
   );

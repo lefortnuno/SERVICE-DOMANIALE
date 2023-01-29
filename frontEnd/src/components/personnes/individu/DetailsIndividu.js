@@ -178,13 +178,20 @@ export default function DetailsIndividu() {
 											</div>
 										) : (
 											<>
-												<img
-													src={
-														process.env.PUBLIC_URL +
-														`/picture/pageNotFound/404 2.png`
-													}
-													alt="image-left"
-												/>
+												<div className="grid-row">
+													<div className="colmun colmun-left">
+														<img
+															src={
+																process.env.PUBLIC_URL +
+																`/picture/pageNotFound/404 2.png`
+															}
+															alt="image-left"
+														/>
+														<h1 className="px-spc-b-20">
+															Veuillez vous reconnecter au serveur.
+														</h1>
+													</div>
+												</div>
 											</>
 										)}
 									</div>

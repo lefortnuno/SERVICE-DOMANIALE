@@ -3,12 +3,14 @@ import getDataUtilisateur from "../../../api/udata";
 import { libraryList, AjoutLibrary } from "../../../api/file.js";
 
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
 
 import HeaderContext from "../../../contexts/header/header.context";
 import FooterContext from "../../../contexts/footer/footer.context";
 import SidebarContext from "../../../contexts/sidebar/sidebar.context";
+import ModalEdition from "./ModalEdit";
+import DeleteConfirmation from "../../../contexts/ModalSuppr";
 
 import {
 	PersoRequerant,
@@ -64,24 +66,34 @@ export default function Individu() {
 	const showDeleteModal = (id) => {
 		setId(id);
 		setDeleteMessage(
-			`Etes vous sûre de vouloir supprimer l'utilisateur : _' ${
-				users.find((x) => x.numCompte === id).identification
-			} '_ ?`
+			`Etes vous sûre de vouloir supprimer l'individu If°${
+				users.find((x) => x.cin === id).cin
+			} 
+      ${users.find((x) => x.cin === id).nom} 
+      ${
+				users.find((x) => x.cin === id).prenom
+			} definitivement de notre base de donnée ?`
 		);
 		setDisplayConfirmationModal(true);
 	};
+
 	const hideConfirmationModal = () => {
 		setDisplayConfirmationModal(false);
 	};
+
 	const submitDelete = (id) => {
 		axios.delete(URL_DE_BASE + `${id}`, u_info.opts).then(function (response) {
 			getUsers();
-			toast.success(`Suppression Réussi`);
 			setDisplayConfirmationModal(false);
-
-			if (id == u_info.u_numCompte) {
-				localStorage.clear();
-				navigate("/");
+console.log(response);
+			if (response.data.success) {
+				toast.success("Suppression Reussi.");
+			} else if (response.data.errno === 1451) {
+				toast.error(
+					"Suppression non effectuer ! L'individu possede un etat requerant !"
+				);
+			} else {
+				toast.error("Echec de la suppression!");
 			}
 		});
 	};
@@ -177,6 +189,19 @@ export default function Individu() {
 	return (
 		<>
 			{libraryList.forEach((x) => AjoutLibrary(x))}
+
+			<ModalEdition showEdit={showEdit} onHide={closeEditModal}>
+				{numCompteEdit}
+			</ModalEdition>
+
+			<DeleteConfirmation
+				showModal={displayConfirmationModal}
+				confirmModal={submitDelete}
+				hideModal={hideConfirmationModal}
+				id={id}
+				message={deleteMessage}
+			/>
+
 			<div className="wrapper">
 				<HeaderContext>
 					<form className="navbar-left navbar-form nav-search mr-md-3">
@@ -224,10 +249,14 @@ export default function Individu() {
 															<th scope="col">Nom </th>
 															<th scope="col">Prénom</th>
 															<th scope="col">Etat Civil</th>
-															<th scope="col" className="text-center">+Details</th>
+															<th scope="col" className="text-center">
+																+Details
+															</th>
 															{u_info.u_attribut === "Chef" ||
 															u_info.u_attribut === "Administrateur" ? (
-																<th scope="col" className="text-center">Actions</th>
+																<th scope="col" className="text-center">
+																	Actions
+																</th>
 															) : null}
 														</tr>
 													</thead>
@@ -256,21 +285,20 @@ export default function Individu() {
 																			className="btn btn-outline-primary btn-sm m-1 waves-effect"
 																			variant="default"
 																			name="numCompteEdit"
-																			onClick={() =>
-																				showEditModal(user.numCompte)
-																			}
+																			onClick={() => showEditModal(user.cin)}
 																		>
 																			<BsPencilSquare />
 																		</button>
 
 																		{u_info.u_attribut === "Chef" ||
+																		u_info.u_attribut === "Chef Adjoint" ||
 																		u_info.u_attribut === "Administrateur" ? (
 																			<button
 																				type="button"
 																				className="btn btn-outline-danger btn-sm m-1 waves-effect"
 																				variant="default"
 																				onClick={() =>
-																					showDeleteModal(user.numCompte)
+																					showDeleteModal(user.cin)
 																				}
 																			>
 																				<BsFillTrashFill />

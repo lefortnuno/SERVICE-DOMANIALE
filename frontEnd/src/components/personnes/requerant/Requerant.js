@@ -94,7 +94,7 @@ export default function Requerant() {
 					"Suppression non effectuer ! Le requerant possede des dossiers !"
 				);
 			} else {
-				toast.error("Echec de l'Ajout!");
+				toast.error("Echec de la suppression!");
 			}
 		});
 	};
