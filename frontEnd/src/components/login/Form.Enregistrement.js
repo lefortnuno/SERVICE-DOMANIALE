@@ -229,7 +229,7 @@ export default function FormulaireEnregistrement() {
 				isValidate = false;
 			}
 		});
-		
+
 		if (picPhotoPDP.file.length === 0) {
 			setErreurs((values) => ({ ...values, photoPDP: true }));
 			setMessages((values) => ({
@@ -251,10 +251,8 @@ export default function FormulaireEnregistrement() {
 		const dataInputs = Object.assign(inputs, { roleU: u_info.u_attribut });
 
 		axios.post(URL_DE_BASE, dataInputs, u_info.opts).then(function (response) {
-			
 			if (response.status === 200) {
-				if (response.data.success) { 
- 
+				if (response.data.success) {
 					if (picPhotoPDP.file.length !== 0) {
 						ajoutPhotoPDP();
 					}
@@ -314,7 +312,7 @@ export default function FormulaireEnregistrement() {
 			axios.get(URL_CIN + `apercu/${valeur}`, u_info.opts).then((response) => {
 				if (response.status === 200) {
 					const ux = response.data;
-					
+
 					if (ux.success) {
 						const u = ux.res;
 
