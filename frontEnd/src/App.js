@@ -39,6 +39,7 @@ import VISA from "./components/traitementApprobation/VISA";
 import UtilisateurEnAttente from "./components/traitementApprobation/ActivationCompte";
 
 import DetailsTerrain from "./components/terrain/DetailsTerrain";
+import DetailsIndividu from "./components/personnes/individu/DetailsIndividu";
 
 export default function App() {
 	return (
@@ -118,6 +119,10 @@ export default function App() {
 					<Route
 						path="viewTerrain/:numeroTitre"
 						element={<SinInProtected Cmp={DetailsTerrain} />}
+					/>
+					<Route
+						path="viewIndividu/:cin"
+						element={<SinInProtected Cmp={DetailsIndividu} />}
 					/>
 				</Routes>
 			</BrowserRouter>

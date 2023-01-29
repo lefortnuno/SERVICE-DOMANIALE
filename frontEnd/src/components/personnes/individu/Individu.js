@@ -3,8 +3,8 @@ import getDataUtilisateur from "../../../api/udata";
 import { libraryList, AjoutLibrary } from "../../../api/file.js";
 
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify"; 
+import { useNavigate, Link } from "react-router-dom";
 
 import HeaderContext from "../../../contexts/header/header.context";
 import FooterContext from "../../../contexts/footer/footer.context";
@@ -224,14 +224,14 @@ export default function Individu() {
 															<th scope="col">Nom </th>
 															<th scope="col">Prénom</th>
 															<th scope="col">Etat Civil</th>
-															<th scope="col">+Details</th>
+															<th scope="col" className="text-center">+Details</th>
 															{u_info.u_attribut === "Chef" ||
 															u_info.u_attribut === "Administrateur" ? (
-																<th scope="col">Actions</th>
+																<th scope="col" className="text-center">Actions</th>
 															) : null}
 														</tr>
 													</thead>
-													<tbody> 
+													<tbody>
 														{contenuTab || users.length !== 0 ? (
 															currentItems.map((user, key) => (
 																<tr key={key}>
@@ -239,20 +239,18 @@ export default function Individu() {
 																	<td>{user.nom}</td>
 																	<td>{user.prenom}</td>
 																	<td>{user.etatCivil}</td>
-																	<td>
-																		<button
+																	<td className="text-center">
+																		<Link
+																			to={`/viewIndividu/${user.cin}`}
 																			type="button"
 																			className="btn btn-outline-success btn-sm m-1 waves-effect"
 																			variant="default"
 																			name="numCompteEdit"
-																			onClick={() =>
-																				showEditModal(user.numCompte)
-																			}
 																		>
 																			<BsEye />
-																		</button>
+																		</Link>
 																	</td>
-																	<td>
+																	<td className="text-center">
 																		<button
 																			type="button"
 																			className="btn btn-outline-primary btn-sm m-1 waves-effect"
