@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const multer = require("multer");
+const path = require("path");
 require("dotenv").config({ path: "./config/.env" });
 
 const utilisateurRoute = require("./routes/utilisateur.route");
@@ -35,6 +36,8 @@ app.use((req, res, next) => {
 	}
 	next();
 });
+
+app.use(express.static(path.join(__dirname + "/public")));
 
 app.use("/api/utilisateur", utilisateurRoute);
 app.use("/api/dossiertemporaire", dossiertemporaireRoute);

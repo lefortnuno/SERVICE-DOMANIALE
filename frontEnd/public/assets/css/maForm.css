@@ -154,6 +154,7 @@ form .buttons button,
 	margin-right: 14px;
 }
 
+/*Acommenter pour la version build*/
 .monToggleoption {
 	margin-top: 1.5%;
 }
@@ -187,12 +188,15 @@ form .buttons button,
 		width: calc(60% - 15px);
 		margin-bottom: 5%;
 	}
+
+	/*Acommenter pour la version build*/
 	.monToggleoption {
 		margin-top: 2%;
 	}
 }
 
 @media (max-width: 400px) {
+	/*Acommenter pour la version build*/
 	.monToggleoption {
 		margin-top: 0%;
 	}
