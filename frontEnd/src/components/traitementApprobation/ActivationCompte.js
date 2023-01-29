@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 import {
+	PersoUtilisateur,
 	PersoIndividu,
 	PersoRequerant,
 	NouveauPersoUtilisateur,
@@ -118,7 +119,7 @@ export default function UtilisateurEnAttente() {
 	//#endregion
 
 	//#region   //----- MA RECHERCHE -----
-	const [contenuTab, setContenuTab] = useState(true);
+	const [contenuTab, setContenuTab] = useState(false);
 	function rechercheElement(event) {
 		const valeur = event.target.value;
 		if (!valeur) {
@@ -253,6 +254,7 @@ export default function UtilisateurEnAttente() {
 						<div className="container-fluid">
 							{/* CONTENU  */}
 							<div className="row">
+								<PersoUtilisateur/>
 								<PersoIndividu />
 								<PersoRequerant />
 								<NouveauPersoUtilisateur />
@@ -370,7 +372,7 @@ export default function UtilisateurEnAttente() {
 														) : (
 															<tr>
 																<td
-																	colSpan={7}
+																	colSpan={10}
 																	className="text-danger text-center"
 																>
 																	La liste est vide ....

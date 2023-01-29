@@ -69,7 +69,7 @@ export default function Utilisateur() {
 	const [showActive, setShowActive] = useState(false);
 	const showActiveModal = (numeroCompteActive) => {
 		setNumeroCompteActive(numeroCompteActive);
-		setShowActive(true); 
+		setShowActive(true);
 	};
 	const closeActiveModal = () => {
 		getUsers();
@@ -103,7 +103,7 @@ export default function Utilisateur() {
 	const submitDelete = (id) => {
 		axios.delete(URL_DE_BASE + `${id}`, u_info.opts).then(function (response) {
 			getUsers();
-			setDisplayConfirmationModal(false); 
+			setDisplayConfirmationModal(false);
 			if (response.data.success) {
 				toast.success("Suppression Reussi.");
 			} else if (response.data.errno === 1451) {
@@ -118,7 +118,7 @@ export default function Utilisateur() {
 	//#endregion
 
 	//#region   //----- MA RECHERCHE -----
-	const [contenuTab, setContenuTab] = useState(true);
+	const [contenuTab, setContenuTab] = useState(false);
 	function rechercheElement(event) {
 		const valeur = event.target.value;
 		if (!valeur) {
@@ -368,7 +368,7 @@ export default function Utilisateur() {
 														) : (
 															<tr>
 																<td
-																	colSpan={7}
+																	colSpan={10}
 																	className="text-danger text-center"
 																>
 																	La liste est vide ....

@@ -224,7 +224,7 @@ export default function CahierNouvelleDemande() {
 																	<td>{user.dateRDV}</td>
 																	<td>{user.nomProcedure}</td>
 																	<td>{user.observationSD}</td>
-																	<td>{user.identification}</td> 
+																	<td>{user.identification}</td>
 																	<td>
 																		{user.accomplissement === 0 &&
 																		user.preVISA === 1 ? (

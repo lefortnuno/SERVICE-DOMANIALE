@@ -101,7 +101,7 @@ export default function Requerant() {
 	//#endregion
 
 	//#region   //----- MA RECHERCHE -----
-	const [contenuTab, setContenuTab] = useState(true);
+	const [contenuTab, setContenuTab] = useState(false);
 	function rechercheElement(event) {
 		const valeur = event.target.value;
 		if (!valeur) {
@@ -316,7 +316,7 @@ export default function Requerant() {
 														) : (
 															<tr>
 																<td
-																	colSpan={7}
+																	colSpan={10}
 																	className="text-danger text-center"
 																>
 																	La liste est vide ....

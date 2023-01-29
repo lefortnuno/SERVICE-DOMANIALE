@@ -36,7 +36,7 @@ export default function Bureau() {
 	//#endregion
 
 	//#region   //----- MA RECHERCHE -----
-	const [contenuTab, setContenuTab] = useState(true);
+	const [contenuTab, setContenuTab] = useState(false);
 	function rechercheUtilisateur(event) {
 		const valeur = event.target.value;
 		if (!valeur) {
@@ -190,7 +190,7 @@ export default function Bureau() {
 												))
 											) : (
 												<tr>
-													<td colSpan={3} className="text-danger text-center">
+													<td colSpan={7} className="text-danger text-center">
 														La liste est vide ....
 													</td>
 												</tr>
