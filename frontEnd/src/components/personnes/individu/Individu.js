@@ -85,7 +85,7 @@ export default function Individu() {
 		axios.delete(URL_DE_BASE + `${id}`, u_info.opts).then(function (response) {
 			getUsers();
 			setDisplayConfirmationModal(false);
-console.log(response);
+
 			if (response.data.success) {
 				toast.success("Suppression Reussi.");
 			} else if (response.data.errno === 1451) {
@@ -230,7 +230,13 @@ console.log(response);
 						<div className="container-fluid">
 							<div className="row">
 								<PersoRequerant />
-								<PersoUtilisateur />
+
+								{u_info.u_attribut === "Chef" ||
+								u_info.u_attribut === "Chef Adjoint" ||
+								u_info.u_attribut === "Administrateur" ? (
+									<PersoUtilisateur />
+								) : null}
+								
 								<NouveauPersoIndividu />
 							</div>
 

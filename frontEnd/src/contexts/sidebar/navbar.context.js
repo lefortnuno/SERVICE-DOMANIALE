@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import getDataUtilisateur from "../../api/udata";
 
 import {
 	BsFolder2Open,
@@ -13,6 +14,7 @@ import {
 } from "react-icons/bs";
 
 export default function NavbarContext() {
+	const u_info = getDataUtilisateur();
 	return (
 		<>
 			<ul className="nav">
@@ -25,70 +27,56 @@ export default function NavbarContext() {
 						<span className="badge badge-count">3</span>
 					</Link>
 				</li>
-				<li className="nav-item ">
-					<Link to="/dossier/">
-						<i className="">
-							<BsFolder2Open />
-						</i>
-						<p> Dossiers </p>
-						<span className="badge badge-count">1</span>
-					</Link>
-				</li>
-				<li className="nav-item">
-					<Link to="/individu/">
-						<i>
-							<BsPeople />
-						</i>
-						<p> Personnes </p>
-						<span className="badge badge-count">3</span>
-					</Link>
-				</li>
-				<li className="nav-item">
-					<Link to="/C_ND/">
-						<i>
-							<BsStickies />
-						</i>
-						<p> Cahiers </p>
-						<span className="badge badge-count">5</span>
-					</Link>
-				</li>
-				<br />
-				<li className="nav-item ">
-					<Link to="/terrain/">
-						<i>
-							<BsGlobe2 />
-						</i>
-						<p>Terrain</p>
-						<span className="badge badge-success">3</span>
-					</Link>
-				</li>
-				{/* <li className="nav-item active"> */}
-				<li className="nav-item">
-					<Link to="/stats/">
-						<i>
-							<BsReception4 />
-						</i>
-						<p>Statisique</p>
-						<span className="badge badge-info">3</span>
-					</Link>
-				</li>
-				{/* <li className="nav-item">
-					<Link to="/maps/">
-						<i>
-							<BsGoogle />
-						</i>
-						<p>Géographie</p>
-						<span className="badge badge-danger">25</span>
-					</Link>
-				</li> */}
-				{/* <li className="nav-item" data-toggle="modal" data-target="#modalUpdate">
-					<Link to="/accueil/">
-						<i>
-							<BsInfoLg />
-						</i>
-						<p> Aide </p>
-					</Link>
-				</li> */}
+				{u_info.u_attribut !== "Usager" ? (
+					<>
+						<li className="nav-item ">
+							<Link to="/dossier/">
+								<i className="">
+									<BsFolder2Open />
+								</i>
+								<p> Dossiers </p>
+								<span className="badge badge-count">1</span>
+							</Link>
+						</li>
+						<li className="nav-item">
+							<Link to="/individu/">
+								<i>
+									<BsPeople />
+								</i>
+								<p> Personnes </p>
+								<span className="badge badge-count">3</span>
+							</Link>
+						</li>
+						<li className="nav-item">
+							<Link to="/C_ND/">
+								<i>
+									<BsStickies />
+								</i>
+								<p> Cahiers </p>
+								<span className="badge badge-count">5</span>
+							</Link>
+						</li>
+						<br />
+						<li className="nav-item ">
+							<Link to="/terrain/">
+								<i>
+									<BsGlobe2 />
+								</i>
+								<p>Terrain</p>
+								<span className="badge badge-success">3</span>
+							</Link>
+						</li>
+						<li className="nav-item">
+							<Link to="/stats/">
+								<i>
+									<BsReception4 />
+								</i>
+								<p>Statisique</p>
+								<span className="badge badge-info">3</span>
+							</Link>
+						</li>
+					</>
+				) : null}
 			</ul>
 		</>
 	);

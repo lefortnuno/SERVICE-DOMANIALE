@@ -4,6 +4,7 @@ const agent = require("../middlewares/agent.middleware");
 const admin = require("../middlewares/admin.middleware");
 const chef = require("../middlewares/chef.middleware");
 const chefAdjoint = require("../middlewares/chef.adjoint.middleware");
+const client = require("../middlewares/client.middleware");
 
 router.get(
 	"/",
@@ -35,17 +36,17 @@ router.get(
 
 router.get(
 	"/lastSousDossier/:id",
-	agent.checkUtilisateur,
+	client.checkUtilisateur,
 	SousDossierController.getLastSousDossierOfDossier
 );
 router.get(
 	"/decompte/:id",
-	agent.checkUtilisateur,
+	client.checkUtilisateur,
 	SousDossierController.getDecompte
 );
 router.get(
 	"/:id",
-	agent.checkUtilisateur,
+	client.checkUtilisateur,
 	SousDossierController.getIdSousDossier
 );
 

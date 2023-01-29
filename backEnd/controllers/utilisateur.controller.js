@@ -26,7 +26,7 @@ module.exports.addUtilisateur = (req, res) => {
 
 	mdp = bcrypt.hashSync(mdp, 10);
 	const photoPDP = "Aucune";
-	const attribut = "utilisateur";
+	const attribut = "Usager";
 	let statu = false;
 
 	if (unite === "true") {

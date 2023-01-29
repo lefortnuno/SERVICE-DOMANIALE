@@ -4,13 +4,14 @@ const admin = require("../middlewares/admin.middleware");
 const chef = require("../middlewares/chef.middleware");
 const chefAdjoint = require("../middlewares/chef.adjoint.middleware");
 const agent = require("../middlewares/agent.middleware");
+const client = require("../middlewares/client.middleware");
 
 router.post("/seConnecter", utilisateurController.loginUtilisateur);
 router.post("/", utilisateurController.addUtilisateur);
 
 router.get(
 	"/",
-	agent.checkUtilisateur,
+	chefAdjoint.checkUtilisateur,
 	utilisateurController.getAllUtilisateurs
 );
 router.get(
@@ -25,23 +26,23 @@ router.get(
 );
 router.get(
 	"/numeroCompte/",
-	agent.checkUtilisateur,
+	client.checkUtilisateur,
 	utilisateurController.getLastNumeroCompteUtilisateur
 );
 router.get(
 	"/:id",
-	agent.checkUtilisateur,
+	client.checkUtilisateur,
 	utilisateurController.getIdUtilisateur
 );
 router.get(
 	"/recherche/:valeur",
-	agent.checkUtilisateur,
+	chefAdjoint.checkUtilisateur,
 	utilisateurController.searchUtilisateurByParams
 );
 
 router.put(
 	"/:id",
-	agent.checkUtilisateur,
+	client.checkUtilisateur,
 	utilisateurController.updateUtilisateur
 );
 router.put(
@@ -56,7 +57,7 @@ router.put(
 );
 router.put(
 	"/photoPDP/:id",
-	agent.checkUtilisateur,
+	client.checkUtilisateur,
 	utilisateurController.addPhotoPdp
 );
 
@@ -65,6 +66,5 @@ router.delete(
 	chefAdjoint.checkUtilisateur,
 	utilisateurController.deleteUtilisateur
 );
-
 
 module.exports = router;

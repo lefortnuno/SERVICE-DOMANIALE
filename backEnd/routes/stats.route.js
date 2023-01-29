@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const StatsController = require("../controllers/stats.controller");
 const agent = require("../middlewares/agent.middleware");
+const client = require("../middlewares/client.middleware");
 
 router.get(
   "/all_stats_procedure_month/",
@@ -9,7 +10,7 @@ router.get(
 );
 router.get(
   "/stats_temps_perdu_procedure/",
-  agent.checkUtilisateur,
+  client.checkUtilisateur,
   StatsController.getTempsPerduByProcedure
 );
 router.get(
@@ -20,7 +21,7 @@ router.get(
 
 router.get(
   "/stats_temps_perdu_dossier_procedure/:id",
-  // agent.checkUtilisateur,
+  client.checkUtilisateur,
   StatsController.getTempsPerduOfDossierByProcedure
 );
 

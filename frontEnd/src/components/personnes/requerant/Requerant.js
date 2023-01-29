@@ -230,7 +230,13 @@ export default function Requerant() {
 						<div className="container-fluid">
 							<div className="row">
 								<PersoIndividu />
-								<PersoUtilisateur />
+
+								{u_info.u_attribut === "Chef" ||
+								u_info.u_attribut === "Chef Adjoint" ||
+								u_info.u_attribut === "Administrateur" ? (
+									<PersoUtilisateur />
+								) : null}
+
 								<NouveauPersoRequerant />
 							</div>
 
