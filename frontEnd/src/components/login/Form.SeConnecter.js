@@ -174,9 +174,9 @@ export default function FormulaireSeConnecter() {
         </div> <br />
 
         <div className="text-center p-t-12">
-          <a className="txt2" href="#">
+          <Link to="/accueil/" className="txt2" >
             Identifiant / Mot de passe
-          </a>
+          </Link>
           <span className="txt1"> oublier ?</span>
         </div>
       </form>

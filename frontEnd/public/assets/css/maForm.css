@@ -155,7 +155,7 @@ form .buttons button,
 }
 
 .monToggleoption {
-	margin-top: 2%;
+	margin-top: 1.5%;
 }
 
 @media (max-width: 750px) {
@@ -186,6 +186,9 @@ form .buttons button,
 	form .fields .monPhotoPDP {
 		width: calc(60% - 15px);
 		margin-bottom: 5%;
+	}
+	.monToggleoption {
+		margin-top: 2%;
 	}
 }
 
