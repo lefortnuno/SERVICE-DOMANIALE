@@ -52,7 +52,7 @@ router.put(
 router.put(
 	"/statu/:id",
 	chefAdjoint.checkUtilisateur,
-	utilisateurController.updateUtilisateurByAdministrateur
+	utilisateurController.updateUtilisateurStatu
 );
 router.put(
 	"/photoPDP/:id",

@@ -89,8 +89,6 @@ module.exports.addPhotoPdp = (req, res) => {
 				photoPDP: req.file.filename,
 			};
 
-			console.log(classifiedsadd);
-
 			Utilisateur.updateUtilisateur(
 				classifiedsadd,
 				req.params.id,
@@ -196,9 +194,8 @@ module.exports.updateUtilisateur = (req, res) => {
 };
 
 module.exports.updateUtilisateurStatu = (req, res) => {
-	const { statu, unite } = req.body;
-	const newUtilisateur = { statu, unite };
-
+	const { statu, unite, attribut } = req.body;
+	const newUtilisateur = { statu, unite, attribut };
 	Utilisateur.updateUtilisateur(newUtilisateur, req.params.id, (err, resp) => {
 		if (!err) {
 			res.send(resp);

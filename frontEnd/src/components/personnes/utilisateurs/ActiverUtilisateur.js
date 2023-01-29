@@ -50,7 +50,7 @@ export default function ModalActivation(props) {
 	//#endregion
 
 	//#region // FONCTION DU BOUTTON ENREGISTRER
-	const onSubmit = () => {
+	const onSubmit = () => { 
 		axios
 			.put(URL_DE_BASE + `statu/${identifiant}`, inputs, u_info.opts)
 			.then(function (response) {
@@ -71,7 +71,6 @@ export default function ModalActivation(props) {
 		const value = target.type === "checkbox" ? target.checked : target.value;
 		const name = target.name;
 		setInputs((values) => ({ ...values, [name]: value }));
-		console.log(name, value);
 	};
 	//#endregion
 
@@ -80,11 +79,14 @@ export default function ModalActivation(props) {
 		event.preventDefault();
 		isValidate = true;
 
+		if (inputs.attribut === "false") {
+			isValidate = false;
+			toast.warn("Veuillez choisir un Rôle pour le compte.");
+		}
+
 		if (isValidate) {
 			onSubmit();
-		} else {
-			toast.warning("Aucune modification apercu");
-		}
+		}  
 	};
 	//#endregion
 
@@ -119,7 +121,14 @@ export default function ModalActivation(props) {
 			>
 				<Modal.Header>
 					<Modal.Title className="text-primary h6 md-6">
-						:- ACTIVATION -:
+						:- ACTIVATION -:{" "}
+						<select name="attribut" onChange={handleChange} autoComplete="off">
+							<option value={false}>- Rôle - </option>
+							<option value="Chef">- Chef </option>
+							<option value="Chef Adjoint">- Chef Adjoint</option>
+							<option value="Agent">- Agent</option>
+							<option value="Usager">- Usager</option>
+						</select>
 					</Modal.Title>
 				</Modal.Header>
 
@@ -178,11 +187,12 @@ export default function ModalActivation(props) {
 								</div>
 
 								<div className="form-group">
-									<label>Rôle : </label>
+									<label> Rôle Actuelle : </label>
 									<span> {inputs.attribut} </span>
 								</div>
 							</div>
 						</Row>
+
 						<Row style={rowStyle}>
 							<Col className="text-center">
 								<div className="input-field">
