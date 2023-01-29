@@ -35,7 +35,7 @@ export default function NavbarContext() {
 					</Link>
 				</li>
 				<li className="nav-item">
-					<Link to="/utilisateur/">
+					<Link to="/individu/">
 						<i>
 							<BsPeople />
 						</i>

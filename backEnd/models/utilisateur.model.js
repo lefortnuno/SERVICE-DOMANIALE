@@ -99,6 +99,7 @@ Utilisateur.getIdUtilisateur = (numeroCompte, result) => {
     REQUETE_ADVANCER + ` AND numeroCompte = ?`,
     numeroCompte,
     (err, res) => {
+      console.log("ERRR : ", err, " RESSS : ",res);
       if (err) {
         result(err, null);
       } else {

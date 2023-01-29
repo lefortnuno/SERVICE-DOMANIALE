@@ -7,6 +7,7 @@ const agent = require("../middlewares/agent.middleware");
 
 router.post("/seConnecter", utilisateurController.loginUtilisateur);
 router.post("/", utilisateurController.addUtilisateur);
+
 router.get(
 	"/",
 	agent.checkUtilisateur,
@@ -22,6 +23,12 @@ router.get(
 	agent.checkUtilisateur,
 	utilisateurController.getIdUtilisateur
 );
+router.get(
+	"/recherche/:valeur",
+	agent.checkUtilisateur,
+	utilisateurController.searchUtilisateurByParams
+);
+
 router.put(
 	"/:id",
 	agent.checkUtilisateur,
@@ -33,10 +40,15 @@ router.put(
 	utilisateurController.updateUtilisateurByAdministrateur
 );
 router.put(
+	"/statu/:id",
+	chefAdjoint.checkUtilisateur,
+	utilisateurController.updateUtilisateurByAdministrateur
+);
+router.put(
 	"/photoPDP/:id",
 	agent.checkUtilisateur,
 	utilisateurController.addPhotoPdp
-); 
+);
 
 router.delete(
 	"/:id",
@@ -44,10 +56,5 @@ router.delete(
 	utilisateurController.deleteUtilisateur
 );
 
-router.get(
-	"/recherche/:valeur",
-	agent.checkUtilisateur,
-	utilisateurController.searchUtilisateurByParams
-);
 
 module.exports = router;

@@ -175,6 +175,19 @@ module.exports.updateUtilisateur = (req, res) => {
   });
 };
 
+module.exports.updateUtilisateurStatu = (req, res) => {
+  const { statu, unite } = req.body;
+  const newUtilisateur = { statu, unite };
+
+  Utilisateur.updateUtilisateur(newUtilisateur, req.params.id, (err, resp) => {
+    if (!err) {
+      res.send(resp);
+    } else {
+      res.send(err);
+    }
+  });
+};
+
 module.exports.updateUtilisateurByAdministrateur = (req, res) => {
   const { photoPDP, identification, mdp, statu, unite } = req.body;
   const newUtilisateur = { photoPDP, identification, mdp, statu, unite };
