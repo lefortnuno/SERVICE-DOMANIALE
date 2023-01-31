@@ -39,7 +39,6 @@ export default function CahierNouvelleDemande() {
 		axios.get(URL_DE_BASE, u_info.opts).then(function (response) {
 			if (response.status === 200) {
 				setUsers(response.data);
-				console.log(response.data);
 			} else {
 				toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
 			}

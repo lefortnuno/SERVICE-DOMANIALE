@@ -277,7 +277,6 @@ export default function ModalRetour(props) {
 			.put(URL_BASE + `/retour/` + `${id}`, upData, u_info.opts)
 			.then(function (response) {
 				if (response.status === 200 && response.data.success) {
-					toast.success("Historique: Ajout Reussi.");
 					i = 0;
 					props.onHide();
 				} else {
@@ -329,7 +328,6 @@ export default function ModalRetour(props) {
 			.post(URL_SOUS_DOSSIER, newData, u_info.opts)
 			.then(function (response) {
 				if (response.status === 200 && response.data.success) {
-					toast.success("Historique: Ajout Reussi.");
 					i = 0;
 					props.onHide();
 					autoProcedure(7, nextInputs.observation);
@@ -366,7 +364,6 @@ export default function ModalRetour(props) {
 			.post(URL_SOUS_DOSSIER, newData, u_info.opts)
 			.then(function (response) {
 				if (response.status === 200 && response.data.success) {
-					toast.success("Historique: Ajout Reussi.");
 					i = 0;
 					props.onHide();
 				} else {

@@ -48,7 +48,7 @@ export default function CahierRendezVous() {
 	function getUsers() {
 		axios.get(URL_DE_BASE, u_info.opts).then(function (response) {
 			if (response.status === 200) {
-				setUsers(response.data); 
+				setUsers(response.data);
 			} else {
 				toast.warning("Vous n'êtes pas autorisé à accéder à cette page!");
 			}
@@ -215,8 +215,6 @@ export default function CahierRendezVous() {
 															<th scope="col">Procédure</th>
 															<th scope="col">Observation</th>
 															<th scope="col">Agent</th>
-															{/* <th scope="col"> </th> */}
-															{/* <th scope="col"> Actions </th> */}
 														</tr>
 													</thead>
 													<tbody>

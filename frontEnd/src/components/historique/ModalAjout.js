@@ -266,8 +266,7 @@ export default function ModalAjout(props) {
 		axios
 			.put(URL_BASE + `next/` + `${id}`, upData, u_info.opts)
 			.then(function (response) {
-				if (response.status === 200 && response.data.success) {
-					toast.success("Historique: Ajout Reussi.");
+				if (response.status === 200 && response.data.success) { 
 					i = 0;
 					props.onHide();
 				} else {
@@ -316,8 +315,7 @@ export default function ModalAjout(props) {
 		axios
 			.post(URL_SOUS_DOSSIER, newData, u_info.opts)
 			.then(function (response) {
-				if (response.status === 200 && response.data.success) {
-					toast.success("Historique: Ajout Reussi.");
+				if (response.status === 200 && response.data.success) { 
 					i = 0;
 					props.onHide();
 				} else {
@@ -345,8 +343,7 @@ export default function ModalAjout(props) {
 		axios
 			.post(URL_IM_TERRAIN, newData, u_info.opts)
 			.then(function (response) {
-				if (response.status === 200 && response.data.success) {
-					toast.success("Historique: Ajout Reussi.");
+				if (response.status === 200 && response.data.success) { 
 					i = 0;
 					props.onHide();
 				} else {

@@ -267,7 +267,6 @@ export default function ModalInfo(props) {
 			.put(URL_BASE + `next/` + `${id}`, upData, u_info.opts)
 			.then(function (response) {
 				if (response.status === 200 && response.data.success) {
-					toast.success("Historique: Ajout Reussi.");
 					i = 0;
 					props.onHide();
 				} else {
@@ -317,7 +316,6 @@ export default function ModalInfo(props) {
 			.post(URL_SOUS_DOSSIER, newData, u_info.opts)
 			.then(function (response) {
 				if (response.status === 200 && response.data.success) {
-					toast.success("Historique: Ajout Reussi.");
 					i = 0;
 					props.onHide();
 				} else {
@@ -346,7 +344,6 @@ export default function ModalInfo(props) {
 			.post(URL_IM_TERRAIN, newData, u_info.opts)
 			.then(function (response) {
 				if (response.status === 200 && response.data.success) {
-					toast.success("Historique: Ajout Reussi.");
 					i = 0;
 					props.onHide();
 				} else {
@@ -572,7 +569,7 @@ export default function ModalInfo(props) {
 								{nextInputs.numeroProcedure === 4 ? (
 									<>
 										<Col col="md-6" ml="auto">
-											<Form.Label>  Prix du m² Proposer : </Form.Label>
+											<Form.Label> Prix du m² Proposer : </Form.Label>
 											<Form.Control
 												type="number"
 												min="0"
