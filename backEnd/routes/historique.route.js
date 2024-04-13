@@ -43,7 +43,7 @@ router.get(
 );
 router.get(
 	"/histoDossier/:id",
-	agent.checkUtilisateur,
+	client.checkUtilisateur,
 	HistoriqueController.getHistoriqueDossier
 );
 

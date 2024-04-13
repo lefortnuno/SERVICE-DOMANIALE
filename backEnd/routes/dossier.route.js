@@ -2,6 +2,7 @@ const router = require("express").Router();
 const DossierController = require("../controllers/dossier.controller");
 const chefAdjoint = require("../middlewares/chef.adjoint.middleware");
 const agent = require("../middlewares/agent.middleware");
+const client = require("../middlewares/client.middleware");
 
 router.get("/", agent.checkUtilisateur, DossierController.getAllDossiers);
 router.get(
@@ -19,12 +20,17 @@ router.get(
 	agent.checkUtilisateur,
 	DossierController.searchDossier
 );
-router.get("/:id", agent.checkUtilisateur, DossierController.getIdDossier);
+router.get("/:id", client.checkUtilisateur, DossierController.getIdDossier);
 
 router.post(
 	"/mesDossiers/",
 	agent.checkUtilisateur,
 	DossierController.getMesDossiers
+);
+router.post(
+	"/mesDossiers/Usagers/",
+	client.checkUtilisateur,
+	DossierController.getMesDossiersUsagers
 );
 router.post(
 	"/mesDossiers/recherche/",

@@ -172,7 +172,8 @@ Utilisateur.deleteUtilisateur = (numeroCompte, result) => {
 		if (
 			resAttribut &&
 			(resAttribut[0].attribut === "client" ||
-				resAttribut[0].attribut === "utilisateur")
+				resAttribut[0].attribut === "utilisateur" ||
+				resAttribut[0].attribut === "Usager")
 		) {
 			dbConn.query(
 				`DELETE FROM compte WHERE numeroCompte = ${numeroCompte}`,

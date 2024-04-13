@@ -97,6 +97,15 @@ WHERE
     AND HISTORIQUE.p_numeroCompte = COMPTE.numeroCompte
     AND (numeroCompte = ? AND identification = ?) `;
 
+	const REQUETE_MES_DOSSIERS_USAGERS = `
+	SELECT numeroDossier, numeroAffaire, nom, p_numeroProcedure
+	FROM DOSSIER,  INDIVIDU, REQUERANT,  COMPTE
+	WHERE 
+	COMPTE.u_cin = INDIVIDU.cin
+	AND INDIVIDU.cin = REQUERANT.p_cin
+	AND REQUERANT.numeroRequerant = DOSSIER.p_numeroRequerant    
+	AND (numeroCompte = ? AND identification = ?) ORDER BY numeroDossier DESC `;
+
 const REQUETE_NOUVELLE_DEMANDE = REQUETE_BASE + ` AND p_numeroProcedure=1 `;
 const GROUP_BY = ` GROUP BY numeroAffaire `;
 const ORDER_BY = ` ORDER BY numeroDossier DESC `;
@@ -124,6 +133,20 @@ Dossier.getAllDossiers = (result) => {
 Dossier.getMesDossiers = (valeur, result) => {
 	dbConn.query(
 		REQUETE_MES_DOSSIERS + GROUP_BY + ORDER_BY,
+		[valeur.numeroCompte, valeur.identification],
+		(err, res) => {
+			if (err) {
+				result(err, null);
+			} else {
+				result(null, res);
+			}
+		}
+	);
+};
+
+Dossier.getMesDossiersUsagers = (valeur, result) => {
+	dbConn.query(
+		REQUETE_MES_DOSSIERS_USAGERS,
 		[valeur.numeroCompte, valeur.identification],
 		(err, res) => {
 			if (err) {

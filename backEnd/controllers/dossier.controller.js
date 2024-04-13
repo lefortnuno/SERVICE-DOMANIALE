@@ -270,6 +270,19 @@ module.exports.getMesDossiers = (req, res) => {
 	});
 };
 
+module.exports.getMesDossiersUsagers = (req, res) => {
+	let { numeroCompte, identification } = req.body;
+	const valeur = { numeroCompte, identification };
+
+	Dossier.getMesDossiersUsagers(valeur, (err, resp) => {
+		if (!err) {
+			res.send(resp);
+		} else {
+			res.send(err);
+		}
+	});
+};
+
 module.exports.getDossiersNouvelleDemande = (req, res) => {
 	Dossier.getDossiersNouvelleDemande((err, resp) => {
 		if (!err) {

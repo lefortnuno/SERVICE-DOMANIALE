@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `compte` (
 --
 
 INSERT INTO `compte` (`numeroCompte`, `identification`, `photoPDP`, `attribut`, `mdp`, `unite`, `statu`, `u_cin`) VALUES
-(1, 'LEFORT', '1671269107521-DSC_0101.JPG', 'Administrateur', '$2b$10$x7i8nWZsUh9NmkkmSGFMzeoS48BSbKbz2C0vofNloSeohLjziIEzi', 1, 1, '201011028460'),
+(1, 'LEFORT', '1671269107521-DSC_0101.JPG', 'Administrateur', '$2b$10$4WBMGWWIiMbljSTSa99Tfur3Wbg9psmXswKck4x30f/30u7kv.pmy', 1, 1, '201011028460'),
 (4, 'Kanto', '1671659425487-IMG_20221222_005007.jpg', 'Chef', '$2b$10$HR/qGl6WQIfThhNEI8vhpuFSdkkb2LsX4a19wYbmoQq61v05ek0OG', 1, 1, '201012013089'),
 (5, 'Nuno', '1672771262506-logo.jpg', 'Chef Adjoint', '$2b$10$aNURlBzDZh0Z.hLK.rTYkOoS590v6c/7sZ7ppKSem/.inVvUmgiRa', 1, 1, '201011028460'),
 (6, 'aaaa-6', '1674994064309-IMGP7505.jpg', 'Usager', '$2b$10$Jen.aioYLjT.46nc6hF6uetrMV8X.VZcn7hgWw0e6ymjoMd3b9l1y', 1, 0, '501012035987'),
