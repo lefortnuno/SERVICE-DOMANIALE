@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 30 jan. 2023 à 06:25
+-- Généré le :  sam. 13 avr. 2024 à 01:27
 -- Version du serveur :  5.7.19
 -- Version de PHP :  5.6.31
 
@@ -65,21 +65,23 @@ CREATE TABLE IF NOT EXISTS `compte` (
   `u_cin` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`numeroCompte`),
   KEY `u_cin` (`u_cin`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `compte`
 --
 
 INSERT INTO `compte` (`numeroCompte`, `identification`, `photoPDP`, `attribut`, `mdp`, `unite`, `statu`, `u_cin`) VALUES
-(1, 'LEFORT', '1671269107521-DSC_0101.JPG', 'Administrateur', '$2b$10$4WBMGWWIiMbljSTSa99Tfur3Wbg9psmXswKck4x30f/30u7kv.pmy', 1, 1, '201011028460'),
-(4, 'Kanto', '1671659425487-IMG_20221222_005007.jpg', 'Chef', '$2b$10$HR/qGl6WQIfThhNEI8vhpuFSdkkb2LsX4a19wYbmoQq61v05ek0OG', 1, 1, '201012013089'),
-(5, 'Nuno', '1672771262506-logo.jpg', 'Chef Adjoint', '$2b$10$aNURlBzDZh0Z.hLK.rTYkOoS590v6c/7sZ7ppKSem/.inVvUmgiRa', 1, 1, '201011028460'),
-(6, 'aaaa-6', '1674994064309-IMGP7505.jpg', 'Usager', '$2b$10$Jen.aioYLjT.46nc6hF6uetrMV8X.VZcn7hgWw0e6ymjoMd3b9l1y', 1, 0, '501012035987'),
-(7, 'bbbb-7', '1675003716828-Logo_Transparent.png', 'utilisateur', '$2b$10$HR/qGl6WQIfThhNEI8vhpuFSdkkb2LsX4a19wYbmoQq61v05ek0OG', 1, 0, '901022036548'),
-(8, 'Nadia-8', '1675003937225-IMGP7563.jpg', 'Usager', '$2b$10$0aTVZvQPPe8qrERcNHb7gO/5d4j/yVdvJfrE5xKuPB6sJcavgbTdG', 1, 1, '901022036548'),
-(9, 'jimm-9', '1675004036338-327730047_585488820060034_7880572166000777784_n.jpg', 'Agent', '$2b$10$VwsE8c.lVaG9su7RkbD71uXKURPgs3cMF6Ge1U5jRlnaOCQLbRB4O', 1, 1, '333331333333'),
-(10, 'Koto-10', '1675004134525-e-Cin-07.png', 'Usager', '$2b$10$q2fKscy4TyECss3kaJzLE.C/X/QZRu34ym4Qv0KIIBESMw/ykj8T6', 0, 0, '201011460028');
+(1, 'LEFORT', '1672771262506-logo.jpg', 'Administrateur', '$2b$10$4WBMGWWIiMbljSTSa99Tfur3Wbg9psmXswKck4x30f/30u7kv.pmy', 1, 1, '201011028460'),
+(4, 'Kanto', '1671269107521-logoENI.png', 'Chef', '$2b$10$HR/qGl6WQIfThhNEI8vhpuFSdkkb2LsX4a19wYbmoQq61v05ek0OG', 1, 1, '201012013089'),
+(5, 'Nuno', '1671269107521-logoENI.png', 'Chef Adjoint', '$2b$10$aNURlBzDZh0Z.hLK.rTYkOoS590v6c/7sZ7ppKSem/.inVvUmgiRa', 1, 1, '201011028460'),
+(6, 'aaaa-6', '1671269107521-logoENI.png', 'Usager', '$2b$10$Jen.aioYLjT.46nc6hF6uetrMV8X.VZcn7hgWw0e6ymjoMd3b9l1y', 1, 0, '501012035987'),
+(7, 'bbbb-7', '1671269107521-logoENI.png', 'utilisateur', '$2b$10$HR/qGl6WQIfThhNEI8vhpuFSdkkb2LsX4a19wYbmoQq61v05ek0OG', 1, 0, '901022036548'),
+(8, 'Nadia-8', '1671269107521-logoENI.png', 'Usager', '$2b$10$0aTVZvQPPe8qrERcNHb7gO/5d4j/yVdvJfrE5xKuPB6sJcavgbTdG', 1, 1, '901022036548'),
+(9, 'jimm', '2672771262506-logo.jpg', 'Agent', '$2b$10$VwsE8c.lVaG9su7RkbD71uXKURPgs3cMF6Ge1U5jRlnaOCQLbRB4O', 1, 1, '333331333333'),
+(10, 'Koto-10', '1671269107521-logoENI.png', 'Usager', '$2b$10$q2fKscy4TyECss3kaJzLE.C/X/QZRu34ym4Qv0KIIBESMw/ykj8T6', 0, 0, '201011460028'),
+(11, 'BARRY', '3671269107521-killua.jpg', 'Usager', '$2b$10$LnWTi5DR9J9meIOoYpKU4ekio4jOOy2IvK9YKLxhhCmBC8CKKQB.m', 1, 1, '901011028444'),
+(12, 'AEENI', '1712970042917-logo AEENI.png', 'Usager', '$2b$10$js44jrFs7tnvd7HHkpakH.3hlj8aGMVqL7e0K0J/b4Heg2pOuX7i2', 1, 1, '501011028555');
 
 -- --------------------------------------------------------
 
@@ -108,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `dossier` (
   PRIMARY KEY (`numeroDossier`,`numeroAffaire`),
   KEY `p_numeroRequerant` (`p_numeroRequerant`),
   KEY `p_numeroProcedure` (`p_numeroProcedure`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `dossier`
@@ -130,7 +132,8 @@ INSERT INTO `dossier` (`numeroDossier`, `numeroAffaire`, `dependance`, `natureAf
 (13, '19-V/2023', 1, 0, 1, 1, 1, 1, 74.5, '2023-01-15', '5.000', '-21.459993', '47.087585', 'aaaaaaaaaaaaaaa', 69, 1),
 (14, '20-V/2023', 0, 0, 0, 1, 1, 1, 79.8, '2023-01-15', '5.000', '-21.459993', '47.087585', 'bbbbbbbbb', 3, 1),
 (15, '21-V/2023', 0, 0, 0, 1, 1, 1, 33, '2023-01-15', '5.000', '-21.461486', '47.070139', '22222222222222222', 14, 1),
-(16, '22-V/2023', 0, 0, 0, 1, 1, 1, 55, '2023-01-27', '5.000', '-21.256987', '47.258976', 'Aucune remarque', 70, 1);
+(16, '22-V/2023', 0, 0, 0, 1, 1, 1, 55, '2023-01-27', '5.000', '-21.256987', '47.258976', 'Aucune remarque', 70, 1),
+(17, '23-V/2024', 0, 0, 0, 1, 1, 1, 82, '2024-04-12', '5.000', '-21.872610 ', '47.023628', 'TULEAR 2024-002 NV', 71, 4);
 
 -- --------------------------------------------------------
 
@@ -185,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `etat_civil` (
   `dateEtatCivil` date DEFAULT NULL,
   `lieuEtatCivil` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`codeEtatCivil`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `etat_civil`
@@ -202,7 +205,9 @@ INSERT INTO `etat_civil` (`codeEtatCivil`, `etatCivil`, `cinConjoint`, `nomConjo
 (8, 'Célibataire', NULL, NULL, NULL, NULL, NULL),
 (9, 'Célibataire', NULL, NULL, NULL, NULL, NULL),
 (10, 'Célibataire', NULL, NULL, NULL, NULL, NULL),
-(11, 'Célibataire', NULL, NULL, NULL, NULL, NULL);
+(11, 'Célibataire', NULL, NULL, NULL, NULL, NULL),
+(12, 'Célibataire', NULL, NULL, NULL, NULL, NULL),
+(13, 'Célibataire', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -229,7 +234,7 @@ CREATE TABLE IF NOT EXISTS `historique` (
   KEY `p_numeroCompte` (`p_numeroCompte`),
   KEY `h_numeroDossier` (`h_numeroDossier`,`h_numeroAffaire`),
   KEY `h_numeroProcedure` (`h_numeroProcedure`)
-) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `historique`
@@ -345,7 +350,11 @@ INSERT INTO `historique` (`numeroHisto`, `mouvement`, `dateDebutMouvement`, `dat
 (125, 'Arriver', '2023-01-15', NULL, '2023-01-15', 1, 0, 0, 'aaaaaaaaaaaaaaa', 13, '19-V/2023', 1, 2),
 (126, 'Arriver', '2023-01-15', NULL, '2023-01-15', 1, 0, 0, 'bbbbbbbbb', 14, '20-V/2023', 1, 4),
 (127, 'Arriver', '2023-01-15', NULL, '2023-01-15', 1, 0, 0, '22222222222222222', 15, '21-V/2023', 1, 2),
-(128, 'Arriver', '2023-01-27', NULL, '2023-01-27', 1, 0, 0, 'Aucune remarque', 16, '22-V/2023', 1, 2);
+(128, 'Arriver', '2023-01-27', NULL, '2023-01-27', 1, 0, 0, 'Aucune remarque', 16, '22-V/2023', 1, 2),
+(129, 'Arriver', '2024-04-12', '2024-04-12', '2024-04-12', 1, 1, 1, 'TULEAR 2024-002 NV', 17, '23-V/2024', 1, 1),
+(130, 'Interne', '2024-04-12', '2024-04-12', '2024-04-12', 1, 1, 1, 'TULEAR 2024-003 CEL', 17, '23-V/2024', 2, 1),
+(131, 'Depart', '2024-04-12', '2024-04-12', '2024-04-13', 0, 1, 1, 'JIMM L\'AGENT ICI', 17, '23-V/2024', 3, 9),
+(132, 'Depart', '2024-04-12', NULL, '2024-04-20', 0, 0, 0, 'JIMM NANDEFA AZY POUR DAS', 17, '23-V/2024', 4, 9);
 
 -- --------------------------------------------------------
 
@@ -381,8 +390,10 @@ INSERT INTO `individu` (`cin`, `nom`, `prenom`, `lieuNaiss`, `dateNaiss`, `profe
 ('222221222222', 'DEUX', 'TWOOO', 'TAMATAVE', '1992-02-22', 'MAITRE', 'LOT 2222 ANJOMA', '2010-02-22', 'INCONNU', 5),
 ('222222222223', '22222', '222222', '2222222', '1992-02-22', '222222', '2222222', '2010-02-22', '22222', 6),
 ('333331333333', 'BIGFLO', 'Oli ', 'TANA', '1957-01-12', 'Avocat', 'Ampasambazaha Lot 333', '1975-01-13', 'TANA', 9),
+('501011028555', 'TOTO', 'Tata', 'MAJUNGA', '1975-02-20', 'CHOMEUR', 'ANJOMA', '1998-02-20', 'MAJUNGA', 13),
 ('501011222218', 'AAAAB', 'AAAAAB', 'Diego', '1992-02-20', '22222', '222222', '2010-02-22', '222222', 7),
 ('501012035987', 'DEUX', 'MIss Two', 'Tana', '2000-01-01', 'Deuxième ', 'Fianar lot 202', '2018-01-01', 'Ftsoa', 4),
+('901011028444', 'BARRY', 'Allen', 'TULEAR', '1980-12-12', 'Professeur', 'TULEAR', '1998-12-12', 'TULEAR', 12),
 ('901012565897', 'TESTE', 'NOTRE TESTE', 'Ftsoa', '1992-01-04', 'Chauffeur', 'Lot 206 Anjoma', '2010-01-04', 'Ftsoa', 8),
 ('901022036548', 'MERLINA', 'Bella', 'Fianarantsoa', '1980-01-22', 'Juge', 'Talatamaty Lot IB 2015', '1998-01-23', 'Toliar', 10);
 
@@ -417,7 +428,7 @@ DROP TABLE IF EXISTS `numero_affaire_v`;
 CREATE TABLE IF NOT EXISTS `numero_affaire_v` (
   `autoNumber` int(255) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`autoNumber`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `numero_affaire_v`
@@ -436,7 +447,8 @@ INSERT INTO `numero_affaire_v` (`autoNumber`) VALUES
 (19),
 (20),
 (21),
-(22);
+(22),
+(23);
 
 -- --------------------------------------------------------
 
@@ -576,7 +588,7 @@ CREATE TABLE IF NOT EXISTS `requerant` (
   `p_cin` varchar(12) NOT NULL,
   PRIMARY KEY (`numeroRequerant`),
   KEY `p_cin` (`p_cin`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `requerant`
@@ -595,7 +607,9 @@ INSERT INTO `requerant` (`numeroRequerant`, `etatMorale`, `numeroTelephone`, `co
 (15, 0, '348978889', 'Aucune', '901012565897'),
 (16, 0, '333333333', 'Aucune', '333331333333'),
 (69, 0, '343395370', NULL, '201011460028'),
-(70, 0, '348995878', 'Aucune remarque', '901022036548');
+(70, 0, '348995878', 'Aucune remarque', '901022036548'),
+(71, 0, '324556987', 'TULEAR 2024-001', '901011028444'),
+(72, 0, '335478985', 'AAAAAAAAAA', '501011028555');
 
 -- --------------------------------------------------------
 
@@ -619,7 +633,7 @@ CREATE TABLE IF NOT EXISTS `sous_dossier` (
   `p_numeroAffaire` varchar(15) NOT NULL,
   PRIMARY KEY (`numeroSousDossier`),
   KEY `p_numeroDossier` (`p_numeroDossier`,`p_numeroAffaire`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `sous_dossier`
@@ -661,7 +675,9 @@ INSERT INTO `sous_dossier` (`numeroSousDossier`, `observationSD`, `dateDepotSD`,
 (41, 'aaaaaaaaaaaaaaa', '2023-01-15', 'NULL', 'NULL', 1, 1, 1, 0, 1, 13, '19-V/2023'),
 (42, 'bbbbbbbbb', '2023-01-15', 'NULL', 'NULL', 0, 0, 0, 0, 1, 14, '20-V/2023'),
 (43, '22222222222222222', '2023-01-15', 'NULL', 'NULL', 0, 0, 0, 0, 1, 15, '21-V/2023'),
-(44, 'Aucune remarque', '2023-01-27', 'NULL', 'NULL', 0, 0, 0, 0, 0, 16, '22-V/2023');
+(44, 'Aucune remarque', '2023-01-27', 'NULL', 'NULL', 0, 0, 0, 0, 0, 16, '22-V/2023'),
+(45, 'TULEAR 2024-002 NV', '2024-04-12', 'NULL', 'NULL', 0, 0, 0, 0, 0, 17, '23-V/2024'),
+(46, 'JIMM NANDEFA AZY POUR DAS', '2024-04-12', NULL, '750', 0, 0, 0, NULL, NULL, 17, '23-V/2024');
 
 -- --------------------------------------------------------
 
