@@ -1,0 +1,26 @@
+Les comptes | password :
+- lefort | lefort : 
+        Admin - Chefo sy Admin manana acess am'rehetra rehetra
+
+- jimm | jimm : 
+        Agent - Mpikarakara Dossier
+
+- barry | barry : 
+        Usager (Client) - Manana Dossier 01
+
+- aeeni | aeeni : 
+        Usager (Client) - tsy manana Dossier
+
++++ Creer-na ny basse de donnee MySQL "BDD_DOMANIALE_FTSOA"
+
++++ Importer le fichier BDD_DOMANIALE_FTSOA.sql dnas phpMyAdmin. 
+localisation du fichier : "SERVICE-DOMANIALE/backEnd/config/"   
+
++++ Installer les dependances avec 
+npm i 
+pour le frontEnd et le backEnd.
+
++++ Pour le backEnd il faut faire un :
+npm i bcrypt
+et
+npm i jquery
